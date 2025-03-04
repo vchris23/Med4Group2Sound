@@ -1,4 +1,5 @@
-﻿
+﻿pip install pydub
+
 
 
 new_tracks=[] #makes new list to store new tracks
