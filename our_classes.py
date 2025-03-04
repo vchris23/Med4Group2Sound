@@ -1,5 +1,5 @@
 ﻿class Track:
-    def __init__(self, sound, label):
+    def __init__(self, sound = None, label = ""):
         self.sound = sound
         self.label:str = label
         self.source:str = ""
