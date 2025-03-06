@@ -75,8 +75,7 @@ def get_spectral_features(sound = None, spectrogram = None, sound_sampling_rate 
 
     return root_mean_square, spectral_centroid, spectral_bandwidth, spectral_contrast
 
-music, sampling_rate = librosa.load("Sounds/07 Ophelia's Lament.mp3", sr=88000
-                                    )
+music, sampling_rate = librosa.load("Sounds/07 Ophelia's Lament.mp3", sr=88000)
 new_specto = get_spectrogram(music, sampling_rate, horizontal_resolution=28600, number_of_bands=None, spectrogram_type=SpectrogramType.mel_scaled_spectrogram)
 features = get_spectral_features(sound = music, spectrogram = new_specto, sound_sampling_rate=sampling_rate)
 display_spectrogram(new_specto, sampling_rate=sampling_rate, frequency_axis=SpectrogramAxis.frequency_linear, spectral_centroid=features[1], spectral_bandwidth=features[2])

@@ -11,7 +11,6 @@ import numpy as np
 from sklearn.datasets import fetch_california_housing
 from sklearn import metrics
 from sklearn import svm
-import pandas as pd
 
 
 def get_trained_SVM(training_data, training_labels):
