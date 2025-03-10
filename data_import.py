@@ -1,4 +1,5 @@
 ﻿import time
+from collections import defaultdict
 from itertools import groupby
 
 import librosa
@@ -33,26 +34,36 @@ def _get_labels(label_csv_path:str, number_to_take:int = None):
     for k, g in groupby(reader, lambda x: x[0]):
         data_by_id.append(list(g))
 
-    labels = []
+    labels_and_names = []
     for i in range(1, len(data_by_id) if number_to_take is None else min(number_to_take + 1, len(data_by_id))):
         values = list(map(lambda x: [int(x[b]) for b in range(2, 10)], data_by_id[i]))
+        genre = data_by_id[i][0][1]
+        song_id = ((i-1)%100)+1
         summed_values = _vote_on_emotion_label(values)
-        labels.append(emotion_lookup[summed_values.index(max(summed_values))])
+        labels_and_names.append((emotion_lookup[summed_values.index(max(summed_values))], f"{genre}, {song_id}"))
 
-    return labels
 
-music_folders = ["classical", "electronic", "pop", "rock"]
+    return labels_and_names
+
+music_folders = ["classical", "rock", "electronic", "pop"]
 def _get_tracks_with_sound_and_source(music_folder_path:str, source_types:list, sampling_rate=44100, number_to_take:int = None):
     tracks = []
     for folder in music_folders:
         genre_folder = os.path.join(music_folder_path, folder)
-        for i in range(1, 101):
-            for source in source_types:
-                song_path = os.path.join(genre_folder, f"{str(source)}_" + str(i) + '.mp3')
-                print(song_path)
-                song = librosa.load(song_path,  sr = sampling_rate)
-                tracks.append(Track(sound=song, source=source, original_track=f"{folder}\\{i}", name=get_name_from_path(song_path)))
+        folder_content = os.listdir(genre_folder)
+        for content in folder_content:
 
+            content_path = os.path.join(genre_folder, content)
+            song = librosa.load(content_path, sr=sampling_rate)
+
+            source, number, part = content.split('_')
+            source = source.split(".")[0]
+
+            original_track = f"{folder}, {number}"
+            name = get_name_from_path(content_path)
+
+            new_track = Track(song, None, source, original_track, name)
+            tracks.append(new_track)
 
             if number_to_take is not None and len(tracks) >= number_to_take*len(source_types): return tracks
 
@@ -65,10 +76,16 @@ def get_tracks(music_folder_path:str, label_csv_path:str, sources:list, sampling
     labels = _get_labels(label_csv_path, amount_to_take-1 if amount_to_take is not None else amount_to_take)
     tracks = _get_tracks_with_sound_and_source(music_folder_path, sources, sampling_rate, amount_to_take)
     print(len(labels), len(tracks))
-    for i in range(0, len(labels)):
-        for j in range(len(sources)):
-            print(i*len(sources) + j)
-            tracks[i*len(sources) + j].label = labels[i]
+
+    dic = defaultdict(list)
+    for pair in labels:
+        dic[pair[1]].append(pair[0])  #We turn the labels and names into a dictionary,
+        # so we efficiently can give the tracks corresponding labels using their original track field
+
+
+    for track in tracks:
+        track.label = dic[track.original_track]
+
     return tracks
 
 def get_names_and_features_from_xml(path):
@@ -105,9 +122,10 @@ def assign_features_to_tracks(tracks:list, names_and_feature_vectors:list):
             continue
     return tracks
 
+
 start_time = time.time()
 names_and_features = get_names_and_features_from_xml("feature_values_1.xml")
-tracks = get_tracks("datasets/emotify/Separated_and_mixed_versions", "datasets/emotify/emotify_data.csv", sources=["Instrumental", "Mixed", "Vocals"], amount_to_take=300)
+tracks = get_tracks("datasets/emotify/clips", "datasets/emotify/emotify_data.csv", sources=["Instrumental", "Mixed", "Vocals"])
 assign_features_to_tracks(tracks, names_and_features)
 end_time = time.time()
 print("Time taken: ", end_time - start_time)

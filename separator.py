@@ -43,7 +43,7 @@ def separate(input_path, output_path, should_override):
     if should_override: shutil.rmtree(output_folder)
     os.makedirs(output_folder, exist_ok=True)
 
-    sep = Separator(output_format="MP3")
+    sep = Separator(output_format="MP3", use_soundfile=True)
     sep.load_model()
     i = 0
     input_sub_folders = os.listdir(input_path)
@@ -67,4 +67,47 @@ def separate(input_path, output_path, should_override):
             if os.path.split(sub_item_path)[1][:4] != ".mp3" or ".wav": continue
             _execute_separation(sep, sub_item_path, output_folder)
 
-separate(input_path="datasets/emotify/emotify_music", output_path="datasets/emotify", should_override= False)
+def split_mp3_file_into_excerpts(song_path, output_folder_path, clip_length_in_seconds):
+    song:soundfile.SoundFile = soundfile.SoundFile(song_path)
+    clips = song.blocks(blocksize=song.samplerate * clip_length_in_seconds)
+    i = 0
+    file_folder, song_name = os.path.split(song_path)
+    title, format = os.path.splitext(song_name)
+
+    for clip in clips:
+        clip_duration = len(clip)/(song.samplerate)
+        if clip_duration < clip_length_in_seconds/3: continue #Avoids too short clips
+        i += 1
+        print("input:",song_path, "output",os.path.join(output_folder_path, f"{title}_PT{i}{format}"))
+        print(clip_duration, "samplerate: ", song.samplerate)
+        soundfile.write(file = os.path.join(output_folder_path, f"{title}_PT{i}{format}"), data = clip, samplerate=song.samplerate)
+
+def split_sound_files_in_folders_into_excerpts(input_folder_path, output_folder_path, clip_length_in_seconds):
+
+    input_folder_content = os.listdir(input_folder_path)
+
+    input_folder_mp3s = [input_content for input_content in input_folder_content if input_content[-3:] == "mp3"]
+
+    for mp3_file in input_folder_mp3s:
+
+        split_mp3_file_into_excerpts(song_path=os.path.join(input_folder_path, mp3_file),
+                                     output_folder_path=output_folder_path,
+                                     clip_length_in_seconds=clip_length_in_seconds)
+        print(os.path.join(input_folder_path, mp3_file))
+
+
+    input_folder_sub_folders = [input_content for input_content in input_folder_content if
+                                os.path.isdir(os.path.join(input_folder_path, input_content))] #Gets folders for recursion
+
+    for sub_folder in input_folder_sub_folders:
+        os.makedirs(os.path.join(output_folder_path, sub_folder), exist_ok=True)
+        split_sound_files_in_folders_into_excerpts(os.path.join(input_folder_path, sub_folder),
+                                                   os.path.join(output_folder_path, sub_folder),
+                                                   clip_length_in_seconds)
+
+
+
+
+#separate(input_path="datasets/emotify/emotify_music", output_path="datasets/emotify", should_override= False)
+#split_mp3_file_into_excerpts("datasets/emotify/emotify_music/classical/1.mp3","datasets/emotify/clips", 15)
+split_sound_files_in_folders_into_excerpts("datasets/emotify/Separated_and_mixed_versions", "datasets/emotify/clips", 15)

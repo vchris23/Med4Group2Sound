@@ -8,6 +8,9 @@
         self.name: str = name
         self.features:list = []
 
+    def __str__(self):
+        return f"name: {self.name}, label: {self.label}, source: {self.source}, original: {self.original_track}, features: {self.features}"
+
 #Tracks = [Track(1,"hello"), Track(2, "I am god"), Track("Me", "Behave")]
 
 #labels = [track.label for track in Tracks]

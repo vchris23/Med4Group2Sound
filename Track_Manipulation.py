@@ -15,5 +15,3 @@ def split_tracks_into_excerpts(tracks, sampling_rate):
             new_tracks.append(new_track)  #tilføjer det nye track til listen (fra toppen)
 
     return new_tracks  #returner listen med alle de nye tracks
-
-
