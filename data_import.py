@@ -65,16 +65,18 @@ def _get_tracks_with_sound_and_source(music_folder_path:str, source_types:list, 
             new_track = Track(song, None, source, original_track, name)
             tracks.append(new_track)
 
+            print(f"_get_tracks_with, len of tracks: {len(tracks)}, number to take: {number_to_take}")
+
             if number_to_take is not None and len(tracks) >= number_to_take*len(source_types): return tracks
 
     return tracks
 
 
-def get_tracks(music_folder_path:str, label_csv_path:str, sources:list, sampling_rate:int = 44100, amount_to_take:int = None):
+def _get_tracks(music_folder_path:str, label_csv_path:str, sources:list, sampling_rate:int = 44100, amount_to_take:int = None):
 
 
     labels = _get_labels(label_csv_path, amount_to_take-1 if amount_to_take is not None else amount_to_take)
-    tracks = _get_tracks_with_sound_and_source(music_folder_path, sources, sampling_rate, amount_to_take)
+    tracks = _get_tracks_with_sound_and_source(music_folder_path, sources, sampling_rate, number_to_take=amount_to_take)
     print(len(labels), len(tracks))
 
     dic = defaultdict(list)
@@ -88,7 +90,7 @@ def get_tracks(music_folder_path:str, label_csv_path:str, sources:list, sampling
 
     return tracks
 
-def get_names_and_features_from_xml(path):
+def _get_names_and_features_from_xml(path):
     tree = ET.parse(path)
 
     names_and_feature_vectors = []
@@ -113,20 +115,18 @@ def get_names_and_features_from_xml(path):
 
     return names_and_feature_vectors
 
-def assign_features_to_tracks(tracks:list, names_and_feature_vectors:list):
+def _assign_features_to_tracks(tracks:list, names_and_feature_vectors:list):
     name_list = [name_and_feature[0] for name_and_feature in names_and_feature_vectors]
     for track in tracks:
         try:
-            track.features = names_and_features[name_list.index(track.name)][1]
+            track.features = names_and_feature_vectors[name_list.index(track.name)][1]
         except ValueError:
             continue
     return tracks
 
-
-start_time = time.time()
-names_and_features = get_names_and_features_from_xml("feature_values_1.xml")
-tracks = get_tracks("datasets/emotify/clips", "datasets/emotify/emotify_data.csv", sources=["Instrumental", "Mixed", "Vocals"])
-assign_features_to_tracks(tracks, names_and_features)
-end_time = time.time()
-print("Time taken: ", end_time - start_time)
-
+def import_tracks(music_folder_path:str, label_csv_path:str, features_xml_path:str, sources:list, amount_to_take:int = None):
+    names_and_features = _get_names_and_features_from_xml(features_xml_path)
+    tracks = _get_tracks(music_folder_path, label_csv_path,
+                         sources, amount_to_take=amount_to_take)
+    tracks = _assign_features_to_tracks(tracks, names_and_features)
+    return tracks
