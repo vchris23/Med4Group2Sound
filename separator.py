@@ -67,7 +67,7 @@ def separate(input_path, output_path, should_override):
             if os.path.split(sub_item_path)[1][:4] != ".mp3" or ".wav": continue
             _execute_separation(sep, sub_item_path, output_folder)
 
-def split_mp3_file_into_excerpts(song_path, output_folder_path, clip_length_in_seconds):
+def _split_mp3_file_into_excerpts(song_path, output_folder_path, clip_length_in_seconds):
     song:soundfile.SoundFile = soundfile.SoundFile(song_path)
     clips = song.blocks(blocksize=song.samplerate * clip_length_in_seconds)
     i = 0
@@ -90,9 +90,9 @@ def split_sound_files_in_folders_into_excerpts(input_folder_path, output_folder_
 
     for mp3_file in input_folder_mp3s:
 
-        split_mp3_file_into_excerpts(song_path=os.path.join(input_folder_path, mp3_file),
-                                     output_folder_path=output_folder_path,
-                                     clip_length_in_seconds=clip_length_in_seconds)
+        _split_mp3_file_into_excerpts(song_path=os.path.join(input_folder_path, mp3_file),
+                                      output_folder_path=output_folder_path,
+                                      clip_length_in_seconds=clip_length_in_seconds)
         print(os.path.join(input_folder_path, mp3_file))
 
 

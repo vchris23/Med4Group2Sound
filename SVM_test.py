@@ -14,7 +14,7 @@ from sklearn import svm
 
 
 def get_trained_SVM(training_data, training_labels):
-    classifier = svm.SVC(kernel='rbf', random_state=42)
+    classifier = svm.SVC(kernel='sigmoid', random_state=42)
 
     # trainmodel using the training data
     classifier.fit(training_data, training_labels)
