@@ -4,7 +4,8 @@ from itertools import groupby
 
 class Track:
     @staticmethod
-    def tracks_to_labels_and_features(tracks:list):
+    def tracks_to_features_and_labels(tracks:list):
+        """Output a deepcopy of the features and labels of all the tracks"""
         new_tracks = deepcopy(tracks)
         labels = [track.label for track in new_tracks]
         features = [track.features for track in new_tracks]

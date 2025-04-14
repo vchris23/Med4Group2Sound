@@ -13,7 +13,7 @@ import pandas as pd
 
 def _get_best_dimensionality(tracks:list, ratio:float):
 
-    features, _ = Track.tracks_to_labels_and_features(tracks)
+    features, _ = Track.tracks_to_features_and_labels(tracks)
     analyser = PCA(random_state=42)
     analyser.fit(features)
     culm = np.cumsum(analyser.explained_variance_ratio_)
@@ -23,7 +23,7 @@ def _get_best_dimensionality(tracks:list, ratio:float):
 
 def get_fitted_pca(tracks:list, dimensions_to_get:int):
 
-    features, _ = Track.tracks_to_labels_and_features(tracks)
+    features, _ = Track.tracks_to_features_and_labels(tracks)
     pca = PCA(random_state=42, n_components=dimensions_to_get)
     pca.fit(features)
 
@@ -71,7 +71,7 @@ def get_pca_tracks_and_correlation(training_tracks:list, test_tracks:list, featu
 
 
 def get_LDA(tracks:list, dimensions_to_get):
-    features, _ = Track.tracks_to_labels_and_features(tracks)
+    features, _ = Track.tracks_to_features_and_labels(tracks)
 
     lda = LinearDiscriminantAnalysis(n_components=dimensions_to_get)
     lda.fit(features)
@@ -81,7 +81,7 @@ def get_LDA(tracks:list, dimensions_to_get):
 def transform_features_of_tracks(tracks:list, transformer):
     new_tracks = deepcopy(tracks)
 
-    features, _ = Track.tracks_to_labels_and_features(new_tracks)
+    features, _ = Track.tracks_to_features_and_labels(new_tracks)
     transformed_features = transformer.transform(features)
 
     for i in range(len(transformed_features)):

@@ -41,7 +41,7 @@ def get_trained_SVM(training_tracks: list, use_oversampler = False, rnd_state = 
 
     classifier = get_untrained_SVM(use_ova=True, rnd_state=rnd_state)
 
-    training_data, training_labels = Track.tracks_to_labels_and_features(training_tracks)
+    training_data, training_labels = Track.tracks_to_features_and_labels(training_tracks)
 
 
     if use_oversampler:
@@ -62,7 +62,7 @@ def select_features(untrained_classifier, training_tracks: list, direction:str =
     First output is a list of integers, the second output is the name of the features
     """
 
-    training_data, training_labels = Track.tracks_to_labels_and_features(training_tracks)
+    training_data, training_labels = Track.tracks_to_features_and_labels(training_tracks)
 
     selector_output = SequentialFeatureSelector(untrained_classifier, direction=direction, n_features_to_select=number_of_features_to_select, cv=number_of_cross_validations, n_jobs=-1)
     print("Got to the fitting")

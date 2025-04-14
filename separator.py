@@ -1,5 +1,6 @@
 ﻿from turtledemo.penrose import start
 
+import audio_separator.utils.cli
 from audio_separator.separator import Separator
 import soundfile
 import os
@@ -33,18 +34,23 @@ def _execute_separation(separator, song_path, output_path):
 
     source_names = {
         "Vocals": os.path.join(output_path, "Vocals_" + song_name),
-        "Instrumental": os.path.join(output_path, "Instrumental_" + song_name)
+        "Instrumental": os.path.join(output_path, "Instrumental_" + song_name),
+        "Drums": os.path.join(output_path, "Drums_" + song_name),
+        "Bass": os.path.join(output_path, "Bass_" + song_name),
+        "Guitar": os.path.join(output_path, "Guitar_" + song_name),
+        "Piano": os.path.join(output_path, "Piano_" + song_name),
+        "Other": os.path.join(output_path, "Other_" + song_name)
     }
     separator.separate(song_path, source_names)
 
-def separate(input_path, output_path, should_override):
+def separate(input_path, output_path, should_override, model_file_name = None):
     output_folder = os.path.join(output_path, "Separated_and_mixed_versions")
 
     if should_override: shutil.rmtree(output_folder)
     os.makedirs(output_folder, exist_ok=True)
 
     sep = Separator(output_format="MP3", use_soundfile=True)
-    sep.load_model()
+    sep.load_model() if model_file_name is None else sep.load_model(model_file_name)
     i = 0
     input_sub_folders = os.listdir(input_path)
     for sub_folder in input_sub_folders:
@@ -107,7 +113,6 @@ def split_sound_files_in_folders_into_excerpts(input_folder_path, output_folder_
 
 
 
-
-#separate(input_path="datasets/emotify/emotify_music", output_path="datasets/emotify", should_override= False)
+separate(input_path="datasets/emotify/emotify_music", output_path="datasets/emotify/very_separated", should_override= False, model_file_name="htdemucs_6s.yaml")
 #split_mp3_file_into_excerpts("datasets/emotify/emotify_music/classical/1.mp3","datasets/emotify/clips", 15)
-split_sound_files_in_folders_into_excerpts("datasets/emotify/Separated_and_mixed_versions", "datasets/emotify/clips", 15)
+#split_sound_files_in_folders_into_excerpts("datasets/emotify/Separated_and_mixed_versions", "datasets/emotify/clips", 15)
