@@ -65,7 +65,6 @@ def _get_labels(label_csv_path:str, number_to_take:int = None):
         else:
             labels_and_names.append((emotion_lookup[summed_values.index(max(summed_values))], f"{genre}, {song_id}"))
 
-
     return labels_and_names
 
 music_folders = ["classical", "rock", "electronic", "pop"]
@@ -100,16 +99,14 @@ def _get_tracks(music_folder_path:str, label_csv_path:str, sources:list, samplin
 
     labels = _get_labels(label_csv_path, amount_to_take-1 if amount_to_take is not None else amount_to_take)
     tracks = _get_tracks_with_sound_and_source(music_folder_path, sources, sampling_rate, number_to_take=amount_to_take)
-    print(len(labels), len(tracks))
 
     dic = defaultdict(list)
     for pair in labels:
         dic[pair[1]].append(pair[0])  #We turn the labels and names into a dictionary,
         # so we efficiently can give the tracks corresponding labels using their original track field
 
-
     for track in tracks:
-        track.label = dic[track.original_track]
+        track.label = dic[track.original_track][0] #The [0] is to prevent a weird one-length list with just the label inside
 
     return tracks
 

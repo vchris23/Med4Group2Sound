@@ -1,10 +1,40 @@
-﻿class Track:
+﻿from copy import deepcopy
+from itertools import groupby
+
+
+class Track:
     @staticmethod
     def tracks_to_labels_and_features(tracks:list):
-        labels = [track.label[0] for track in tracks]
-        features = [track.features for track in tracks]
+        new_tracks = deepcopy(tracks)
+        labels = [track.label for track in new_tracks]
+        features = [track.features for track in new_tracks]
 
         return features, labels
+
+    @staticmethod
+    def separate_tracks_by_source(tracks:list):
+        tracks.sort(key=lambda track: track.source)
+        grouped = groupby(tracks, lambda track: track.source)
+
+        separated_lists = []
+
+        for source, group in grouped:
+            separated_lists.append(list(group))
+
+        return separated_lists
+
+    @staticmethod
+    def separate_tracks_by_label(tracks:list):
+        tracks.sort(key=lambda track: track.label)
+        grouped = groupby(tracks, lambda track: track.label)
+
+        separated_lists = []
+
+        for source, group in grouped:
+            separated_lists.append(list(group))
+
+        return separated_lists
+
 
     def __init__(self, sound = None, label = None, source = None, original_track = None, name = None):
         self.sound = sound
@@ -18,7 +48,7 @@
     def __str__(self):
         return f"name: {self.name}, label: {self.label}, source: {self.source}, original: {self.original_track}"
 
-#Tracks = [Track(1,"hello"), Track(2, "I am god"), Track("Me", "Behave")]
-
-#labels = [track.label for track in Tracks]
-#print(labels)
+    def __copy__(self):
+        copy_track = Track(self.sound, self.label, self.source, self.original_track, self.name)
+        copy_track.features = self.features
+        return copy_track

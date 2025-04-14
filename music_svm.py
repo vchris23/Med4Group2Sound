@@ -26,29 +26,39 @@ from matplotlib import pyplot as plt
 from sklearn.metrics import confusion_matrix, ConfusionMatrixDisplay
 from imblearn.over_sampling import RandomOverSampler, SVMSMOTE
 
+def _result_dic_to_predictions_and_labels(result_dic:dict):
+    predictions = [prediction for prediction in result_dic.values()]
+    labels = [track.label for track in result_dic.keys()]
+
+    return labels, predictions
+
 def get_untrained_SVM(use_ova:bool = False, kernel:str = 'rbf', rnd_state:int = 42, C:int = 10000, gamma = 0.01, probability:bool = True, class_weight_strategy:str = 'balanced', cache_size:int = 5012):
     classifier = svm.SVC(kernel = kernel, random_state = rnd_state, C = C, gamma = gamma, probability = probability, class_weight = class_weight_strategy, cache_size = cache_size)
     classifier = OneVsRestClassifier(classifier) if use_ova else classifier
     return classifier
 
-def get_trained_SVM(training_tracks: list, use_oversampler = false, rnd_state = 42):
+def get_trained_SVM(training_tracks: list, use_oversampler = False, rnd_state = 42):
 
-    classifier = get_untrained_SVM(use_ova=True)
+    classifier = get_untrained_SVM(use_ova=True, rnd_state=rnd_state)
 
     training_data, training_labels = Track.tracks_to_labels_and_features(training_tracks)
 
+
     if use_oversampler:
+        before_count = len(training_data)
         oversampler = RandomOverSampler(random_state=rnd_state)
         training_data, training_labels = oversampler.fit_resample(training_data, training_labels)
+        after_count = len(training_data)
+        print(f"Oversampler added {after_count-before_count} more samples")
 
     # train model using the training data
-    classifier.fit(training_data, training_labels)
+    classifier = classifier.fit(training_data, training_labels)
 
 
     return classifier
 
 def select_features(untrained_classifier, training_tracks: list, direction:str = "forward", feature_names:list[str] = None, number_of_features_to_select = None, number_of_cross_validations = None):
-    """direction can either be \"forward\" or \"backward\"
+    """direction can either be \"forward\" or \"backward\" \n
     First output is a list of integers, the second output is the name of the features
     """
 
@@ -88,25 +98,28 @@ def random_search(svm, tracks):
     frame.to_csv(f"random_oversampling_rbf_{tracks[0].source}.csv")
 
 
-def classify_and_get_conf_scores(svm, track):
-    y_pred_ova:str = svm.predict([track.features])
+def classify_and_get_conf_scores(svm:OneVsRestClassifier, track):
+    y_pred_ova:str = str(svm.predict([track.features])[0]) #svm predict requires it to have multiple dimensions, but the output is also a list, therefore the [] and [0]
+                                                           #Additionally we have to cast it to a string, since it returns it as an numpy.str_ which is annoying to work with
     y_confidence:list = svm.predict_proba([track.features])
 
     return y_pred_ova, y_confidence
 
 
 def get_scores(prediction_results, actual_results):
+    """Return accuracy, precision, and recall"""
 
     acc = metrics.accuracy_score(actual_results, prediction_results)
-    pre = metrics.precision_score(actual_results, prediction_results, average='macro')
-    rec = metrics.recall_score(actual_results, prediction_results, average='macro')
+    pre = metrics.precision_score(actual_results, prediction_results, average='macro', zero_division=np.nan)
+    rec = metrics.recall_score(actual_results, prediction_results, average='macro', zero_division=np.nan)
 
     return acc, pre, rec
 
-def get_confusion_matrix(prediction_results, actual_results, svm:OneVsRestClassifier=None):
+def get_confusion_matrix(prediction_results, actual_results, title:str = "Confusion matrix"):
     matrix = confusion_matrix(actual_results, prediction_results)
     display = ConfusionMatrixDisplay(confusion_matrix=matrix)
     display.plot()
+    plt.title(title)
     plt.show()
 
 def train_and_test_new_SVM(training_tracks: list, test_tracks: list):
@@ -180,15 +193,20 @@ def combined_classification_by_original_track(svms:list, track_lists:list):
     return combined_result_dict
 
 def classify_tracks(svm:OneVsRestClassifier, tracks:list):
+    """Returns list of predictions and list of labels"""
 
     result_dict = {}
     for track in tracks:
         result_dict[track] = classify_and_get_conf_scores(svm, track)[0]
 
-    return result_dict
+    return _result_dic_to_predictions_and_labels(result_dict)
 
 
 def combined_classify_tracks(svms:list, track_lists:list):
+    """Returns list of predictions and list of labels"""
+    svm_dic = {}
+    for i in range(len(track_lists)):
+        svm_dic[track_lists[i][0].source] = svms[i]
 
     track_dic = defaultdict(list)
 
@@ -202,8 +220,7 @@ def combined_classify_tracks(svms:list, track_lists:list):
     conf_dic = defaultdict(list)
     for shared_name in track_dic.keys():
         for track in track_dic[shared_name]:
-            for classifier in svms:
-                conf_dic[shared_name].append(classify_and_get_conf_scores(classifier, track)[1])
+            conf_dic[shared_name].append(classify_and_get_conf_scores(svm_dic[track.source], track)[1])
 
     result_dict = {}
     for shared_name in conf_dic.keys():
@@ -217,5 +234,19 @@ def combined_classify_tracks(svms:list, track_lists:list):
             result_dict[track_dic[shared_name][0]] = _class_from_confidence_scores(svms[0], list(summed_list))
 
 
-    return result_dict
+    return _result_dic_to_predictions_and_labels(result_dict)
 
+def classify_and_get_scores(svm:OneVsRestClassifier | list, tracks:list, plot_confusion_matrix:bool = False, confusion_matrix_title:str = None):
+    """ If svm is a list, ensemble classification is assumed, so tracks must be a list of lists of tracks \n
+    Returns accuracy, precision, and recall"""
+
+    if type(svm) == list:
+        predictions, labels = combined_classify_tracks(svm, tracks)
+
+    else:
+        predictions, labels = classify_tracks(svm, tracks)
+
+    if plot_confusion_matrix:
+        get_confusion_matrix(predictions, labels, confusion_matrix_title)
+
+    return get_scores(predictions, labels)
