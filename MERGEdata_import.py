@@ -2,6 +2,7 @@
 import librosa
 from data_import import _get_names_and_features_from_xml
 #kald nu så denne function for at bruge den heri det her script
+#se onenote for mere hjælp/noter
 
 
 #mappe hvor alle sangene er (definere så vi kan bruge den nemt/hurtigt senere)
@@ -9,6 +10,21 @@ folder_path= "MERGE-datas/AllSongsQ1-4"
 
 #laver en liste for informationer om alle sangene (som vi kan bruge senere
 songs=[]
+
+
+# Sti til XML-fil med features
+xml_path = "MERGE-datas/feature_values_15sPT2.xml"
+# Hent alle features og filnavne
+features = _get_names_and_features_from_xml(xml_path)
+# Vis hvor mange tracks der er fundet
+print("Number of feature sets loaded:", len(features))
+# Vis de første 3
+for name, vector in features[:3]:
+    print("\nTrack:", name)
+    print("First 5 features:", vector[:5])
+
+
+
 
 #loop køres igennem mappen af sangenee (så vi kan arbejde med enkelte sange)
 for file in os.listdir(folder_path): #os.listdir returnere en liste med alle filnavne imappen

@@ -21,6 +21,17 @@ import pandas as pd
 
 emotion_lookup = {0: "amazement", 1: "solemnity", 2: "tenderness", 3: "nostalgia", 4:"calmness", 5:"power", 6:"joyful_activation", 7:"tension", 8:"sadness"}
 
+def __init__(self, sound=None, label = None, source=None, original_track=None, name=None):
+    self.sound = sound #Must be filled
+    self.label:str = label #must be filled
+    self.source:str = source #must be filled
+    self.train_or_test:str=""
+    self.original_track:str=original_track #must be filled
+    self.name:str=name
+    self.feature:list=[] #must be filled
+
+
+
 def get_name_from_path(path):
     song_folder, song_title = path.split("\\")[-2:]
     song_name = os.path.join(song_folder, song_title)
