@@ -19,7 +19,7 @@ import numpy as np
 from sklearn.svm import SVC
 from sklearn.multiclass import OneVsRestClassifier
 from collections import defaultdict
-from data_import import _vote_on_emotion_label, add_list
+from data_import import _vote_on_emotion_label, add_list, get_feature_names
 from pandas import DataFrame
 from pandas.plotting import table
 from matplotlib import pyplot as plt
@@ -63,6 +63,7 @@ def select_features(untrained_classifier, training_tracks: list, direction:str =
     """
 
     training_data, training_labels = Track.tracks_to_features_and_labels(training_tracks)
+    Track.tracks_features_to_dataframe(training_data, get_feature_names("feature_values_1.xml", True))
 
     selector_output = SequentialFeatureSelector(untrained_classifier, direction=direction, n_features_to_select=number_of_features_to_select, cv=number_of_cross_validations, n_jobs=-1)
     print("Got to the fitting")
@@ -98,16 +99,28 @@ def random_search(svm, tracks):
     frame.to_csv(f"random_oversampling_rbf_{tracks[0].source}.csv")
 
 
-def classify_and_get_conf_scores(svm:OneVsRestClassifier, track):
-    y_pred_ova:str = str(svm.predict([track.features])[0]) #svm predict requires it to have multiple dimensions, but the output is also a list, therefore the [] and [0]
+def classify_and_get_conf_scores(svm:OneVsRestClassifier, track:Track | list, feature_names = None):
+
+    feature_names = get_feature_names("feature_values_1.xml", True) if feature_names is None else feature_names
+    if type(track) == list:
+        dataframe_features = Track.tracks_features_to_dataframe(track, feature_names)
+    else:
+        dataframe_features = Track.tracks_features_to_dataframe([track], feature_names)
+
+
+
+    y_pred_ova:str = str(svm.predict(dataframe_features)[0]) #svm predict requires it to have multiple dimensions, but the output is also a list, therefore the [] and [0]
                                                            #Additionally we have to cast it to a string, since it returns it as an numpy.str_ which is annoying to work with
-    y_confidence:list = svm.predict_proba([track.features])
+    y_confidence:list = svm.predict_proba(dataframe_features)
 
     return y_pred_ova, y_confidence
 
 
 def get_scores(prediction_results, actual_results):
     """Return accuracy, precision, and recall"""
+
+    print(prediction_results[:4])
+    print(actual_results[:4])
 
     acc = metrics.accuracy_score(actual_results, prediction_results)
     pre = metrics.precision_score(actual_results, prediction_results, average='macro', zero_division=np.nan)
@@ -133,7 +146,7 @@ def train_and_test_new_SVM(training_tracks: list, test_tracks: list):
     return scores
 
 
-def _get_conf_scores_by_original_track(svm:OneVsRestClassifier, tracks:list):
+def _get_conf_scores_by_original_track(svm:OneVsRestClassifier, tracks:list, feature_names:list = None):
 
     grouped_tracks = defaultdict(list)
     for track in tracks:
@@ -141,9 +154,7 @@ def _get_conf_scores_by_original_track(svm:OneVsRestClassifier, tracks:list):
 
     result_dictionary = {}
     for original_track in grouped_tracks.keys():
-        conf_scores = []
-        for track in grouped_tracks[original_track]:
-            conf_scores.append(classify_and_get_conf_scores(svm, track)[1])
+        conf_scores = classify_and_get_conf_scores(svm, grouped_tracks[original_track], feature_names)[1]
         summed = list(sum(conf_scores)[0])
         result_dictionary[original_track] = summed
 
@@ -192,17 +203,19 @@ def combined_classification_by_original_track(svms:list, track_lists:list):
 
     return combined_result_dict
 
-def classify_tracks(svm:OneVsRestClassifier, tracks:list):
+def classify_tracks(svm:OneVsRestClassifier, tracks:list, feature_names:list = None):
     """Returns list of predictions and list of labels"""
 
     result_dict = {}
-    for track in tracks:
-        result_dict[track] = classify_and_get_conf_scores(svm, track)[0]
+    predictions = classify_and_get_conf_scores(svm, tracks, feature_names)
+
+    for i in range(len(predictions)):
+        result_dict[tracks[i]] = predictions[i]
 
     return _result_dic_to_predictions_and_labels(result_dict)
 
 
-def combined_classify_tracks(svms:list, track_lists:list):
+def combined_classify_tracks(svms:list, track_lists:list, feature_names:list = None):
     """Returns list of predictions and list of labels"""
     svm_dic = {}
     for i in range(len(track_lists)):
@@ -220,7 +233,7 @@ def combined_classify_tracks(svms:list, track_lists:list):
     conf_dic = defaultdict(list)
     for shared_name in track_dic.keys():
         for track in track_dic[shared_name]:
-            conf_dic[shared_name].append(classify_and_get_conf_scores(svm_dic[track.source], track)[1])
+            conf_dic[shared_name].append(classify_and_get_conf_scores(svm_dic[track.source], track, feature_names)[1])
 
     result_dict = {}
     for shared_name in conf_dic.keys():
@@ -236,15 +249,15 @@ def combined_classify_tracks(svms:list, track_lists:list):
 
     return _result_dic_to_predictions_and_labels(result_dict)
 
-def classify_and_get_scores(svm:OneVsRestClassifier | list, tracks:list, plot_confusion_matrix:bool = False, confusion_matrix_title:str = None):
+def classify_and_get_scores(svm:OneVsRestClassifier | list, tracks:list, plot_confusion_matrix:bool = False, confusion_matrix_title:str = None, feature_names:list = None):
     """ If svm is a list, ensemble classification is assumed, so tracks must be a list of lists of tracks \n
     Returns accuracy, precision, and recall"""
 
     if type(svm) == list:
-        predictions, labels = combined_classify_tracks(svm, tracks)
+        predictions, labels = combined_classify_tracks(svm, tracks, feature_names)
 
     else:
-        predictions, labels = classify_tracks(svm, tracks)
+        predictions, labels = classify_tracks(svm, tracks, feature_names)
 
     if plot_confusion_matrix:
         get_confusion_matrix(predictions, labels, confusion_matrix_title)

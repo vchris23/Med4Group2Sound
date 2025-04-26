@@ -114,5 +114,4 @@ def split_sound_files_in_folders_into_excerpts(input_folder_path, output_folder_
 
 
 separate(input_path="datasets/emotify/emotify_music", output_path="datasets/emotify/very_separated", should_override= False, model_file_name="htdemucs_6s.yaml")
-#split_mp3_file_into_excerpts("datasets/emotify/emotify_music/classical/1.mp3","datasets/emotify/clips", 15)
-#split_sound_files_in_folders_into_excerpts("datasets/emotify/Separated_and_mixed_versions", "datasets/emotify/clips", 15)
+#split_sound_files_in_folders_into_excerpts("datasets/emotify/very_separated", "datasets/emotify/very_separated_clips", 15)

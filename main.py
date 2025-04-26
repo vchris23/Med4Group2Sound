@@ -24,8 +24,8 @@ import pandas as pd
 from Analysis import _get_best_dimensionality, get_fitted_pca, transform_features_of_tracks, \
     save_correlation_of_pca_and_og_features, get_pca_tracks_and_correlation, interpret_principal_components
 
-all_tracks = import_tracks("datasets/emotify/clips", "datasets/emotify/emotify_data.csv", features_xml_path="feature_values_1.xml",
-                     sources=["Instrumental", "Mixed", "Vocals"], amount_to_take=None)
+all_tracks = import_tracks("datasets/emotify/very_separated_clips/Separated_and_mixed_versions", "datasets/emotify/emotify_data.csv", features_xml_path="feature_values_1.xml",
+                     sources=["Bass", "Drums", "Guitar", "Mixed", "Other", "Piano", "Vocals"], amount_to_take=None)
 
 all_tracks = [track for track in all_tracks if track.label[0] != "amazement"]
 
@@ -40,7 +40,11 @@ for feature_vector in [track.features for track in all_tracks]:
 plt.title("Before")
 plt.show()
 
-scaler = Scalers.ROBUST
+for i in range(40, 60):
+    val_list = [track.features[i] for track in all_tracks]
+    print(f"Max in index {i}: {max(val_list)}")
+
+scaler = Scalers.MINMAX
 new_all_tracks = scale_features(all_tracks, scaler)
 print("Using this scaler: ", scaler)
 
@@ -102,3 +106,4 @@ if use_pca: print(f"This was done with PCA ratio at {ratio}")
 else: print("This was done without PCA")
 
 if oversampler_do: print("Using oversampler")
+
