@@ -4,6 +4,7 @@ from collections import defaultdict
 from itertools import groupby
 
 import librosa
+import numpy
 from librosa.filters import chroma
 from onnx.numpy_helper import from_dict
 from sklearn.feature_extraction import DictVectorizer
