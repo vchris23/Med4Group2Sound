@@ -1,7 +1,4 @@
-﻿from turtledemo.penrose import start
-
-import audio_separator.utils.cli
-from audio_separator.separator import Separator
+﻿from audio_separator.separator import Separator
 import soundfile
 import os
 import shutil
@@ -113,5 +110,5 @@ def split_sound_files_in_folders_into_excerpts(input_folder_path, output_folder_
 
 
 
-separate(input_path="datasets/emotify/emotify_music", output_path="datasets/emotify/very_separated", should_override= False, model_file_name="htdemucs_6s.yaml")
+separate(input_path="datasets/emotify/emotify_music", output_path="datasets/emotify/very_separated", should_override= False)
 #split_sound_files_in_folders_into_excerpts("datasets/emotify/very_separated", "datasets/emotify/very_separated_clips", 15)
