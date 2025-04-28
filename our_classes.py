@@ -47,7 +47,7 @@ class Track:
         self.features:list = []
 
     def __str__(self):
-        return f"name: {self.name}, label: {self.label}, source: {self.source}, original: {self.original_track}"
+        return f"name: {self.name}, label: {self.label}, source: {self.source}, original: {self.original_track}, length of features: {len(self.features)}"
 
     def __copy__(self):
         copy_track = Track(self.sound, self.label, self.source, self.original_track, self.name)
