@@ -26,8 +26,9 @@ def convert_folder_to_wav(should_override):
 
 def _execute_separation(separator, song_path, output_path):
 
-    song_name = os.path.split(song_path)[1]
-    song_name, song_format = song_name.split(".")
+    song_name_1 = os.path.split(song_path)[1]
+    song_name, song_format = os.path.splitext(song_name_1)
+    song_format = song_format[1:]
 
     song, sr = soundfile.read(song_path)
     soundfile.write(os.path.join(output_path, "Mixed_" + song_name + f".{song_format}"), song, sr)
@@ -63,14 +64,19 @@ def separate(input_path, output_path, should_override, model_file_name = None):
             songs = os.listdir(sub_item_path)
             print(sub_item_path)
             for song in songs:
+                if i >= 30:
+                    break  # Stop after 30 songs total (across all subfolders)
                 song_path = os.path.join(sub_item_path, song)
+                if not should_override and os.path.exists(os.path.join(output_sub_folder, "Vocals_" + song)):
+                    continue
                 print(sep.output_dir)
                 i += 1
                 print(i)
-                if not should_override and os.path.exists(os.path.join(output_sub_folder, "Vocals_" + song)): continue
                 _execute_separation(sep, song_path, output_sub_folder)
         else:
-            if os.path.split(sub_item_path)[1][:4] != ".mp3" or ".wav": continue
+            file_type = os.path.split(sub_item_path)[1][-4:]
+            if file_type != ".mp3" and file_type != ".wav": continue
+            if not should_override and os.path.exists(os.path.join(output_folder, "Vocals_" + os.path.split(sub_item_path)[1])): continue
             _execute_separation(sep, sub_item_path, output_folder)
 
 def _split_mp3_file_into_excerpts(song_path, output_folder_path, clip_length_in_seconds):
@@ -113,6 +119,6 @@ def split_sound_files_in_folders_into_excerpts(input_folder_path, output_folder_
 
 
 
-separate(input_path="datasets/emotify/emotify_music", output_path="datasets/emotify/very_separated", should_override= False, model_file_name="htdemucs_6s.yaml")
+separate(input_path="datasets/New dataset/CAL500_32kps", output_path="datasets/New dataset/SeperatedeSongs", should_override= False)
 #split_mp3_file_into_excerpts("datasets/emotify/emotify_music/classical/1.mp3","datasets/emotify/clips", 15)
 #split_sound_files_in_folders_into_excerpts("datasets/emotify/Separated_and_mixed_versions", "datasets/emotify/clips", 15)
