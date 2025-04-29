@@ -7,6 +7,7 @@ import librosa
 from librosa.filters import chroma
 from onnx.numpy_helper import from_dict
 from sklearn.feature_extraction import DictVectorizer
+from sympy import false
 
 import OurSound
 from OurSound import SpectrogramType
@@ -21,8 +22,11 @@ import pandas as pd
 
 emotion_lookup = {0: "amazement", 1: "solemnity", 2: "tenderness", 3: "nostalgia", 4:"calmness", 5:"power", 6:"joyful_activation", 7:"tension", 8:"sadness"}
 
-def get_name_from_path(path):
-    song_folder, song_title = path.split("\\")[-2:]
+def get_name_from_path(path, use_forward_slash:bool = False): #Maybe use this
+    if use_forward_slash:
+        song_folder, song_title = path.split("/")[-2:]
+    else:
+        song_folder, song_title = path.split("\\")[-2:]
     song_name = os.path.join(song_folder, song_title)
     return song_name
 
@@ -110,7 +114,7 @@ def _get_tracks(music_folder_path:str, label_csv_path:str, sources:list, samplin
 
     return tracks
 
-def _get_names_and_features_from_xml(path):
+def _get_names_and_features_from_xml(path): #use this
     tree = ET.parse(path)
 
     names_and_feature_vectors = []
@@ -139,14 +143,15 @@ def _get_names_and_features_from_xml(path):
 
     return names_and_feature_vectors
 def get_get_chroma_features(track:Track):
-    chromagram = OurSound.get_spectrogram(track.sound[0], sampling_rate=44100, number_of_bands=12, horizontal_resolution=1024, spectrogram_type=SpectrogramType.stft_chromagram)
+    sound = track.sound[0] if type(track.sound) is tuple else track.sound
+    chromagram = OurSound.get_spectrogram(sound, sampling_rate=44100, number_of_bands=12, horizontal_resolution=1024, spectrogram_type=SpectrogramType.stft_chromagram)
 
     features = []
     for band in chromagram:
         features.append(np.mean(band))
     return features
 
-def _assign_features_to_tracks(tracks:list, names_and_feature_vectors:list):
+def _assign_features_to_tracks(tracks:list, names_and_feature_vectors:list): #use this
     name_list = [name_and_feature[0] for name_and_feature in names_and_feature_vectors]
     for track in tracks:
         try:
@@ -155,8 +160,6 @@ def _assign_features_to_tracks(tracks:list, names_and_feature_vectors:list):
 
         except ValueError:
             continue
-
-
 
     return tracks
 
