@@ -76,6 +76,8 @@ def separate(input_path, output_path, should_override, model_file_name = None):
         else:
             file_type = os.path.split(sub_item_path)[1][-4:]
             if file_type != ".mp3" and file_type != ".wav": continue
+            i += 1
+            print(i)
             if not should_override and os.path.exists(os.path.join(output_folder, "Vocals_" + os.path.split(sub_item_path)[1])): continue
             _execute_separation(sep, sub_item_path, output_folder)
 
