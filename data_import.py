@@ -22,10 +22,20 @@ import pandas as pd
 emotion_lookup = {0: "amazement", 1: "solemnity", 2: "tenderness", 3: "nostalgia", 4:"calmness", 5:"power", 6:"joyful_activation", 7:"tension", 8:"sadness"}
 
 def get_name_from_path(path):
-    song_folder, song_title = path.split("\\")[-2:]
+    song_folder_path, song_title = os.path.split(path)
+    song_folder = os.path.split(song_folder_path)[1]
     song_name = os.path.join(song_folder, song_title)
     return song_name
 
+def get_original_name_and_source_from_file_name(file_name:str):
+    split_name = file_name.split("_")
+    source = split_name[0]
+    part_with_file_type = split_name[-1]
+    original_name = file_name[len(source) + 1:-(len(part_with_file_type) + 1)] #We add one to each to account for the underscore
+    print(file_name)
+    print(original_name)
+
+    return original_name, source
 def add_list(list_a, list_b):
     summed_list = list_a.copy()
     for i in range(len(list_a)):

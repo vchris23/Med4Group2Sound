@@ -121,6 +121,6 @@ def split_sound_files_in_folders_into_excerpts(input_folder_path, output_folder_
 
 
 
-separate(input_path="datasets/New dataset/CAL500_32kps", output_path="datasets/New dataset/SeperatedeSongs", should_override= False)
+#separate(input_path="datasets/New dataset/CAL500_32kps", output_path="datasets/New dataset/SeperatedeSongs", should_override= False)
 #split_mp3_file_into_excerpts("datasets/emotify/emotify_music/classical/1.mp3","datasets/emotify/clips", 15)
-#split_sound_files_in_folders_into_excerpts("datasets/emotify/Separated_and_mixed_versions", "datasets/emotify/clips", 15)
+split_sound_files_in_folders_into_excerpts("datasets/New dataset/SeperatedeSongs/Separated_and_mixed_versions", "datasets/New dataset/Clips", 15)
