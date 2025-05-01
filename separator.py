@@ -30,6 +30,9 @@ def _execute_separation(separator, song_path, output_path):
     song_name, song_format = song_name.split(".")
 
     song, sr = soundfile.read(song_path)
+    if song.shape[0] < 300000:
+        print(f"SONG {song_name} WAS SHORTER THAN ALLOWED")
+        return
     soundfile.write(os.path.join(output_path, "Mixed_" + song_name + f".{song_format}"), song, sr)
 
     source_names = {
@@ -72,6 +75,8 @@ def separate(input_path, output_path, should_override, model_file_name = None):
         else:
             file_type = os.path.split(sub_item_path)[1][-4:]
             if file_type != ".mp3" and file_type != ".wav": continue
+            i += 1
+            print(i)
             if not should_override and os.path.exists(os.path.join(output_folder, "Vocals_" + os.path.split(sub_item_path)[1])): continue
             _execute_separation(sep, sub_item_path, output_folder)
 
@@ -118,4 +123,4 @@ def split_sound_files_in_folders_into_excerpts(input_folder_path, output_folder_
 separate(input_path="MERGE-datas/AllSongsQ1-4", output_path="MERGE-datas/AllSongsSourceSep", should_override= False)
          #model_file_name="htdemucs_6s.yaml")
 #split_mp3_file_into_excerpts("datasets/emotify/emotify_music/classical/1.mp3","datasets/emotify/clips", 15)
-split_sound_files_in_folders_into_excerpts("MERGE-datas/AllSongsSourceSep/Separated_and_mixed_versions", "MERGE-datas/AllSongs15Sec", 15)
+#split_sound_files_in_folders_into_excerpts("MERGE-datas/AllSongsSourceSep/Separated_and_mixed_versions", "MERGE-datas/AllSongs15Sec", 15)
