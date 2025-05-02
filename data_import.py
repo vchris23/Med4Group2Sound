@@ -21,7 +21,8 @@ import pandas as pd
 emotion_lookup = {0: "amazement", 1: "solemnity", 2: "tenderness", 3: "nostalgia", 4:"calmness", 5:"power", 6:"joyful_activation", 7:"tension", 8:"sadness"}
 
 def get_name_from_path(path):
-    song_folder, song_title = path.split("\\")[-2:]
+    song_folder_path, song_title = os.path.split(path)
+    song_folder = os.path.split(song_folder_path)[1]
     song_name = os.path.join(song_folder, song_title)
     return song_name
 
@@ -148,6 +149,7 @@ def _get_names_and_features_from_xml(path):
         song_path = sets[0].text
         song_name = get_name_from_path(song_path)
         name_and_vector.append(song_name)
+        print(f"Getting features for {song_name}...")
 
         feature_vector = []
 
@@ -165,7 +167,8 @@ def _get_names_and_features_from_xml(path):
 
     return names_and_feature_vectors
 def get_get_chroma_features(track:Track):
-    chromagram = OurSound.get_spectrogram(track.sound[0], sampling_rate=44100, number_of_bands=12, horizontal_resolution=1024, spectrogram_type=SpectrogramType.stft_chromagram)
+    print(f"Assigning chromagram to {track.name}")
+    chromagram = OurSound.get_spectrogram(track.sound, sampling_rate=44100, number_of_bands=12, horizontal_resolution=1024, spectrogram_type=SpectrogramType.stft_chromagram)
 
     features = []
     for band in chromagram:

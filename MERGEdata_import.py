@@ -8,18 +8,12 @@ from data_import import _get_names_and_features_from_xml, get_name_from_path, _a
 #from SVM_test import labels
 from data_import import _get_names_and_features_from_xml
 
-original_folder_path= "MERGE-datas/AllSongsQ1-4"
-path_to_SS_clips = "MERGE-datas/AllSongs15Sec"
-
-songs=[]
 
 def removing_redundant_characters():
     song_and_quadrant = []
     load_song_name_and_quadrant = np.loadtxt('MERGE-datas/merge_audio_balanced_metadataMIN2(1).csv', delimiter= ';', ndmin=2, dtype=np.object_)
     return load_song_name_and_quadrant[:, 0:2]
 
-
-SS_and_clipped_audio_list = [f for f in listdir('MERGE-datas/AllSongs15Sec') if isfile(join('MERGE-datas/AllSongs15Sec', f))]
 
 def separating_source_name_part(clip_name):
     names_and_quadrants_list = removing_redundant_characters()
@@ -28,23 +22,19 @@ def separating_source_name_part(clip_name):
 
     return og_name
 
-def filling_track_list(tracks_amount: int):
-    tracks_list = _get_tracks_without_features_or_labels("MERGE-datas/AllSongs15Sec", tracks_amount)
-    i = 0
+def filling_track_list(clips_folder_path: str, xml_file_path, tracks_amount: int = None):
+    tracks_list = _get_tracks_without_features_or_labels(clips_folder_path, tracks_amount)
+
     for track in tracks_list:
         quadrant = separating_source_name_part(track.original_track)
         track.label = quadrant
 
-        i += 1
-        if i > tracks_amount: break
-
-    features = _get_names_and_features_from_xml("MERGE-datas/feature_values_15sPT2.xml")
+    features = _get_names_and_features_from_xml(xml_file_path)
     tracks_with_features = _assign_features_to_tracks(tracks_list, features)
-    print(tracks_with_features[0])
+    return tracks_with_features
 
-
-filling_track_list(10)
-
+filled_tracks_list = filling_track_list(None)
+print(filled_tracks_list[0])
 """"
 for name, vector in features[:3]:
     print("\nTrack:", name)
