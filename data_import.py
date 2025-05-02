@@ -2,7 +2,6 @@
 import time
 from collections import defaultdict
 from itertools import groupby
-
 import librosa
 from librosa.filters import chroma
 from onnx.numpy_helper import from_dict
@@ -42,6 +41,34 @@ def add_list(list_a, list_b):
     for i in range(len(list_a)):
         summed_list[i] += list_b[i]
     return summed_list
+
+def get_original_name_and_source_from_file_name(file_name:str): #this
+    split_name = file_name.split("_")
+    source = split_name[0]
+    part_with_file_type = split_name[-1]
+    original_name = file_name[len(source) + 1:-(len(part_with_file_type) + 1)] #We add one to each to account for the underscore
+    print("getting original name and source from: ", file_name)
+
+    return original_name, source
+
+def _make_track(path:str): #this
+    """Whole path to clip"""
+    track = Track()
+    print(path)
+    track.sound = np.float16(librosa.load(path)[0])
+    print(track.sound.shape)
+    track.name = get_name_from_path(path)
+    track.original_track, track.source = get_original_name_and_source_from_file_name(os.path.split(path)[1])
+    return track
+
+def _get_tracks_without_features_or_labels(sound_folder_path:str): #this - use this - everything without features or lables, so names, source, track
+    """Only sound files can be in the sound_folder_path directory - AllSongs15Sec"""
+
+    files = os.listdir(sound_folder_path)
+    paths = [os.path.join(sound_folder_path, file) for file in files]
+    tracks = list(map(_make_track, paths))
+
+    return tracks
 
 def _vote_on_emotion_label(label_lists_for_id):
     total_list = label_lists_for_id[0].copy()
