@@ -20,17 +20,6 @@ import pandas as pd
 
 emotion_lookup = {0: "amazement", 1: "solemnity", 2: "tenderness", 3: "nostalgia", 4:"calmness", 5:"power", 6:"joyful_activation", 7:"tension", 8:"sadness"}
 
-def __init__(self, sound=None, label = None, source=None, original_track=None, name=None):
-    self.sound = sound #Must be filled
-    self.label:str = label #must be filled
-    self.source:str = source #must be filled
-    self.train_or_test:str=""
-    self.original_track:str=original_track #must be filled
-    self.name:str=name
-    self.feature:list=[] #must be filled
-
-
-
 def get_name_from_path(path):
     song_folder, song_title = path.split("\\")[-2:]
     song_name = os.path.join(song_folder, song_title)
@@ -54,17 +43,16 @@ def get_original_name_and_source_from_file_name(file_name:str): #this
 def _make_track(path:str): #this
     """Whole path to clip"""
     track = Track()
-    print(path)
     track.sound = np.float16(librosa.load(path)[0])
-    print(track.sound.shape)
     track.name = get_name_from_path(path)
     track.original_track, track.source = get_original_name_and_source_from_file_name(os.path.split(path)[1])
     return track
 
-def _get_tracks_without_features_or_labels(sound_folder_path:str): #this - use this - everything without features or lables, so names, source, track
-    """Only sound files can be in the sound_folder_path directory - AllSongs15Sec"""
+def _get_tracks_without_features_or_labels(sound_folder_path:str, amount_to_take = None): #this - use this - everything without features or lables, so names, source, track
+    """Only sound files can be in the sound_folder_path directory - AllSongs15Sec
+    \n If amount to take is None then it takes all songs, else it takes a certain number of songs. No considerations are taken if amount ot take is higher then the number of songs"""
 
-    files = os.listdir(sound_folder_path)
+    files = os.listdir(sound_folder_path)[:amount_to_take] if amount_to_take is not None else os.listdir(sound_folder_path)
     paths = [os.path.join(sound_folder_path, file) for file in files]
     tracks = list(map(_make_track, paths))
 

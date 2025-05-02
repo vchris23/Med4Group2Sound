@@ -21,30 +21,34 @@ def removing_redundant_characters():
 
 SS_and_clipped_audio_list = [f for f in listdir('MERGE-datas/AllSongs15Sec') if isfile(join('MERGE-datas/AllSongs15Sec', f))]
 
-def separating_source_name_part():
+def separating_source_name_part(clip_name):
     names_and_quadrants_list = removing_redundant_characters()
-    names = list(names_and_quadrants_list[:,0])
-    print(names)
-    print(names_and_quadrants_list[names.index('A013'), 1])
+    names = list(names_and_quadrants_list[:,0]) #a list with all the og names
+    og_name = (names_and_quadrants_list[names.index(clip_name), 1]) #Q corresponding to the og name in the paranthesis
 
-test = _get_tracks_without_features_or_labels("MERGE-datas/AllSongs15Sec")
-print(test)
+    return og_name
 
-#testtwo, _ = get_original_name_and_source_from_file_name("Instrumental_A001_PT1.mp3")
-#print(testtwo)
+def filling_track_list(tracks_amount: int):
+    tracks_list = _get_tracks_without_features_or_labels("MERGE-datas/AllSongs15Sec", tracks_amount)
+    i = 0
+    for track in tracks_list:
+        quadrant = separating_source_name_part(track.original_track)
+        track.label = quadrant
+
+        i += 1
+        if i > tracks_amount: break
+
+    features = _get_names_and_features_from_xml("MERGE-datas/feature_values_15sPT2.xml")
+    tracks_with_features = _assign_features_to_tracks(tracks_list, features)
+    print(tracks_with_features[0])
+
+
+filling_track_list(10)
 
 """"
-# Sti til XML-fil med features
-xml_path = "MERGE-datas/feature_values_15sPT2.xml"
-# Hent alle features og filnavne
-features = _get_names_and_features_from_xml(xml_path)
-# Vis hvor mange tracks der er fundet
-#print("Number of feature sets loaded:", len(features))
-# Vis de første 3
 for name, vector in features[:3]:
     print("\nTrack:", name)
     print("First 5 features:", vector[:5])
-
 
 #loop køres igennem mappen af sangenee (så vi kan arbejde med enkelte sange)
 for file in os.listdir(folder_path): #os.listdir returnere en liste med alle filnavne i mappen

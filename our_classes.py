@@ -42,12 +42,12 @@ class Track:
         self.label:str = label #Q1-Q4
         self.source:str = source #Instrumental, mixed or voice
         self.train_or_test:str = ""
-        self.original_track:str = original_track #name of og track before source separation and clip
+        self.original_track:str = original_track #name of OG track before source separation and clip
         self.name: str = name #name of directory and song name
         self.features:list = [] #
 
     def __str__(self):
-        return f"name: {self.name}, label: {self.label}, source: {self.source}, original: {self.original_track}"
+        return f"name: {self.name}, label: {self.label}, source: {self.source}, original: {self.original_track}, length of features: {len(self.features)}"
 
     def __copy__(self):
         copy_track = Track(self.sound, self.label, self.source, self.original_track, self.name)
