@@ -119,6 +119,6 @@ def split_sound_files_in_folders_into_excerpts(input_folder_path, output_folder_
 
 
 
-separate(input_path="datasets/MIREX-like_mood/Audio", output_path="datasets/MIREX-like_mood/Source_separated_audio", should_override= False)
+#separate(input_path="datasets/MIREX-like_mood/Audio", output_path="datasets/MIREX-like_mood/Source_separated_audio", should_override= False)
 #_split_mp3_file_into_excerpts("MIREX-like_mood/Source_separated_audio","MIREX-like_mood/SS_and_clipped_audio", 15)
-#split_sound_files_in_folders_into_excerpts("datasets/MIREX-like_mood/Source_separated_audio",  "datasets/MIREX-like_mood/SS_and_clipped_audio", 15)
+split_sound_files_in_folders_into_excerpts("datasets/MIREX-like_mood/Source_separated_audio",  "datasets/MIREX-like_mood/SS_and_clipped_audio", 15)
