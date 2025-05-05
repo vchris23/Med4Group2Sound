@@ -32,8 +32,7 @@ def get_original_name_and_source_from_file_name(file_name:str):
     source = split_name[0]
     part_with_file_type = split_name[-1]
     original_name = file_name[len(source) + 1:-(len(part_with_file_type) + 1)] #We add one to each to account for the underscore
-    print(file_name)
-    print(original_name)
+    print("getting original name and source from: ", file_name)
 
     return original_name, source
 def add_list(list_a, list_b):
