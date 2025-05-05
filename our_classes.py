@@ -1,11 +1,43 @@
 ﻿from collections import defaultdict
 from copy import deepcopy
 from itertools import groupby
-
+from librosa.feature import rms
+from librosa.display import specshow
 import pandas as pd
-
+import numpy as np
+from OurSound import get_spectrogram
+from matplotlib import pyplot as plt
 
 class Track:
+
+    @staticmethod
+    def remove_empty_tracks(tracks:list):
+        """Removes all tracks, where one of the streams has a root mean square less than 0.01"""
+        tracks.sort(key = lambda x: x.original_track)
+        tracks_by_original_track = groupby(tracks, key=lambda x: x.original_track)
+        cleaned_tracks = []
+        summations = []
+        for group, group_tracks in tracks_by_original_track:
+            track_list = list(group_tracks)
+            track_list.sort(key = lambda x: x.source)
+            tracks_by_source = groupby(track_list, key=lambda x: x.source)
+
+            for source, grouped_tracks in tracks_by_source:
+                summed_rms = 0.0
+                i = 0
+                for track in grouped_tracks:
+                    i += 1
+                    summed_rms += np.mean(rms(y=track.sound))
+                summations.append(summed_rms/i)
+                if summed_rms/i < 0.015:
+                    print(f"Removing {group}")
+                    break
+
+            else:
+                cleaned_tracks.extend(track_list)
+
+        print(f"original number of tracks: {len(tracks)}, new number of tracks: {len(cleaned_tracks)}")
+        return cleaned_tracks
     @staticmethod
     def tracks_to_features_and_labels(tracks:list):
         """Output a deepcopy of the features and labels of all the tracks"""

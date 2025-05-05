@@ -77,7 +77,7 @@ def _get_tracks_with_sound_and_source(music_folder_path:str, source_types:list, 
         for content in folder_content:
 
             content_path = os.path.join(genre_folder, content)
-            song = librosa.load(content_path, sr=sampling_rate)
+            song = librosa.load(content_path, sr=sampling_rate)[0]
 
             source, number, part = content.split('_')
             source = source.split(".")[0]
@@ -140,7 +140,7 @@ def _get_names_and_features_from_xml(path):
 
     return names_and_feature_vectors
 def get_get_chroma_features(track:Track):
-    chromagram = OurSound.get_spectrogram(track.sound[0], sampling_rate=44100, number_of_bands=12, horizontal_resolution=1024, spectrogram_type=SpectrogramType.stft_chromagram)
+    chromagram = OurSound.get_spectrogram(track.sound, sampling_rate=44100, number_of_bands=12, horizontal_resolution=1024, spectrogram_type=SpectrogramType.stft_chromagram)
 
     features = []
     for band in chromagram:
@@ -154,7 +154,7 @@ def _assign_features_to_tracks(tracks:list, names_and_feature_vectors:list):
             track.features = names_and_feature_vectors[name_list.index(track.name)][1]
             track.features.extend(get_get_chroma_features(track))
 
-        except ValueError:
+        except ValueError: #In case the song can't be found in our list of tracks
             continue
 
 
@@ -185,6 +185,7 @@ def import_tracks(music_folder_path:str, label_csv_path:str, features_xml_path:s
     names_and_features = _get_names_and_features_from_xml(features_xml_path)
     tracks = _get_tracks(music_folder_path, label_csv_path,
                          sources, amount_to_take=amount_to_take)
+    tracks = Track.remove_empty_tracks(tracks)
     tracks = _assign_features_to_tracks(tracks, names_and_features)
 
     return tracks

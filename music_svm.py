@@ -104,23 +104,21 @@ def classify_and_get_conf_scores(svm:OneVsRestClassifier, track:Track | list, fe
     feature_names = get_feature_names("feature_values_1.xml", True) if feature_names is None else feature_names
     if type(track) == list:
         dataframe_features = Track.tracks_features_to_dataframe(track, feature_names)
+
+        y_pred_ova: list = svm.predict(dataframe_features)
+        y_pred_ova: list = list(map(lambda x: str(x), y_pred_ova))
+
+        y_confidence: list = svm.predict_proba(dataframe_features)
     else:
         dataframe_features = Track.tracks_features_to_dataframe([track], feature_names)
-
-
-
-    y_pred_ova:str = str(svm.predict(dataframe_features)[0]) #svm predict requires it to have multiple dimensions, but the output is also a list, therefore the [] and [0]
-                                                           #Additionally we have to cast it to a string, since it returns it as an numpy.str_ which is annoying to work with
-    y_confidence:list = svm.predict_proba(dataframe_features)
+        y_pred_ova: str = str(svm.predict(dataframe_features)[0])
+        y_confidence: list = svm.predict_proba(dataframe_features)
 
     return y_pred_ova, y_confidence
 
 
 def get_scores(prediction_results, actual_results):
     """Return accuracy, precision, and recall"""
-
-    print(prediction_results[:4])
-    print(actual_results[:4])
 
     acc = metrics.accuracy_score(actual_results, prediction_results)
     pre = metrics.precision_score(actual_results, prediction_results, average='macro', zero_division=np.nan)
@@ -180,7 +178,7 @@ def classify_by_original_track(svm:OneVsRestClassifier, tracks:list):
     for key in results.keys():
         classification_results[lookup_table[key][0]] = _class_from_confidence_scores(svm, results[key])
 
-    return classification_results
+    return _result_dic_to_predictions_and_labels(classification_results)
 
 def combined_classification_by_original_track(svms:list, track_lists:list):
     result_dictionaries = []
@@ -201,13 +199,13 @@ def combined_classification_by_original_track(svms:list, track_lists:list):
         summed_scores:list = list(sum(scores))
         combined_result_dict[lookup_table[key][0]] = _class_from_confidence_scores(svms[0], summed_scores)
 
-    return combined_result_dict
+    return _result_dic_to_predictions_and_labels(combined_result_dict)
 
 def classify_tracks(svm:OneVsRestClassifier, tracks:list, feature_names:list = None):
     """Returns list of predictions and list of labels"""
 
     result_dict = {}
-    predictions = classify_and_get_conf_scores(svm, tracks, feature_names)
+    predictions = classify_and_get_conf_scores(svm, tracks, feature_names)[0] #[0] means we only get the predicted class
 
     for i in range(len(predictions)):
         result_dict[tracks[i]] = predictions[i]
@@ -258,6 +256,24 @@ def classify_and_get_scores(svm:OneVsRestClassifier | list, tracks:list, plot_co
 
     else:
         predictions, labels = classify_tracks(svm, tracks, feature_names)
+
+    if plot_confusion_matrix:
+        get_confusion_matrix(predictions, labels, confusion_matrix_title)
+
+    return get_scores(predictions, labels)
+
+def classify_by_original_track_and_get_scores(svm:OneVsRestClassifier | list, tracks:list, plot_confusion_matrix:bool = False, confusion_matrix_title:str = None, feature_names:list = None):
+    """ If svm is a list, ensemble classification is assumed, so tracks must be a list of lists of tracks \n
+    Returns accuracy, precision, and recall"""
+
+    for track in tracks:
+        print(track)
+
+    if type(svm) == list:
+        predictions, labels = combined_classification_by_original_track(svm, tracks, feature_names)
+
+    else:
+        predictions, labels = classify_by_original_track(svm, tracks, feature_names)
 
     if plot_confusion_matrix:
         get_confusion_matrix(predictions, labels, confusion_matrix_title)
