@@ -33,7 +33,7 @@ def filling_track_list(clips_folder_path: str, xml_file_path, tracks_amount: int
     tracks_with_features = _assign_features_to_tracks(tracks_list, features)
     return tracks_with_features
 
-filled_tracks_list = filling_track_list(None)
+filled_tracks_list = filling_track_list('MERGE-datas/AllSongs15Sec', 'MERGE-datas/feature_values_1.xml', None)
 print(filled_tracks_list[0])
 """"
 for name, vector in features[:3]:
