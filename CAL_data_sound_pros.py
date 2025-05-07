@@ -9,7 +9,7 @@ from collections import defaultdict
 from data_import import get_name_from_path, get_original_name_and_source_from_file_name, _get_names_and_features_from_xml, _assign_features_to_tracks
 from our_classes import Track
 
-
+i = 0
 def _get_new_label(labels:list):
     is_happy:bool = labels.count('happy') > 0 or labels.count('cheerful') > 0
     is_sad:bool = labels.count('sad') > 0 or labels.count('depressed') > 0
@@ -42,7 +42,6 @@ def _get_new_label(labels:list):
         label = f"{label}romantic "
 
     if label == "":
-        if label == "":
             label = 'neutral'
 
     return label
@@ -58,12 +57,11 @@ def _generate_new_label_file(annoated_path:str, remove_limit:int = 4):
     label_counter = defaultdict(int)
     for song in songs_to_labels.keys():
         new_label = _get_new_label(songs_to_labels[song])
-        if new_label == 'neutral': continue
         label_counter[new_label] += 1
         songs_to_labels[song] = new_label
 
     for song in copy(songs_to_labels).keys():
-        if label_counter[songs_to_labels[song]] <= remove_limit:
+        if label_counter[songs_to_labels[song]] <= remove_limit or songs_to_labels[song] == 'neutral':
             del songs_to_labels[song]
 
     annotated_dir = os.path.split(annoated_path)[0]
@@ -117,5 +115,5 @@ def get_cal_tracks(annoated_path:str, sound_folder_path:str, feature_xml_path):
 
 
 
-#_generate_new_label_file("datasets/New dataset/cal_annotations2.txt")
-get_cal_tracks("datasets/New dataset/new_annotated.txt", "datasets/New dataset/Clips", "datasets/New dataset/feature_values_1.xml")
+_generate_new_label_file("datasets/New dataset/cal_annotations2.txt")
+#get_cal_tracks("datasets/New dataset/new_annotated.txt", "datasets/New dataset/Clips", "datasets/New dataset/feature_values_1.xml")

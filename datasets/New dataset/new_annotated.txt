@@ -32,7 +32,6 @@ apples_in_stereo-glowworm;happy
 aretha_franklin-dont_play_that_song;happy romantic 
 arlo_guthrie-alices_restaurant_massacree;happy calming 
 artemis-don_t_look_back;sad 
-arthur_alexander-you_dont_care;neutral
 arthur_yoria-at_least_you_ve_been_told;sad 
 ashford_and_simpson-solid;happy romantic 
 association-windy;happy 
@@ -63,12 +62,9 @@ billy_bragg-jeane;sad
 billy_joel-we_didnt_start_the_fire;happy 
 birthday_party-mr._clarinet;sad angry exciting 
 bjrk-army_of_me;sad angry 
-black_crowes-thorn_in_my_pride;neutral
 black_flag-six_pack;sad angry 
 black_sabbath-black_sabbath;sad angry exciting 
 blind_faith-had_to_cry_today;sad 
-blind_melon-no_rain;neutral
-blondie-rapture;neutral
 blood_sweat_and_tears-sometimes_in_winter;calming romantic 
 blue_yster_cult-burnin_for_you;happy 
 blur-country_house;happy 
@@ -85,21 +81,16 @@ boo_radleys-wake_up_boo;happy
 boogie_down_productions-the_bridge_is_over;sad angry exciting 
 booker_t._and_the_mgs-time_is_tight;happy 
 boston-more_than_a_feeling;happy exciting 
-bots-take_the_power_back;neutral
-brad_sucks-overreacting;neutral
 bread-if;calming romantic 
-breeders-cannonball;neutral
 brenton_wood-lovey_dovey_kind_of_love;happy calming romantic 
 brian_eno-here_come_the_warm_jets;happy 
 britney_spears-im_a_slave_for_you;happy 
 bruce_springsteen-badlands;happy 
 bryan_adams-cuts_like_a_knife;sad 
-buddy_holly-peggy_sue;neutral
 buffalo_springfield-for_what_its_worth;sad calming 
 buffalo_springfield-mr._soul;sad exciting 
 buggles-video_killed_the_radio_star;happy 
 built_to_spill-i_would_hurt_a_fly;sad 
-burnshee_thornside-goodbye_on_a_beautiful_day;neutral
 bush-comedown;sad angry 
 busta_rhymes-woo_hah_got_you_all_in_check;angry 
 buzzcocks-everybodys_happy_nowadays;happy 
@@ -108,7 +99,6 @@ c_layne-devil_and_the_woman;sad
 cab_calloway-minnie_the_moocher;exciting 
 cake-perhaps,_perhaps,_perhaps;sad 
 camper_van_beethoven-take_the_skinheads_bowling;happy 
-canned_heat-on_the_road_again;neutral
 captain_beefheart_and_the_magic_band-safe_as_milk;sad angry 
 cardigans-lovefool;happy 
 cargo_cult-garden;sad angry exciting 
@@ -131,16 +121,11 @@ chet_baker-these_foolish_things;calming romantic
 chicago-if_you_leave_me_now;sad calming romantic 
 chic-le_freak;happy exciting 
 chi-lites-stoned_out_of_my_mind;happy calming romantic 
-chills-i_love_my_leather_jacket;neutral
 chris_juergensen-prospects;calming 
 christina_aguilera-genie_in_a_bottle;happy 
 chuck_berry-roll_over_beethoven;happy 
 chumbawamba-tubthumping;happy exciting 
-church-under_the_milky_way;neutral
 cilla_black-alfie;calming 
-clarence_ashley-the_house_carpenter;neutral
-clash-lost_in_the_supermarket;neutral
-coasters-poison_ivy;neutral
 coldplay-clocks;calming 
 contours-do_you_love_me;happy exciting 
 counting_crows-speedway;sad calming 
@@ -150,10 +135,7 @@ cream-tales_of_brave_ulysses;sad
 creedence_clearwater_revival-travelin_band;happy exciting 
 crosby_stills_and_nash-guinnevere;calming 
 crosby_stills_nash_and_young-teach_your_children;calming 
-curandero-aras;neutral
-cure-just_like_heaven;neutral
 curtis_mayfield-move_on_up;happy 
-cyndi_lauper-money_changes_everything;neutral
 cypress_hill-lowrider;exciting 
 daft_punk-da_funk;happy 
 darkness-i_believe_in_a_thing_called_love;exciting 
@@ -164,30 +146,24 @@ dead_kennedys-chemical_warfare;angry exciting
 def_leppard-pour_some_sugar_on_me;happy exciting 
 dennis_brown-tribulation;calming 
 depeche_mode-world_in_my_eyes;sad 
-devo-girl_u_want;neutral
 diana_ross_and_the_supremes-where_did_our_love_go;happy calming romantic 
 dido-here_with_me;calming romantic 
 dionne_warwick-walk_on_by;sad calming 
 dire_straits-money_for_nothing;happy 
 dj_jazzy_jeff_and_the_fresh_prince-summertime;happy 
 dj_markitos-sunset_138_bpm_remix;sad 
-domased-too_slow;neutral
-donovan-catch_the_wind;neutral
 doobie_brothers-china_grove;happy exciting 
 dr._dre-nuthin_but_a_g_thang;angry 
 dr_kuch-persuaders_dub;sad exciting 
 drevo-our_watcher_show_us_the_way;sad calming 
 drop_trio-slapjack;happy calming 
 duke_ellington_and_his_orchestra-caravan;happy 
-duncan_sheik-barely_breathing;neutral
 duran_duran-come_undone;sad calming romantic 
 eagles-tequila_sunrise;sad calming 
 earth_wind_and_fire-september;happy 
-eels-cancer_for_the_cure;neutral
 electric_frankenstein-teenage_shutdown;sad angry 
 elliott_smith-baby_britain;happy calming 
 elton_john-tiny_dancer;calming 
-elvis_costello-less_than_zero;neutral
 elvis_presley-heartbreak_hotel;sad 
 eminem-my_fault;angry 
 emma_s_mini-lost;sad exciting 
@@ -204,9 +180,7 @@ fiona_apple-love_ridden;sad calming romantic
 fleetwood_mac-say_you_love_me;calming romantic 
 flying_burrito_brothers-break_my_mind;romantic 
 foo_fighters-big_me;calming 
-four_stones-brilliant_day_eine_kleine_mix;neutral
 frank_sinatra-fly_me_to_the_moon;happy calming romantic 
-frank_zappa-whats_the_ugliest_part_of_your_body;neutral
 franz_ferdinand-come_on_home;happy exciting 
 garbage-hammering_in_my_head;angry exciting 
 gene_clark-the_true_one;sad calming 
@@ -214,28 +188,21 @@ genesis-cuckoo_cocoon;sad calming
 george_harrison-all_things_must_pass;calming 
 germs-lexicon_devil;exciting 
 gin_blossoms-hey_jealousy;sad romantic 
-glen_bledsoe-p_pop;neutral
 gloria_gaynor-i_will_survive;happy exciting 
 go-gos-vacation;happy 
 gram_parsons-1000_wedding;sad 
-grateful_dead-high_time;neutral
-grayson_wray-heaven_s_the_place;neutral
 green_day-longview;angry exciting 
-guided_by_voices-kicker_of_elves;neutral
 guns_n_roses-november_rain;sad 
-hall_and_oates-private_eyes;neutral
 howlin_wolf-moanin_at_midnight;sad 
 human_response-angels;sad 
 hybris-hate;sad angry 
 ike_and_tina_turner-river_deep_mountain_high;happy 
 indidginus-dusty_lands;sad 
 interpol-stella_was_a_diver_and_she_was_always_down;sad 
-introspekt-tbd;neutral
 ivilion-d_b_l;sad angry exciting 
 jackalopes-rotgut;angry 
 jackson_5-abc;happy exciting 
 jacques_brel-les_vieux;calming romantic 
-jag-jag_s_rag;neutral
 james_brown-give_it_up_or_turnit_a_loose;happy exciting 
 james_taylor-fire_and_rain;calming 
 jamie_janover-event_horizon;sad calming 
@@ -243,34 +210,27 @@ jamiroquai-little_l;happy exciting
 janes_addiction-been_caught_stealing;happy exciting 
 janet_jackson-miss_you_much;happy romantic 
 jay_kishor-raga_malgunji_jor;calming 
-jeff_buckley-last_goodbye;neutral
 jefferson_airplane-somebody_to_love;sad exciting 
 jerry_lee_lewis-great_balls_of_fire;happy exciting 
 jesse_manno-alf_leyla_wa_leyla;exciting 
 jewel-enter_from_the_east;sad calming 
-jimi_hendrix-highway_chile;neutral
 john_cale-pablo_picasso;sad angry 
 john_coltrane-giant_steps;happy exciting 
 john_lee_hooker-boom_boom;happy calming 
-john_lennon-imagine;neutral
 johnny_cash-the_man_comes_around;sad calming 
 joram-solipsism;sad 
 joy_division-love_will_tear_us_apart;sad 
-junior_murvin-police_and_thieves;neutral
 kansas-carry_on_wayward_son;exciting 
 kanye_west-gold_digger;exciting 
 kenji_williams-i_m_alive;calming 
-king_crimson-thela_hun_ginjeet;neutral
 kiss-deuce;exciting 
 kokoon-order;exciting 
 kool_and_the_gang-funky_stuff;happy exciting 
 kourosh_zolani-peaceful_planet;calming 
-kraftwerk-spacelab;neutral
 kris_kristofferson-the_best_of_all_possible_worlds;sad 
 lambert_hendricks_and_ross-gimme_that_wine;happy 
 led_zeppelin-immigrant_song;sad angry exciting 
 leonard_cohen-suzanne;calming romantic 
-lisa_debenedictis-fruitless;neutral
 live-lightning_crashes;sad 
 liz_phair-supernova;sad angry 
 ll_cool_j-mama_said_knock_you_out;sad angry exciting 
@@ -278,7 +238,6 @@ los_lobos-corrido_1;happy
 lou_reed-walk_on_the_wild_side;calming 
 louis_armstrong-hotter_than_that;happy exciting 
 love_and_rockets-mirror_people;sad 
-love-you_set_the_scene;neutral
 lynyrd_skynyrd-sweet_home_alabama;happy 
 macy_gray-i_try;sad calming romantic 
 madness-baggy_trousers;happy 
@@ -307,7 +266,6 @@ mr_epic-ruff_and_tumble;calming
 mr_gelatine-knysnamushrooms;sad 
 mrdc-leaving;calming 
 muddy_waters-im_ready;calming 
-my_bloody_valentine-when_you_sleep;neutral
 myles_cochran-getting_stronger;calming 
 napoleon_blown_aparts-higher_education;angry exciting 
 natalie_imbruglia-torn;sad 
@@ -315,17 +273,14 @@ neil_young_and_crazy_horse-western_hero;sad calming
 neil_young-razor_love;calming romantic 
 nelly-country_grammar;happy exciting 
 neutral_milk_hotel-where_youll_find_me_now;sad calming 
-new_order-blue_monday;neutral
 nine_inch_nails-head_like_a_hole;sad angry 
 nirvana-aneurysm;sad angry 
 no_doubt-artificial_sweetener;sad angry 
 no_doubt-simple_kind_of_life;romantic 
 norah_jones-dont_know_why;calming romantic 
-norine_braun-spanish_banks;neutral
 nova_express-i_m_alive;sad 
 oasis-supersonic;exciting 
 ojays-livin_for_the_weekend;happy exciting 
-olivia_tremor_control-i_have_been_floated;neutral
 outkast-ms._jackson;exciting 
 panacea-dragaicuta;sad 
 pantera-becoming;sad angry exciting 
@@ -333,7 +288,6 @@ paul_mccartney-ebony_and_ivory;happy calming
 pearl_jam-yellow_ledbetter;sad exciting 
 pet_shop_boys-being_boring;calming 
 pink_floyd-echoes;sad calming 
-pixies-wave_of_mutilation;neutral
 pizzle-what_s_wrong_with_my_footm;sad angry exciting 
 pj_harvey-dry;sad 
 police-every_little_thing_she_does_is_magic;happy romantic 
@@ -353,12 +307,9 @@ ray_charles-hit_the_road_jack;sad
 red_hot_chili_peppers-give_it_away;happy exciting 
 replacements-answering_machine;sad 
 rick_james-super_freak;happy exciting 
-robert_johnson-sweet_home_chicago;neutral
 rocket_city_riot-mine_tonite;exciting 
-rolling_stones-little_by_little;neutral
 ronettes-walking_in_the_rain;happy romantic 
 roots_of_rebellion-legend;sad exciting 
-roxy_music-love_is_the_drug;neutral
 roy_orbison-running_scared;romantic 
 rubn_gonzlez-cumbanchero;happy exciting 
 rufus_wainwright-cigarettes_and_chocolate_milk;calming 
@@ -378,20 +329,15 @@ shira_kammen-music_of_waters;calming
 shiva_in_exile-hollow_earth;sad 
 shuggie_otis-sweet_thang;calming romantic 
 simon_and_garfunkel-the_only_living_boy_in_new_york;sad calming romantic 
-sinad_oconnor-no_mans_woman;neutral
 sir_mix-a-lot-baby_got_back;angry exciting 
 skitzo-last_depression;sad angry 
 sly_and_the_family_stone-just_like_a_baby;calming romantic 
-small_faces-lazy_sunday;neutral
-smashing_pumpkins-rocket;neutral
-smithereens-behind_the_wall_of_sleep;neutral
 smiths-how_soon_is_now;sad exciting 
 smokey_robinson_and_the_miracles-ooo_baby_baby;calming romantic 
 smokey_robinson-cruisin;calming 
 snoop_doggy_dogg-gin_and_juice;sad 
 solace-laz_7_8;sad 
 somadrone-coda;sad angry 
-sonic_youth-teen_age_riot;neutral
 sonny_rollins-strode_rode;happy exciting 
 soul_ii_soul-keep_on_movin;calming romantic 
 soulprint-crawlspace;sad angry exciting 
@@ -404,18 +350,14 @@ spiritualized-stop_your_crying;calming romantic
 squarepusher-a_journey_to_reedham_(7am_mix);happy exciting 
 squeeze-pulling_mussels_from_the_shell;happy 
 stan_getz-corcovado_quiet_nights_of_quiet_stars;calming romantic 
-standells-dirty_water;neutral
 starship-nothings_gonna_stop_us_now;romantic 
-steely_dan-rikki_dont_lose_that_number;neutral
 steppenwolf-born_to_be_wild;happy exciting 
 stereolab-cybeles_reverie;happy calming romantic 
 stevie_wonder-for_once_in_my_life;happy 
 sting-big_lie_small_world;calming romantic 
 stone_roses-i_wanna_be_adored;sad 
 stooges-dirt;sad 
-stranglers-golden_brown;neutral
 strawbs-new_world;sad angry 
-strojovna_07-130;neutral
 style_council-headstart_for_happiness;happy romantic 
 sundays-heres_where_the_story_ends;happy calming 
 superchunk-slack_motherfucker;angry 
@@ -424,14 +366,9 @@ syd_barrett-effervescing_elephant;happy
 sylvester-you_make_me_feel_mighty_real;happy exciting 
 syreeta-what_love_has_joined_together;happy calming romantic 
 t._rex-children_of_the_revolution;angry exciting 
-talking_heads-and_she_was;neutral
 tears_for_fears-everybody_wants_to_rule_the_world;happy calming 
-teenage_fanclub-the_concept;neutral
-television-venus;neutral
 temptations-since_i_lost_my_baby;calming romantic 
-thelonious_monk-epistrophy;neutral
 they_might_be_giants-i_should_be_allowed_to_think;calming 
-thin_lizzy-dont_believe_a_word;neutral
 third_eye_blind-semi-charmed_life;exciting 
 throwing_muses-hate_my_way;sad angry 
 thursday_group-like_white_on_rice;sad exciting 
@@ -442,7 +379,6 @@ tim_rayborn-yedi_tekrar;sad exciting
 todd_rundgren-bang_the_drum_all_day;happy exciting 
 tom_paul-little_part_of_me;sad 
 tom_petty_and_the_heartbreakers-dont_come_around_here_no_more;calming 
-tom_petty-i_wont_back_down;neutral
 tom_waits-time;sad calming 
 tommy_james_and_the_shondells-i_think_were_alone_now;happy 
 tori_amos-professional_widow;sad 
@@ -452,7 +388,6 @@ tricky-christiansands;sad
 troggs-wild_thing;happy 
 turtles-elenore;happy exciting 
 u2-hold_me_thrill_me_kiss_me_kill_me;exciting 
-ultravox-dancing_with_tears_in_my_eyes;neutral
 uncle_tupelo-the_long_cut;calming romantic 
 urge_overkill-sister_havana;exciting 
 utopia_banished-by_mourning;sad angry 
@@ -461,8 +396,6 @@ van_morrison-and_it_stoned_me;calming romantic
 vapors-turning_japanese;happy exciting 
 velvet_underground-new_age;sad 
 version-universal_humans;calming 
-very_large_array-psychedelic_baby;neutral
-violent_femmes-blister_in_the_sun;neutral
 war-all_day_music;happy calming romantic 
 weezer-buddy_holly;happy exciting 
 wes_montgomery-bumpin;calming 
@@ -472,13 +405,9 @@ whitney_houston-how_will_i_know;romantic
 who-bargain;exciting 
 wicked_allstars-happy;happy calming 
 wicked_boy-pressure;sad 
-wilco-kingpin;neutral
-williamson-whats_on_the_ceiling_beats_whats_on_tv;neutral
 xtc-love_at_first_sight;happy 
 yakshi-chandra;sad calming 
 yeah_yeah_yeahs-maps;calming 
-yes-leave_it;neutral
-yo_la_tengo-tom_courtenay;neutral
 young_mc-bust_a_move;happy 
 young_rascals-baby_lets_wait;sad 
 zapp-dance_floor;happy 
