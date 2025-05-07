@@ -67,7 +67,11 @@ def separate(input_path, output_path, should_override, model_file_name = None):
                 if not should_override and os.path.exists(os.path.join(output_sub_folder, "Vocals_" + song)): continue
                 _execute_separation(sep, song_path, output_sub_folder)
         else:
-            if os.path.split(sub_item_path)[1][:4] != ".mp3" or ".wav": continue
+            file_type = os.path.split(sub_item_path)[1][-4:]
+            if file_type != ".mp3" and file_type != ".wav": continue
+            i += 1
+            print(i)
+            if not should_override and os.path.exists(os.path.join(output_folder, "Vocals_" + os.path.split(sub_item_path)[1])): continue
             _execute_separation(sep, sub_item_path, output_folder)
 
 def _split_mp3_file_into_excerpts(song_path, output_folder_path, clip_length_in_seconds):
