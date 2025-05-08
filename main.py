@@ -25,7 +25,7 @@ from Analysis import _get_best_dimensionality, get_fitted_pca, transform_feature
     save_correlation_of_pca_and_og_features, get_pca_tracks_and_correlation, interpret_principal_components
 
 all_tracks = import_tracks("datasets/emotify/very_separated_clips/Separated_and_mixed_versions", "datasets/emotify/emotify_data.csv", features_xml_path="feature_values_1.xml",
-                     sources=["Bass", "Drums", "Guitar", "Mixed", "Other", "Piano", "Vocals"], amount_to_take=None)
+                     sources=["Bass", "Drums", "Guitar", "Mixed", "Other", "Piano", "Vocals"], amount_to_take=400)
 
 all_tracks = [track for track in all_tracks if track.label[0] != "amazement"]
 

@@ -12,7 +12,7 @@ class Track:
 
     @staticmethod
     def remove_empty_tracks(tracks:list):
-        """Removes all tracks, where one of the streams has a root mean square less than 0.01"""
+        """Removes all tracks, where one of the streams has an average root mean square less than 0.01"""
         tracks.sort(key = lambda x: x.original_track)
         tracks_by_original_track = groupby(tracks, key=lambda x: x.original_track)
         cleaned_tracks = []
@@ -36,6 +36,17 @@ class Track:
             else:
                 cleaned_tracks.extend(track_list)
 
+        tracks.sort(key=lambda x: x.original_track)
+        counter = set()
+        for group, songs in groupby(tracks, key=lambda x: x.original_track):
+            counter.add(group)
+
+        cleaned_tracks.sort(key=lambda x: x.original_track)
+        clean_counter = set()
+        for group, songs in groupby(cleaned_tracks, key=lambda x: x.original_track):
+            clean_counter.add(group)
+
+        print("Original amount of songs: ", len(counter), "\nSongs after those without vocals have been removed:", len(clean_counter))
         print(f"original number of tracks: {len(tracks)}, new number of tracks: {len(cleaned_tracks)}")
         return cleaned_tracks
     @staticmethod

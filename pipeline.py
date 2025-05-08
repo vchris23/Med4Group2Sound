@@ -28,7 +28,6 @@ warnings.filterwarnings('always')
 
 all_tracks = import_tracks("datasets/emotify/clips", "datasets/emotify/emotify_data.csv", features_xml_path="datasets/emotify/emotify_values.xml",
                      sources=["Mixed", "Instrumentals", "Vocals"], amount_to_take=None)
-
 class Searchers(Enum):
     RANDOM = 0
     GRID = 1
