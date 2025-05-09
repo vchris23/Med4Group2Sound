@@ -24,10 +24,10 @@ import pandas as pd
 from Analysis import _get_best_dimensionality, get_fitted_pca, transform_features_of_tracks, \
     save_correlation_of_pca_and_og_features, get_pca_tracks_and_correlation, interpret_principal_components
 
-all_tracks = import_tracks("datasets/emotify/very_separated_clips/Separated_and_mixed_versions", "datasets/emotify/emotify_data.csv", features_xml_path="feature_values_1.xml",
-                     sources=["Bass", "Drums", "Guitar", "Mixed", "Other", "Piano", "Vocals"], amount_to_take=400)
+all_tracks = import_tracks("datasets/emotify/clips", "datasets/emotify/emotify_data.csv", features_xml_path="datasets/emotify/emotify_values.xml",
+                     sources=["Instrumental", "Mixed", "Vocals"], amount_to_take=None)
 
-all_tracks = [track for track in all_tracks if track.label[0] != "amazement"]
+all_tracks = [track for track in all_tracks if track.label != "amazement"]
 
 all_tracks.sort(key = lambda track: track.label)
 for grouping in groupby(all_tracks, lambda track: track.label):
@@ -35,25 +35,9 @@ for grouping in groupby(all_tracks, lambda track: track.label):
 
 all_tracks.sort(key = lambda track: track.source)
 
-for feature_vector in [track.features for track in all_tracks]:
-    plt.scatter(x=range(len(feature_vector)), y=feature_vector)
-plt.title("Before")
-plt.show()
+Track.get_class_balance(all_tracks)
 
-for i in range(40, 60):
-    val_list = [track.features[i] for track in all_tracks]
-    print(f"Max in index {i}: {max(val_list)}")
-
-scaler = Scalers.MINMAX
-new_all_tracks = scale_features(all_tracks, scaler)
-print("Using this scaler: ", scaler)
-
-features = [track.features for track in new_all_tracks]
-
-for feature_vector in features:
-    plt.scatter(x=range(len(feature_vector)), y=feature_vector)
-plt.title("After")
-plt.show()
+scaler = Scalers.STANDARD
 
 #indices, names = select_features(get_untrained_SVM(use_ova=True), training_tracks, number_of_features_to_select=5, feature_names=get_feature_names("feature_values_1.xml", with_chroma=True))
 
@@ -66,11 +50,54 @@ score_dict = defaultdict(dict)
 
 for i in range(0, 220, 40):
     print(f"{i}/{220}")
-    tracks = new_all_tracks
 
-    training_tracks, test_tracks = split_into_train_and_test(tracks, 0.8, i, stratify=True)
+    training_tracks, test_tracks = split_into_train_and_test(all_tracks, 0.8, i, stratify=True)
+
+    print("Stratified: ")
+
+    print("Training set:")
+    Track.get_class_balance(training_tracks)
+    print("Testing set:")
+    Track.get_class_balance(test_tracks)
+
+    print("Non-stratified")
+
+    training_tracks, test_tracks = split_into_train_and_test(all_tracks, 0.8, i, stratify=False)
+
+    print("Training set:")
+    Track.get_class_balance(training_tracks)
+    print("Testing set:")
+    Track.get_class_balance(test_tracks)
+
+
+
+
     training_tracks_by_source = Track.separate_tracks_by_source(training_tracks)
     test_tracks_by_source = Track.separate_tracks_by_source(test_tracks)
+
+    for feature_vector in [track.features for track in training_tracks]:
+        feature_vector = feature_vector[0:10]
+        plt.scatter(x=range(len(feature_vector)), y=feature_vector)
+    plt.xlabel('Feature index')
+    plt.ylabel("Feature values")
+    plt.title("Feature values for clips before scaling")
+    plt.show()
+
+    new_all_tracks = scale_features(training_tracks, Scalers.STANDARD)
+    print("Using this scaler: ", scaler)
+
+    features = [track.features for track in new_all_tracks]
+
+    for feature_vector in features:
+        feature_vector = feature_vector[0:10]
+        plt.scatter(x=range(len(feature_vector)), y=feature_vector)
+    plt.xlabel('Feature index')
+    plt.ylabel("Feature values")
+    plt.title("Feature values for clips after scaling")
+    plt.show()
+
+    tracks = new_all_tracks
+
 
     for source_i in range(len(training_tracks_by_source)):
         source_name = training_tracks_by_source[source_i][0].source

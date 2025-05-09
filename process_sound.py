@@ -30,10 +30,4 @@ def split_into_train_and_test(track_list:list, ratio:float, seed:int = None, str
             training_set.extend(part_training_set)
             test_set.extend(part_test_set)
 
-    for track in training_set:
-     track.train_or_test = "train"
-
-    for track in test_set:
-        track.train_or_test = "test"
-
     return training_set, test_set

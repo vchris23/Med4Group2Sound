@@ -18,9 +18,6 @@ def _get_new_label(labels:list):
     is_exciting:bool = labels.count('exciting') > 0
     is_romantic:bool = labels.count('romantic') > 0
 
-    is_powerful:bool = labels.count('powerful') > 0
-    is_boring:bool = labels.count('boring') > 0
-
     label = ""
 
     if is_happy:
@@ -69,6 +66,20 @@ def _generate_new_label_file(annoated_path:str, remove_limit:int = 4):
     df = DataFrame.from_dict({"Title": list(songs_to_labels.keys()), "Label": list(songs_to_labels.values())})
     np.savetxt(new_annotated_path, df, delimiter=';', fmt='%s')
 
+def remake_csv(annotated_path:str, list_of_removed:list):
+    content = np.loadtxt(fname = annotated_path, delimiter=';', dtype=np.object_, encoding='utf-8-sig')
+    print("List of removed:", list_of_removed)
+    for i in range(content.shape[0]):
+        row = content[i]
+        name = row[0]
+        print(name)
+        if name in list_of_removed:
+            print(f"Removed name: ", name)
+            np.delete(content, i, 0)
+
+    np.savetxt("test.csv", content, delimiter=';', fmt='%s')
+
+
 def _make_track(path:str):
     track = Track()
     print(path)
@@ -85,7 +96,7 @@ def _get_tracks_without_features_or_labels(sound_folder_path:str):
     paths = [os.path.join(sound_folder_path, file) for file in files]
     tracks = map(_make_track, paths)
 
-    return tracks
+    return list(tracks)
 
 def _assign_labels_to_tracks(tracks:list, annotated_path:str):
     csv_content:np = np.loadtxt(annotated_path, delimiter=';', dtype=np.object_, encoding='utf-8-sig')
@@ -113,7 +124,13 @@ def get_cal_tracks(annoated_path:str, sound_folder_path:str, feature_xml_path):
     for track in tracks:
         print(track)
 
+    return tracks
 
 
-_generate_new_label_file("datasets/New dataset/cal_annotations2.txt")
-#get_cal_tracks("datasets/New dataset/new_annotated.txt", "datasets/New dataset/Clips", "datasets/New dataset/feature_values_1.xml")
+
+#_generate_new_label_file("datasets/New dataset/cal_annotations2.txt")
+tracks = get_cal_tracks("datasets/New dataset/new_annotated.txt", "datasets/New dataset/Clips", "datasets/New dataset/feature_values_1.xml")
+cleaned_tracks = Track.remove_empty_tracks_and_number_removed(tracks)
+mismatched = Track.get_mismatched_original_tracks(tracks, cleaned_tracks)
+remake_csv("datasets/New dataset/new_annotated.txt", mismatched)
+

@@ -166,9 +166,10 @@ def _assign_features_to_tracks(tracks:list, names_and_feature_vectors:list):
         except ValueError: #In case the song can't be found in our list of tracks
             continue
 
+    new_track_list = [track for track in tracks if track.features != []]
+    print('removed', len(list(tracks)) - len(list(new_track_list)), 'tracks')
 
-
-    return tracks
+    return new_track_list
 
 def get_feature_names(feature_xml_path:str, with_chroma:bool):
 
@@ -194,7 +195,7 @@ def import_tracks(music_folder_path:str, label_csv_path:str, features_xml_path:s
     names_and_features = _get_names_and_features_from_xml(features_xml_path)
     tracks = _get_tracks(music_folder_path, label_csv_path,
                          sources, amount_to_take=amount_to_take)
-    tracks = Track.remove_empty_tracks(tracks)
+    tracks = Track.remove_empty_tracks_and_number_removed(tracks)
     tracks = _assign_features_to_tracks(tracks, names_and_features)
 
     return tracks
