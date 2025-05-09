@@ -9,9 +9,40 @@ from OurSound import get_spectrogram
 from matplotlib import pyplot as plt
 
 class Track:
+    @staticmethod
+    def get_class_balance(tracks:list):
+        tracks.sort(key=lambda x: x.original_track)
+        grouped = groupby(tracks, key= lambda x: x.original_track)
+
+        label_counter = defaultdict(int)
+        current_song = None
+        for original_song, group in grouped:
+            if original_song == current_song:
+                continue
+            else:
+                label_counter[list(group)[0].label] += 1
+                current_song = original_song
+
+        print(label_counter)
 
     @staticmethod
-    def remove_empty_tracks(tracks:list):
+    def get_mismatched_original_tracks(tracks_A:list, tracks_B:list):
+        mismatched_tracks = set()
+        song_list_A = [track.original_track for track in tracks_A]
+        song_list_B = [track.original_track for track in tracks_B]
+
+        for name in song_list_A:
+            if name not in song_list_B:
+                mismatched_tracks.add(name)
+        for name in song_list_B:
+            if name not in song_list_A:
+                mismatched_tracks.add(name)
+        mismatched_tracks = list(mismatched_tracks)
+        mismatched_tracks.sort()
+        return mismatched_tracks
+
+    @staticmethod
+    def remove_empty_tracks_and_number_removed(tracks:list):
         """Removes all tracks, where one of the streams has an average root mean square less than 0.01"""
         tracks.sort(key = lambda x: x.original_track)
         tracks_by_original_track = groupby(tracks, key=lambda x: x.original_track)
