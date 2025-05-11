@@ -69,9 +69,6 @@ for i in range(0, 220, 40):
     print("Testing set:")
     Track.get_class_balance(test_tracks)
 
-
-
-
     training_tracks_by_source = Track.separate_tracks_by_source(training_tracks)
     test_tracks_by_source = Track.separate_tracks_by_source(test_tracks)
 
@@ -97,7 +94,6 @@ for i in range(0, 220, 40):
     plt.show()
 
     tracks = new_all_tracks
-
 
     for source_i in range(len(training_tracks_by_source)):
         source_name = training_tracks_by_source[source_i][0].source
