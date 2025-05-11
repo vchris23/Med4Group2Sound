@@ -80,7 +80,7 @@ def get_optimal_estimators(list_of_steps:list, training_tracks, search_attribute
 def get_and_test_optimal_pipelines_for_every_source(tracks:list, list_of_steps:list, search_attributes:dict | list, search_type:Searchers, use_oversampler = False, feature_names:list = None):
 
     estimators_by_source = defaultdict(list)
-    training_tracks, test_tracks = split_into_train_and_test(tracks, 0.8, seed=42)
+    training_tracks, test_tracks = split_into_train_and_test(tracks, 0.8, seed=42, stratify=True)
     data = defaultdict(list)
     try:
         for tracks_by_source in Track.separate_tracks_by_source(training_tracks):
