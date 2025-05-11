@@ -129,8 +129,8 @@ def get_cal_tracks(annoated_path:str, sound_folder_path:str, feature_xml_path):
 
 
 #_generate_new_label_file("datasets/New dataset/cal_annotations2.txt")
-tracks = get_cal_tracks("datasets/New dataset/new_annotated.txt", "datasets/New dataset/Clips", "datasets/New dataset/feature_values_1.xml")
-cleaned_tracks = Track.remove_empty_tracks_and_number_removed(tracks)
-mismatched = Track.get_mismatched_original_tracks(tracks, cleaned_tracks)
-remake_csv("datasets/New dataset/new_annotated.txt", mismatched)
+#tracks = get_cal_tracks("datasets/New dataset/new_annotated.txt", "datasets/New dataset/Clips", "datasets/New dataset/feature_values_1.xml")
+#cleaned_tracks = Track.remove_empty_tracks_and_number_removed(tracks)
+#mismatched = Track.get_mismatched_original_tracks(tracks, cleaned_tracks)
+#remake_csv("datasets/New dataset/new_annotated.txt", mismatched)
 
