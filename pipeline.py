@@ -18,7 +18,7 @@ from sklearn.decomposition import PCA
 from sklearn.discriminant_analysis import QuadraticDiscriminantAnalysis, LinearDiscriminantAnalysis
 
 from CAL_data_sound_pros import get_cal_tracks
-from music_svm import grid_param_search, get_scores, classify_and_get_scores
+from music_svm import grid_param_search, get_scores, classify_and_get_scores, classify_by_original_track_and_get_scores
 from process_sound import split_into_train_and_test
 from data_import import import_tracks, get_feature_names
 from our_classes import Track
@@ -27,7 +27,7 @@ import pandas as pd
 import warnings
 warnings.filterwarnings('always')
 
-all_tracks = get_cal_tracks("datasets/New dataset/new_annotated.txt", "datasets/New dataset/Clips", "datasets/New dataset/feature_values_1.xml")
+all_tracks = tracks = get_cal_tracks("datasets/New dataset/new_annotated.txt", "datasets/New dataset/Clips", "datasets/New dataset/feature_values_1.xml")
 class Searchers(Enum):
     RANDOM = 0
     GRID = 1
@@ -71,7 +71,7 @@ def get_optimal_estimators(list_of_steps:list, training_tracks, search_attribute
         parameters = best_parameters.take([i]).values[0]
         estimator = Pipeline(list_of_steps)
         estimator.set_params(**parameters)
-        print("CLassifier", parameters["Classifier__SVC__C"])
+        print("CLassifier", parameters["Classifier__SVC__estimator__C"])
         best_estimators.append(clone(estimator)) #I don't feel like we need a clone here, but for some reason it is; else we are appending the same estimator every time
 
     return best_estimators
@@ -81,13 +81,14 @@ def get_and_test_optimal_pipelines_for_every_source(tracks:list, list_of_steps:l
 
     estimators_by_source = defaultdict(list)
     training_tracks, test_tracks = split_into_train_and_test(tracks, 0.8, seed=42, stratify=True)
+    print(Track.get_class_balance(training_tracks))
     data = defaultdict(list)
     try:
         for tracks_by_source in Track.separate_tracks_by_source(training_tracks):
 
             best_estimators = get_optimal_estimators(list_of_steps, tracks_by_source, search_attributes, search_type, number_to_take=10, use_oversampler=use_oversampler, feature_names= feature_names)
             for best_estimator in best_estimators:
-                best_estimator.set_params(**{"Classifier__SVC__probability": True})
+                best_estimator.set_params(**{"Classifier__SVC__estimator__probability": True})
 
                 features, labels = Track.tracks_to_features_and_labels(tracks_by_source)
                 features = Track.tracks_features_to_dataframe(tracks_by_source, feature_names)
@@ -98,7 +99,7 @@ def get_and_test_optimal_pipelines_for_every_source(tracks:list, list_of_steps:l
         for source in estimators_by_source.keys():
             for estimator in estimators_by_source[source]:
                 print(source, id(estimator))
-                results = classify_and_get_scores(estimator, [track for track in test_tracks if track.source == source], feature_names= feature_names)
+                results = classify_by_original_track_and_get_scores(estimator, [track for track in test_tracks if track.source == source], feature_names= feature_names)
                 data['source(s)'].append(source)
                 data['Oversampling'].append(use_oversampler)
                 data['First parameters'].append(estimator.get_params())
@@ -121,8 +122,8 @@ def get_and_test_optimal_pipelines_for_every_source(tracks:list, list_of_steps:l
                         if estimator_peer == estimator: continue
                         if (estimator, estimator_peer) in combinations or (estimator_peer, estimator) in combinations: continue
                         i += 1
-                        print(source, source_peer, id(source_peer), f"{i}/{len(estimators_by_source[source]) * len(list(estimators_by_source.keys())) * (len(list(estimators_by_source.keys())) - 1)}")
-                        results = classify_and_get_scores([estimator, estimator_peer], [[track for track in test_tracks if track.source == source], [track for track in test_tracks if track.source == source_peer]], feature_names=feature_names)
+                        print(source, source_peer, id(source_peer), f"{i}/{(len(estimators_by_source[source]) * len(list(estimators_by_source.keys())) * (len(list(estimators_by_source.keys())) - 1))*5}")
+                        results = classify_by_original_track_and_get_scores([estimator, estimator_peer], [[track for track in test_tracks if track.source == source], [track for track in test_tracks if track.source == source_peer]], feature_names=feature_names)
 
                         data['source(s)'].append(f"{source} + {source_peer}")
                         data['Oversampling'].append(use_oversampler)
@@ -141,18 +142,16 @@ def get_and_test_optimal_pipelines_for_every_source(tracks:list, list_of_steps:l
     pd.DataFrame.from_dict(data).to_csv("Pipeline results.csv")
 
 
-classifier = Pipeline([("SVC", SVC(cache_size=500, max_iter=1000000, probability=False, random_state=42, class_weight='balanced'))])
-classifier_two = Pipeline([("SVC", SVC(cache_size=500, max_iter=1000000, probability=False, random_state=40, class_weight='balanced'))])
+classifier = Pipeline([("SVC", OneVsRestClassifier(SVC(cache_size=500, max_iter=1000000, probability=False, random_state=42, class_weight='balanced', decision_function_shape='ovr')))])
 
-search_attributes = [{"Classifier__SVC__C": [1, 10, 100, 1000], "Classifier__SVC__kernel": ["linear"], "Scaler": [MinMaxScaler()], 'Selector__max_features': [2, 4, 6, 8, 10, 12, 14, 16, 18, 20, 24]},
-                     {"Classifier__SVC__C": [10, 100, 1000, 10000], "Classifier__SVC__gamma": [0.0001, 0.001, 0.01, 0.1],"Classifier__SVC__kernel": ["rbf"], "Scaler": [MinMaxScaler()], 'Selector__max_features': [2, 4, 6, 8, 10, 12, 14, 16, 18, 20, 24]},
-                     {"Classifier__SVC__C": [0.0001, 0.001, 0.01, 0.1], "Classifier__SVC__gamma": [0.0001, 0.001, 0.01, 0.1], "Classifier__SVC__degree": [3, 5], "Classifier__SVC__coef0": [2, 4, 6],"Classifier__SVC__kernel": ["poly"], "Scaler": [MinMaxScaler()], 'Selector__max_features': [2, 4, 6, 8, 10, 12, 14, 16, 18, 20, 24]}]
+search_attributes = [{"Classifier__SVC__estimator__C": [1, 10, 100, 1000], "Classifier__SVC__estimator__kernel": ["linear"], "Scaler": [MinMaxScaler()], 'Selector__max_features': [2, 4, 6, 8, 10, 12, 14, 16, 18, 20, 24]},
+                     {"Classifier__SVC__estimator__C": [10, 100, 1000, 10000], "Classifier__SVC__estimator__gamma": [0.0001, 0.001, 0.01, 0.1],"Classifier__SVC__estimator__kernel": ["rbf"], "Scaler": [MinMaxScaler()], 'Selector__max_features': [2, 4, 6, 8, 10, 12, 14, 16, 18, 20, 24]},
+                     {"Classifier__SVC__estimator__C": [0.0001, 0.001, 0.01, 0.1], "Classifier__SVC__estimator__gamma": [0.0001, 0.001, 0.01, 0.1], "Classifier__SVC__estimator__degree": [3, 5], "Classifier__SVC__estimator__coef0": [2, 4, 6],"Classifier__SVC__estimator__kernel": ["poly"], "Scaler": [MinMaxScaler()], 'Selector__max_features': [2, 4, 6, 8, 10, 12, 14, 16, 18, 20, 24]}]
 
 #steps = [("Imputer", SimpleImputer(strategy="mean")), ("Scaler", StandardScaler()), ("PCA", PCA(random_state=42)), ('Selector', SelectFromModel(LinearSVC())), ("Classifier", classifier)]
 steps = [("Imputer", SimpleImputer(strategy="mean")), ("Scaler", StandardScaler()), ('Selector', SelectFromModel(LinearSVC())), ("Classifier", classifier)]
 
 feature_names = get_feature_names("datasets/emotify/emotify_values.xml", True)
-
 start_time = time.time()
 get_and_test_optimal_pipelines_for_every_source(all_tracks, steps, search_attributes, Searchers.GRID, use_oversampler = False, feature_names = feature_names)
 print(f"Took {time.time()-start_time}")

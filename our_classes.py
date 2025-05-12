@@ -42,7 +42,7 @@ class Track:
         return mismatched_tracks
 
     @staticmethod
-    def remove_empty_tracks_and_number_removed(tracks:list):
+    def remove_empty_tracks_and_number_removed(tracks:list, threshold:float = 0.015):
         """Removes all tracks, where one of the streams has an average root mean square less than 0.01"""
         tracks.sort(key = lambda x: x.original_track)
         tracks_by_original_track = groupby(tracks, key=lambda x: x.original_track)
@@ -60,7 +60,7 @@ class Track:
                     i += 1
                     summed_rms += np.mean(rms(y=track.sound))
                 summations.append(summed_rms/i)
-                if summed_rms/i < 0.015:
+                if summed_rms/i < threshold:
                     print(f"Removing {group}")
                     break
 

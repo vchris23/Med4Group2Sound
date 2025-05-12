@@ -153,7 +153,7 @@ def _get_conf_scores_by_original_track(svm:OneVsRestClassifier, tracks:list, fea
     result_dictionary = {}
     for original_track in grouped_tracks.keys():
         conf_scores = classify_and_get_conf_scores(svm, grouped_tracks[original_track], feature_names)[1]
-        summed = list(sum(conf_scores)[0])
+        summed = list(np.sum(conf_scores, axis=0, dtype=float))
         result_dictionary[original_track] = summed
 
     return result_dictionary
@@ -164,9 +164,9 @@ def _class_from_confidence_scores(svm:OneVsRestClassifier, confidence_scores:lis
     index_of_highest = confidence_scores.index(max(confidence_scores))
     return classes[index_of_highest]
 
-def classify_by_original_track(svm:OneVsRestClassifier, tracks:list):
+def classify_by_original_track(svm:OneVsRestClassifier, tracks:list, feature_names:list = None):
 
-    results = _get_conf_scores_by_original_track(svm, tracks)
+    results = _get_conf_scores_by_original_track(svm, tracks, feature_names)
 
     lookup_table = defaultdict(list)
 
@@ -180,10 +180,10 @@ def classify_by_original_track(svm:OneVsRestClassifier, tracks:list):
 
     return _result_dic_to_predictions_and_labels(classification_results)
 
-def combined_classification_by_original_track(svms:list, track_lists:list):
+def combined_classification_by_original_track(svms:list, track_lists:list, feature_names:list = None):
     result_dictionaries = []
     for i in range(len(svms)):
-        result_dictionaries.append(_get_conf_scores_by_original_track(svms[i], track_lists[i]))
+        result_dictionaries.append(_get_conf_scores_by_original_track(svms[i], track_lists[i], feature_names))
 
     lookup_table = defaultdict(list)
 
@@ -196,7 +196,7 @@ def combined_classification_by_original_track(svms:list, track_lists:list):
         scores = []
         for dictionary in result_dictionaries:
             scores.append(np.array(dictionary[key]))
-        summed_scores:list = list(sum(scores))
+        summed_scores:list = list(np.sum(scores, axis = 0, dtype=float))
         combined_result_dict[lookup_table[key][0]] = _class_from_confidence_scores(svms[0], summed_scores)
 
     return _result_dic_to_predictions_and_labels(combined_result_dict)
@@ -265,9 +265,6 @@ def classify_and_get_scores(svm:OneVsRestClassifier | list, tracks:list, plot_co
 def classify_by_original_track_and_get_scores(svm:OneVsRestClassifier | list, tracks:list, plot_confusion_matrix:bool = False, confusion_matrix_title:str = None, feature_names:list = None):
     """ If svm is a list, ensemble classification is assumed, so tracks must be a list of lists of tracks \n
     Returns accuracy, precision, and recall"""
-
-    for track in tracks:
-        print(track)
 
     if type(svm) == list:
         predictions, labels = combined_classification_by_original_track(svm, tracks, feature_names)
