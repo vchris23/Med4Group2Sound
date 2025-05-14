@@ -120,7 +120,7 @@ def split_sound_files_in_folders_into_excerpts(input_folder_path, output_folder_
 
 
 
-separate(input_path="MERGE-datas/AllSongsQ1-4", output_path="MERGE-datas/AllSongsSourceSep", should_override= False)
+#separate(input_path="MERGE-datas/AllSongsQ1-4", output_path="MERGE-datas/AllSongsSourceSep", should_override= False)
          #model_file_name="htdemucs_6s.yaml")
 #split_mp3_file_into_excerpts("datasets/emotify/emotify_music/classical/1.mp3","datasets/emotify/clips", 15)
-#split_sound_files_in_folders_into_excerpts("MERGE-datas/AllSongsSourceSep/Separated_and_mixed_versions", "MERGE-datas/AllSongs15Sec", 15)
+split_sound_files_in_folders_into_excerpts("MERGE-datas/AllSongsSourceSep/Separated_and_mixed_versions", "MERGE-datas/AllSongs15Sec", 15)

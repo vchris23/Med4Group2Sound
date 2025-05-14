@@ -2,7 +2,6 @@
 import time
 from collections import defaultdict
 from itertools import groupby
-
 import librosa
 from librosa.filters import chroma
 from onnx.numpy_helper import from_dict
@@ -21,19 +20,9 @@ import pandas as pd
 
 emotion_lookup = {0: "amazement", 1: "solemnity", 2: "tenderness", 3: "nostalgia", 4:"calmness", 5:"power", 6:"joyful_activation", 7:"tension", 8:"sadness"}
 
-def __init__(self, sound=None, label = None, source=None, original_track=None, name=None):
-    self.sound = sound #Must be filled
-    self.label:str = label #must be filled
-    self.source:str = source #must be filled
-    self.train_or_test:str=""
-    self.original_track:str=original_track #must be filled
-    self.name:str=name
-    self.feature:list=[] #must be filled
-
-
-
 def get_name_from_path(path):
-    song_folder, song_title = path.split("\\")[-2:]
+    song_folder_path, song_title = os.path.split(path)
+    song_folder = os.path.split(song_folder_path)[1]
     song_name = os.path.join(song_folder, song_title)
     return song_name
 
@@ -42,6 +31,33 @@ def add_list(list_a, list_b):
     for i in range(len(list_a)):
         summed_list[i] += list_b[i]
     return summed_list
+
+def get_original_name_and_source_from_file_name(file_name:str): #this
+    split_name = file_name.split("_")
+    source = split_name[0]
+    part_with_file_type = split_name[-1]
+    original_name = file_name[len(source) + 1:-(len(part_with_file_type) + 1)] #We add one to each to account for the underscore
+    print("getting original name and source from: ", file_name)
+
+    return original_name, source
+
+def _make_track(path:str): #this
+    """Whole path to clip"""
+    track = Track()
+    track.sound = np.float16(librosa.load(path)[0])
+    track.name = get_name_from_path(path)
+    track.original_track, track.source = get_original_name_and_source_from_file_name(os.path.split(path)[1])
+    return track
+
+def _get_tracks_without_features_or_labels(sound_folder_path:str, amount_to_take = None): #this - use this - everything without features or lables, so names, source, track
+    """Only sound files can be in the sound_folder_path directory - AllSongs15Sec
+    \n If amount to take is None then it takes all songs, else it takes a certain number of songs. No considerations are taken if amount ot take is higher then the number of songs"""
+
+    files = os.listdir(sound_folder_path)[:amount_to_take] if amount_to_take is not None else os.listdir(sound_folder_path)
+    paths = [os.path.join(sound_folder_path, file) for file in files]
+    tracks = list(map(_make_track, paths))
+
+    return tracks
 
 def _vote_on_emotion_label(label_lists_for_id):
     total_list = label_lists_for_id[0].copy()
@@ -133,6 +149,7 @@ def _get_names_and_features_from_xml(path):
         song_path = sets[0].text
         song_name = get_name_from_path(song_path)
         name_and_vector.append(song_name)
+        print(f"Getting features for {song_name}...")
 
         feature_vector = []
 
@@ -150,7 +167,8 @@ def _get_names_and_features_from_xml(path):
 
     return names_and_feature_vectors
 def get_get_chroma_features(track:Track):
-    chromagram = OurSound.get_spectrogram(track.sound[0], sampling_rate=44100, number_of_bands=12, horizontal_resolution=1024, spectrogram_type=SpectrogramType.stft_chromagram)
+    print(f"Assigning chromagram to {track.name}")
+    chromagram = OurSound.get_spectrogram(track.sound, sampling_rate=44100, number_of_bands=12, horizontal_resolution=1024, spectrogram_type=SpectrogramType.stft_chromagram)
 
     features = []
     for band in chromagram:
