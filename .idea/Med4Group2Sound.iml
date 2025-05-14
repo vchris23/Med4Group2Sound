@@ -4,6 +4,7 @@
     <content url="file://$MODULE_DIR$">
       <excludeFolder url="file://$MODULE_DIR$/cache" />
       <excludeFolder url="file://$MODULE_DIR$/datasets" />
+      <excludeFolder url="file://$MODULE_DIR$/MERGE-datas" />
     </content>
     <orderEntry type="jdk" jdkName="SourceSep" jdkType="Python SDK" />
     <orderEntry type="sourceFolder" forTests="false" />

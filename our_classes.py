@@ -42,7 +42,7 @@ class Track:
         return mismatched_tracks
 
     @staticmethod
-    def remove_empty_tracks_and_number_removed(tracks:list, threshold:float = 0.015):
+    def remove_empty_tracks_and_number_removed(tracks:list, threshold:float = 0.01):
         """Removes all tracks, where one of the streams has an average root mean square less than 0.01"""
         tracks.sort(key = lambda x: x.original_track)
         tracks_by_original_track = groupby(tracks, key=lambda x: x.original_track)

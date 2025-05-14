@@ -3,7 +3,7 @@ from collections import defaultdict
 from enum import Enum
 from random import random
 import traceback
-
+from MERGEdata_import import filling_track_list
 from imblearn.over_sampling import RandomOverSampler
 from pandas.core.common import random_state
 from pandas.core.interchange.dataframe_protocol import DataFrame
@@ -27,7 +27,8 @@ import pandas as pd
 import warnings
 warnings.filterwarnings('always')
 
-all_tracks = tracks = get_cal_tracks("datasets/New dataset/new_annotated.txt", "datasets/New dataset/Clips", "datasets/New dataset/feature_values_1.xml")
+
+
 class Searchers(Enum):
     RANDOM = 0
     GRID = 1
@@ -86,7 +87,7 @@ def get_and_test_optimal_pipelines_for_every_source(tracks:list, list_of_steps:l
     try:
         for tracks_by_source in Track.separate_tracks_by_source(training_tracks):
 
-            best_estimators = get_optimal_estimators(list_of_steps, tracks_by_source, search_attributes, search_type, number_to_take=10, use_oversampler=use_oversampler, feature_names= feature_names)
+            best_estimators = get_optimal_estimators(list_of_steps, tracks_by_source, search_attributes, search_type, number_to_take=20, use_oversampler=use_oversampler, feature_names= feature_names)
             for best_estimator in best_estimators:
                 best_estimator.set_params(**{"Classifier__SVC__estimator__probability": True})
 
@@ -122,7 +123,7 @@ def get_and_test_optimal_pipelines_for_every_source(tracks:list, list_of_steps:l
                         if estimator_peer == estimator: continue
                         if (estimator, estimator_peer) in combinations or (estimator_peer, estimator) in combinations: continue
                         i += 1
-                        print(source, source_peer, id(source_peer), f"{i}/{(len(estimators_by_source[source]) * len(list(estimators_by_source.keys())) * (len(list(estimators_by_source.keys())) - 1))*5}")
+                        print(source, source_peer, id(source_peer), f"{i}/{(len(estimators_by_source[source]) * len(list(estimators_by_source.keys())) * (len(list(estimators_by_source.keys())) - 1))*10}")
                         results = classify_by_original_track_and_get_scores([estimator, estimator_peer], [[track for track in test_tracks if track.source == source], [track for track in test_tracks if track.source == source_peer]], feature_names=feature_names)
 
                         data['source(s)'].append(f"{source} + {source_peer}")
@@ -141,12 +142,15 @@ def get_and_test_optimal_pipelines_for_every_source(tracks:list, list_of_steps:l
 
     pd.DataFrame.from_dict(data).to_csv("Pipeline results.csv")
 
+all_tracks = tracks = filling_track_list('MERGE-datas/AllSongs15Sec', 'MERGE-datas/feature_values_1.xml', None)
+
+all_tracks = Track.remove_empty_tracks_and_number_removed(all_tracks)
 
 classifier = Pipeline([("SVC", OneVsRestClassifier(SVC(cache_size=500, max_iter=1000000, probability=False, random_state=42, class_weight='balanced', decision_function_shape='ovr')))])
 
-search_attributes = [{"Classifier__SVC__estimator__C": [1, 10, 100, 1000], "Classifier__SVC__estimator__kernel": ["linear"], "Scaler": [MinMaxScaler()], 'Selector__max_features': [2, 4, 6, 8, 10, 12, 14, 16, 18, 20, 24]},
-                     {"Classifier__SVC__estimator__C": [10, 100, 1000, 10000], "Classifier__SVC__estimator__gamma": [0.0001, 0.001, 0.01, 0.1],"Classifier__SVC__estimator__kernel": ["rbf"], "Scaler": [MinMaxScaler()], 'Selector__max_features': [2, 4, 6, 8, 10, 12, 14, 16, 18, 20, 24]},
-                     {"Classifier__SVC__estimator__C": [0.0001, 0.001, 0.01, 0.1], "Classifier__SVC__estimator__gamma": [0.0001, 0.001, 0.01, 0.1], "Classifier__SVC__estimator__degree": [3, 5], "Classifier__SVC__estimator__coef0": [2, 4, 6],"Classifier__SVC__estimator__kernel": ["poly"], "Scaler": [MinMaxScaler()], 'Selector__max_features': [2, 4, 6, 8, 10, 12, 14, 16, 18, 20, 24]}]
+search_attributes = [{"Classifier__SVC__estimator__C": [1, 10, 100, 1000], "Classifier__SVC__estimator__kernel": ["linear"], "Scaler": [MinMaxScaler(), StandardScaler()], 'Selector__max_features': [2, 4, 6, 8, 10, 12, 14, 16, 18, 20, 24]},
+                     {"Classifier__SVC__estimator__C": [10, 100, 1000, 10000], "Classifier__SVC__estimator__gamma": [0.0001, 0.001, 0.01, 0.1],"Classifier__SVC__estimator__kernel": ["rbf"], "Scaler": [MinMaxScaler(), StandardScaler()], 'Selector__max_features': [2, 4, 6, 8, 10, 12, 14, 16, 18, 20, 24]},
+                     {"Classifier__SVC__estimator__C": [0.0001, 0.001, 0.01, 0.1], "Classifier__SVC__estimator__gamma": [0.0001, 0.001, 0.01, 0.1], "Classifier__SVC__estimator__degree": [3, 5], "Classifier__SVC__estimator__coef0": [2, 4, 6],"Classifier__SVC__estimator__kernel": ["poly"], "Scaler": [MinMaxScaler(), StandardScaler()], 'Selector__max_features': [2, 4, 6, 8, 10, 12, 14, 16, 18, 20, 24]}]
 
 #steps = [("Imputer", SimpleImputer(strategy="mean")), ("Scaler", StandardScaler()), ("PCA", PCA(random_state=42)), ('Selector', SelectFromModel(LinearSVC())), ("Classifier", classifier)]
 steps = [("Imputer", SimpleImputer(strategy="mean")), ("Scaler", StandardScaler()), ('Selector', SelectFromModel(LinearSVC())), ("Classifier", classifier)]
