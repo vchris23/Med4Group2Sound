@@ -1,12 +1,10 @@
 ﻿import time
 from collections import defaultdict
+from copy import copy
 from enum import Enum
-from random import random
 import traceback
-from MERGEdata_import import filling_track_list
+import numpy as np
 from imblearn.over_sampling import RandomOverSampler
-from pandas.core.common import random_state
-from pandas.core.interchange.dataframe_protocol import DataFrame
 from sklearn.base import BaseEstimator, clone
 from sklearn.feature_selection import SequentialFeatureSelector, SelectFromModel
 from sklearn.impute import SimpleImputer
@@ -14,10 +12,6 @@ from sklearn.multiclass import OneVsRestClassifier
 from sklearn.pipeline import Pipeline
 from sklearn.preprocessing import StandardScaler, RobustScaler, MinMaxScaler
 from sklearn.svm import SVC, LinearSVC
-from sklearn.decomposition import PCA
-from sklearn.discriminant_analysis import QuadraticDiscriminantAnalysis, LinearDiscriminantAnalysis
-
-from CAL_data_sound_pros import get_cal_tracks
 from music_svm import grid_param_search, get_scores, classify_and_get_scores, classify_by_original_track_and_get_scores
 from process_sound import split_into_train_and_test
 from data_import import import_tracks, get_feature_names
@@ -26,8 +20,6 @@ from sklearn.model_selection import GridSearchCV, RandomizedSearchCV
 import pandas as pd
 import warnings
 warnings.filterwarnings('always')
-
-
 
 class Searchers(Enum):
     RANDOM = 0
@@ -72,7 +64,6 @@ def get_optimal_estimators(list_of_steps:list, training_tracks, search_attribute
         parameters = best_parameters.take([i]).values[0]
         estimator = Pipeline(list_of_steps)
         estimator.set_params(**parameters)
-        print("CLassifier", parameters["Classifier__SVC__estimator__C"])
         best_estimators.append(clone(estimator)) #I don't feel like we need a clone here, but for some reason it is; else we are appending the same estimator every time
 
     return best_estimators
@@ -142,7 +133,53 @@ def get_and_test_optimal_pipelines_for_every_source(tracks:list, list_of_steps:l
 
     pd.DataFrame.from_dict(data).to_csv("Pipeline results.csv")
 
-all_tracks = tracks = filling_track_list('MERGE-datas/AllSongs15Sec', 'MERGE-datas/feature_values_1.xml', None)
+def make_confusion_matrices(pipeline:Pipeline, csv_file, all_tracks, feature_names):
+    training, test = split_into_train_and_test(all_tracks, 0.8, seed=42, stratify=True)
+    training_source_lists = Track.separate_tracks_by_source(training)
+    training_tracks_by_source = {}
+    for source_list in training_source_lists:
+        training_tracks_by_source[source_list[0].source] = Track.tracks_features_to_dataframe(source_list, feature_names), Track.tracks_to_features_and_labels(source_list)[1]
+
+    test_source_lists = Track.separate_tracks_by_source(test)
+    test_tracks_by_source = {}
+    for source_list in test_source_lists:
+        test_tracks_by_source[source_list[0].source] = source_list
+
+    dataframe = pd.read_csv(csv_file)
+    for row in dataframe.iterrows():
+        row_content = row[1]
+        is_ensemble = row_content['source(s)'].count('+') != 0
+        if is_ensemble:
+            sources = "".join(row_content['source(s)'].replace('*', "").split())
+            sources = sources.split('+')
+
+            pipelines = [clone(pipeline), clone(pipeline)]
+            pipelines[0] = pipelines[0].set_params(**eval(row_content['First parameters']))
+            pipelines[1] = pipelines[1].set_params(**eval(row_content['Second parameters']))
+            track_lists = []
+            for i in range(len(sources)):
+                source = sources[i]
+                track_lists.append(test_tracks_by_source[source])
+
+                features, labels = training_tracks_by_source[source]
+                pipelines[i].fit(features, labels)
+
+            scores = classify_by_original_track_and_get_scores(pipelines, track_lists,
+                                                      plot_confusion_matrix=True, confusion_matrix_title=str(row[0]),
+                                                      feature_names=feature_names)
+            print(row[0], scores)
+
+        else:
+            source = row_content['source(s)'] if row_content['source(s)'].count('*') == 0 else row_content['source(s)'].replace('*', '').replace(' ', '')
+            features, labels = training_tracks_by_source[source]
+            parameters = eval(row_content['First parameters'])
+            pipeline = pipeline.set_params(**parameters)
+            pipeline = pipeline.fit(features, labels)
+            scores = classify_by_original_track_and_get_scores(pipeline, test_tracks_by_source[source], plot_confusion_matrix=True, confusion_matrix_title=str(row[0]), feature_names = feature_names)
+            print(row[0], scores)
+
+all_tracks = import_tracks("datasets/emotify/clips", "datasets/emotify/emotify_data.csv", features_xml_path="datasets/emotify/emotify_values.xml",
+                     sources=["Mixed", "Instrumentals", "Vocals"], amount_to_take=None)
 
 all_tracks = Track.remove_empty_tracks_and_number_removed(all_tracks)
 
@@ -156,6 +193,11 @@ search_attributes = [{"Classifier__SVC__estimator__C": [1, 10, 100, 1000], "Clas
 steps = [("Imputer", SimpleImputer(strategy="mean")), ("Scaler", StandardScaler()), ('Selector', SelectFromModel(LinearSVC())), ("Classifier", classifier)]
 
 feature_names = get_feature_names("datasets/emotify/emotify_values.xml", True)
+
+pipeline = Pipeline(steps, memory="cache")
+
+#make_confusion_matrices(pipeline, "Emotify results.csv", all_tracks, feature_names)
+
 start_time = time.time()
 get_and_test_optimal_pipelines_for_every_source(all_tracks, steps, search_attributes, Searchers.GRID, use_oversampler = False, feature_names = feature_names)
 print(f"Took {time.time()-start_time}")

@@ -160,7 +160,7 @@
  'Method of Moments Overall Average 3'
  'Method of Moments Overall Average 4'
  'Method of Moments Overall Average 5']",,,0.1527777777777778,0.07007575757575758,0.15007309941520466
-4,Instrumental,False,"{'memory': None, 'steps': [('Imputer', SimpleImputer()), ('Scaler', StandardScaler()), ('Selector', SelectFromModel(estimator=LinearSVC(), max_features=24)), ('Classifier', Pipeline(steps=[('SVC',
+4,Instrumental *,False,"{'memory': None, 'steps': [('Imputer', SimpleImputer()), ('Scaler', StandardScaler()), ('Selector', SelectFromModel(estimator=LinearSVC(), max_features=24)), ('Classifier', Pipeline(steps=[('SVC',
                  OneVsRestClassifier(estimator=SVC(C=1000, cache_size=500,
                                                    class_weight='balanced',
                                                    coef0=6, degree=5,
@@ -1083,7 +1083,7 @@
  'Method of Moments Overall Average 3'
  'Method of Moments Overall Average 4'
  'Method of Moments Overall Average 5']",,,0.09722222222222222,0.039646464646464645,0.03376623376623377
-30,Mixed,False,"{'memory': None, 'steps': [('Imputer', SimpleImputer()), ('Scaler', StandardScaler()), ('Selector', SelectFromModel(estimator=LinearSVC(), max_features=14)), ('Classifier', Pipeline(steps=[('SVC',
+30,Mixed *,False,"{'memory': None, 'steps': [('Imputer', SimpleImputer()), ('Scaler', StandardScaler()), ('Selector', SelectFromModel(estimator=LinearSVC(), max_features=14)), ('Classifier', Pipeline(steps=[('SVC',
                  OneVsRestClassifier(estimator=SVC(C=100, cache_size=500,
                                                    class_weight='balanced',
                                                    coef0=2, degree=5, gamma=0.1,
@@ -1859,7 +1859,7 @@
  'Method of Moments Overall Average 3'
  'Method of Moments Overall Average 4'
  'Method of Moments Overall Average 5']",,,0.25,0.11073232323232324,0.217032967032967
-52,Vocals,False,"{'memory': None, 'steps': [('Imputer', SimpleImputer()), ('Scaler', StandardScaler()), ('Selector', SelectFromModel(estimator=LinearSVC(), max_features=14)), ('Classifier', Pipeline(steps=[('SVC',
+52,Vocals *,False,"{'memory': None, 'steps': [('Imputer', SimpleImputer()), ('Scaler', StandardScaler()), ('Selector', SelectFromModel(estimator=LinearSVC(), max_features=14)), ('Classifier', Pipeline(steps=[('SVC',
                  OneVsRestClassifier(estimator=SVC(C=1000, cache_size=500,
                                                    class_weight='balanced',
                                                    coef0=4, degree=5, gamma=0.1,

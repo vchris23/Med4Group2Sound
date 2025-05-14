@@ -126,11 +126,14 @@ def get_scores(prediction_results, actual_results):
 
     return acc, pre, rec
 
-def get_confusion_matrix(prediction_results, actual_results, title:str = "Confusion matrix"):
-    matrix = confusion_matrix(actual_results, prediction_results)
-    display = ConfusionMatrixDisplay(confusion_matrix=matrix)
-    display.plot()
-    plt.title(title)
+def get_confusion_matrix(prediction_results, actual_results, title:str = "Confusion matrix", labels = None):
+
+    fig, ax = plt.subplots(figsize=(8, 8))
+    matrix = confusion_matrix(actual_results, prediction_results, labels=labels)
+    display = ConfusionMatrixDisplay(matrix, display_labels=labels)
+    display.plot(xticks_rotation='vertical', colorbar=False, ax=ax)
+    plt.title(title, size='x-large')
+    plt.tight_layout()
     plt.show()
 
 def train_and_test_new_SVM(training_tracks: list, test_tracks: list):
@@ -273,6 +276,6 @@ def classify_by_original_track_and_get_scores(svm:OneVsRestClassifier | list, tr
         predictions, labels = classify_by_original_track(svm, tracks, feature_names)
 
     if plot_confusion_matrix:
-        get_confusion_matrix(predictions, labels, confusion_matrix_title)
+        get_confusion_matrix(predictions, labels, confusion_matrix_title, labels=svm.classes_ if type(svm) != list else svm[0].classes_)
 
     return get_scores(predictions, labels)
