@@ -7,6 +7,7 @@ import librosa
 from librosa.filters import chroma
 from onnx.numpy_helper import from_dict
 from sklearn.feature_extraction import DictVectorizer
+from sympy import false
 
 import OurSound
 from OurSound import SpectrogramType
@@ -104,7 +105,7 @@ def _get_tracks_with_sound_and_source(music_folder_path:str, source_types:list, 
         for content in folder_content:
 
             content_path = os.path.join(genre_folder, content)
-            song = librosa.load(content_path, sr=sampling_rate)[0]
+            song = librosa.load(content_path, sr=sampling_rate)
 
             source, number, part = content.split('_')
             source = source.split(".")[0]

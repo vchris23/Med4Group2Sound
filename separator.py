@@ -1,4 +1,7 @@
-﻿from audio_separator.separator import Separator
+﻿from turtledemo.penrose import start
+
+import audio_separator.utils.cli
+from audio_separator.separator import Separator
 import soundfile
 import os
 import shutil
@@ -65,6 +68,7 @@ def separate(input_path, output_path, should_override, model_file_name = None):
             for song in songs:
                 song_path = os.path.join(sub_item_path, song)
                 print(sep.output_dir)
+                print("Song", song)
                 i += 1
                 print(i)
                 if not should_override and os.path.exists(os.path.join(output_sub_folder, "Vocals_" + song)): continue
@@ -99,6 +103,7 @@ def split_sound_files_in_folders_into_excerpts(input_folder_path, output_folder_
     input_folder_mp3s = [input_content for input_content in input_folder_content if input_content[-3:] == "mp3"]
 
     for mp3_file in input_folder_mp3s:
+        print(mp3_file)
 
         _split_mp3_file_into_excerpts(song_path=os.path.join(input_folder_path, mp3_file),
                                       output_folder_path=output_folder_path,
@@ -110,6 +115,7 @@ def split_sound_files_in_folders_into_excerpts(input_folder_path, output_folder_
                                 os.path.isdir(os.path.join(input_folder_path, input_content))] #Gets folders for recursion
 
     for sub_folder in input_folder_sub_folders:
+        print(sub_folder)
         os.makedirs(os.path.join(output_folder_path, sub_folder), exist_ok=True)
         split_sound_files_in_folders_into_excerpts(os.path.join(input_folder_path, sub_folder),
                                                    os.path.join(output_folder_path, sub_folder),
