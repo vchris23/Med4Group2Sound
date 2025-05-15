@@ -3,7 +3,7 @@ from itertools import groupby
 
 
 from our_classes import Track
-
+random.seed(42)
 def split_into_train_and_test(track_list:list, ratio:float, seed:int = None, stratify:bool = False):
 
     track_list.sort(key = lambda track: track.original_track)
