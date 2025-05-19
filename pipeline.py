@@ -35,7 +35,7 @@ def pipeline_search(pipeline, training_tracks, search_attributes:dict | list, se
     features, labels = Track.tracks_to_features_and_labels(training_tracks)
     features = Track.tracks_features_to_dataframe(training_tracks, feature_names)
     if use_oversampler:
-        features, labels = RandomOverSampler(random_state=42).fit_resample(features, labels)
+        features, labels = RandomOverSampler(random_state=rng).fit_resample(features, labels)
 
     match search_type:
         case Searchers.RANDOM:
@@ -65,7 +65,6 @@ def get_optimal_estimators(list_of_steps:list, training_tracks, search_attribute
     best_estimators = []
     for i in range(len(best_parameters)):
         parameters = best_parameters.take([i]).values[0]
-        print(parameters)
         estimator = Pipeline(list_of_steps)
         estimator.set_params(**parameters)
         best_estimators.append(clone(estimator)) #I don't feel like we need a clone here, but for some reason it is; else we are appending the same estimator every time
@@ -95,7 +94,7 @@ def get_and_test_optimal_pipelines_for_every_source(tracks:list, list_of_steps:l
     try:
         for tracks_by_source in Track.separate_tracks_by_source(training_tracks):
 
-            best_estimators = get_optimal_estimators(list_of_steps, tracks_by_source, search_attributes, search_type, number_to_take=10, use_oversampler=use_oversampler, feature_names= feature_names)
+            best_estimators = get_optimal_estimators(list_of_steps, tracks_by_source, search_attributes, search_type, number_to_take=30, use_oversampler=use_oversampler, feature_names= feature_names)
             for best_estimator in best_estimators:
                 best_estimator.set_params(**{"Classifier__SVC__estimator__probability": True})
 
@@ -182,11 +181,8 @@ def make_confusion_matrices(pipeline:Pipeline, csv_file, all_tracks, feature_nam
             pipelines[1] = pipelines[1].set_params(**eval(row_content['Second parameters'].replace(': nan', ': np.nan')))
             for i in range(len(sources)):
                 source = sources[i]
-
                 features, labels = training_tracks_by_source[source]
                 pipelines[i].fit(features, labels)
-                pipelines[0] = pipelines[0].set_params(**eval(row_content['First parameters']))
-
             scores = classify_by_original_track_and_get_scores(pipelines, [[track for track in test if track.source == sources[0]], [track for track in test if track.source == sources[1]]],
                                                       plot_confusion_matrix=True, confusion_matrix_title=str(row[0]),
                                                       feature_names=feature_names)
@@ -205,14 +201,13 @@ all_tracks = get_cal_tracks("datasets/New dataset/new_annotated.txt", "datasets/
 
 all_tracks = Track.remove_empty_tracks_and_number_removed(all_tracks)
 
-classifier = Pipeline([("SVC", OneVsRestClassifier(SVC(cache_size=500, max_iter=1000000, probability=False, random_state=42, class_weight='balanced', decision_function_shape='ovr')))])
+classifier = Pipeline([("SVC", OneVsRestClassifier(SVC(cache_size=500, max_iter=1000000, probability=False, random_state=rng, class_weight='balanced', decision_function_shape='ovr')))])
 
 search_attributes = [{"Classifier__SVC__estimator__C": [0.01, 0.1, 1, 10, 100], "Classifier__SVC__estimator__kernel": ["linear"], "Scaler": [MinMaxScaler(), StandardScaler()], 'Selector__max_features': [4, 8, 12, 16, 20, 24, 28, 32]},
                      {"Classifier__SVC__estimator__C": [0.01, 0.1, 1, 10, 100], "Classifier__SVC__estimator__gamma": [0.0001, 0.001, 0.01, 0.1],"Classifier__SVC__estimator__kernel": ["rbf"], "Scaler": [MinMaxScaler(), StandardScaler()], 'Selector__max_features': [4, 8, 12, 16, 20, 24, 28, 32]},
                      {"Classifier__SVC__estimator__C": [0.01, 0.1, 1, 10, 100], "Classifier__SVC__estimator__gamma": [0.0001, 0.001, 0.01, 0.1], "Classifier__SVC__estimator__degree": [2, 4, 6, 8], "Classifier__SVC__estimator__coef0": [2, 4, 6, 8],"Classifier__SVC__estimator__kernel": ["poly"], "Scaler": [MinMaxScaler(), StandardScaler()], 'Selector__max_features': [4, 8, 12, 16, 20, 24, 28, 32]}]
 
-#steps = [("Imputer", SimpleImputer(strategy="mean")), ("Scaler", StandardScaler()), ("PCA", PCA(random_state=42)), ('Selector', SelectFromModel(LinearSVC())), ("Classifier", classifier)]
-steps = [("Imputer", SimpleImputer(strategy="mean")), ("Scaler", MinMaxScaler()), ('Selector', SelectFromModel(LinearSVC(random_state=42))), ("Classifier", classifier)]
+steps = [("Imputer", SimpleImputer(strategy="mean")), ("Scaler", StandardScaler), ('Selector', SelectFromModel(LinearSVC(random_state=rng))), ("Classifier", classifier)]
 
 feature_names = get_feature_names("datasets/emotify/emotify_values.xml", True)
 
