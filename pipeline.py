@@ -1,24 +1,20 @@
 ﻿import time
 from collections import defaultdict
-from copy import copy
 from enum import Enum
 import traceback
-from random import random, Random
-
 import numpy as np
-import numpy.random
 from imblearn.over_sampling import RandomOverSampler
-from pandas.core.interchange.dataframe_protocol import DataFrame
-from sklearn.base import BaseEstimator, clone
-from sklearn.feature_selection import SequentialFeatureSelector, SelectFromModel
+from sklearn.base import clone
+from sklearn.feature_selection import SelectFromModel
 from sklearn.impute import SimpleImputer
 from sklearn.multiclass import OneVsRestClassifier
 from sklearn.pipeline import Pipeline
-from sklearn.preprocessing import StandardScaler, RobustScaler, MinMaxScaler
+from sklearn.preprocessing import StandardScaler, MinMaxScaler
 from sklearn.svm import SVC, LinearSVC
+from copy import copy
 
-from dataframe_test import dataframe
-from music_svm import grid_param_search, get_scores, classify_and_get_scores, classify_by_original_track_and_get_scores
+from CAL_data_sound_pros import get_cal_tracks
+from music_svm import classify_by_original_track_and_get_scores
 from process_sound import split_into_train_and_test
 from data_import import import_tracks, get_feature_names
 from our_classes import Track
@@ -27,6 +23,7 @@ import pandas as pd
 import warnings
 warnings.filterwarnings('always')
 
+rng = np.random.RandomState(42)
 class Searchers(Enum):
     RANDOM = 0
     GRID = 1
@@ -75,6 +72,19 @@ def get_optimal_estimators(list_of_steps:list, training_tracks, search_attribute
 
     return best_estimators
 
+def make_parameters_saveable(parameters:dict):
+    new_parameters = copy(parameters)
+    new_parameters['Selector'].estimator.set_params(**{'random_state': 42})
+    new_parameters['steps'][-1][1][-1].estimator.set_params(**{'random_state': 42})
+    new_parameters['steps'][-2][1].estimator.set_params(**{'random_state': 42})
+    new_parameters['Classifier'][-1].estimator.set_params(**{'random_state': 42})
+    new_parameters['Classifier__steps'][0][1].estimator.set_params(**{'random_state': 42})
+    new_parameters['Classifier__SVC'].estimator.set_params(**{'random_state': 42})
+    new_parameters['Classifier__SVC__estimator'].set_params(**{'random_state': 42})
+    new_parameters['Classifier__SVC__estimator__random_state'] = 42
+    new_parameters['Selector__estimator'].set_params(**{'random_state': 42})
+    new_parameters['Selector__estimator__random_state'] = 42
+    return new_parameters
 
 def get_and_test_optimal_pipelines_for_every_source(tracks:list, list_of_steps:list, search_attributes:dict | list, search_type:Searchers, use_oversampler = False, feature_names:list = None):
 
@@ -85,13 +95,13 @@ def get_and_test_optimal_pipelines_for_every_source(tracks:list, list_of_steps:l
     try:
         for tracks_by_source in Track.separate_tracks_by_source(training_tracks):
 
-            best_estimators = get_optimal_estimators(list_of_steps, tracks_by_source, search_attributes, search_type, number_to_take=20, use_oversampler=use_oversampler, feature_names= feature_names)
+            best_estimators = get_optimal_estimators(list_of_steps, tracks_by_source, search_attributes, search_type, number_to_take=10, use_oversampler=use_oversampler, feature_names= feature_names)
             for best_estimator in best_estimators:
                 best_estimator.set_params(**{"Classifier__SVC__estimator__probability": True})
 
                 features, labels = Track.tracks_to_features_and_labels(tracks_by_source)
                 features = Track.tracks_features_to_dataframe(tracks_by_source, feature_names)
-                if use_oversampler: features, labels = RandomOverSampler(random_state = 42).fit_resample(features, labels)
+                if use_oversampler: features, labels = RandomOverSampler(random_state = rng).fit_resample(features, labels)
                 best_estimator.fit(features, labels)
                 estimators_by_source[tracks_by_source[0].source].append(best_estimator)
         i = 0
@@ -102,7 +112,7 @@ def get_and_test_optimal_pipelines_for_every_source(tracks:list, list_of_steps:l
                 results = classify_by_original_track_and_get_scores(estimator, [track for track in test_tracks if track.source == source], feature_names= feature_names, plot_confusion_matrix=False, confusion_matrix_title=f"{source} {i}")
                 data['source(s)'].append(source)
                 data['Oversampling'].append(use_oversampler)
-                data['First parameters'].append(estimator.get_params())
+                data['First parameters'].append(make_parameters_saveable(estimator.get_params()))
                 data['First features'].append(estimator[:-1].get_feature_names_out())
                 data['Second parameters'].append(None)
                 data['Second features'].append(None)
@@ -120,16 +130,20 @@ def get_and_test_optimal_pipelines_for_every_source(tracks:list, list_of_steps:l
                 combinations.append((source, source_peer))
                 for estimator in estimators_by_source[source]:
                     for estimator_peer in estimators_by_source[source_peer]:
-                        if estimator_peer == estimator: continue
-                        if (estimator, estimator_peer) in combinations or (estimator_peer, estimator) in combinations: continue
+                        if estimator_peer == estimator:
+                            print("Skipped as estimator peer was estimator")
+                            continue
+                        if (estimator, estimator_peer) in combinations or (estimator_peer, estimator) in combinations:
+                            print("Skipped")
+                            continue
                         print(source, source_peer, id(source_peer), f"{i}/{(len(estimators_by_source[source]) * len(list(estimators_by_source.keys())) * (len(list(estimators_by_source.keys())) - 1))*10}")
                         results = classify_by_original_track_and_get_scores([estimator, estimator_peer], [[track for track in test_tracks if track.source == source], [track for track in test_tracks if track.source == source_peer]], feature_names=feature_names)
 
                         data['source(s)'].append(f"{source} + {source_peer}")
                         data['Oversampling'].append(use_oversampler)
-                        data['First parameters'].append(estimator.get_params())
+                        data['First parameters'].append(make_parameters_saveable(estimator.get_params()))
                         data['First features'].append(estimator[:-1].get_feature_names_out())
-                        data['Second parameters'].append(estimator_peer.get_params())
+                        data['Second parameters'].append(make_parameters_saveable(estimator_peer.get_params()))
                         data['Second features'].append(estimator_peer[:-1].get_feature_names_out())
                         data['Accuracy'].append(results[0])
                         data['Precision'].append(results[1])
@@ -164,8 +178,8 @@ def make_confusion_matrices(pipeline:Pipeline, csv_file, all_tracks, feature_nam
             sources = sources.split('+')
 
             pipelines = [clone(pipeline), clone(pipeline)]
-            pipelines[0] = pipelines[0].set_params(**eval(row_content['First parameters']))
-            pipelines[1] = pipelines[1].set_params(**eval(row_content['Second parameters']))
+            pipelines[0] = pipelines[0].set_params(**eval(row_content['First parameters'].replace(': nan', ': np.nan')))
+            pipelines[1] = pipelines[1].set_params(**eval(row_content['Second parameters'].replace(': nan', ': np.nan')))
             for i in range(len(sources)):
                 source = sources[i]
 
@@ -181,23 +195,21 @@ def make_confusion_matrices(pipeline:Pipeline, csv_file, all_tracks, feature_nam
         else:
             source = row_content['source(s)'] if row_content['source(s)'].count('*') == 0 else row_content['source(s)'].replace('*', '').replace(' ', '')
             features, labels = training_tracks_by_source[source]
-            parameters = eval(row_content['First parameters'])
-            pipeline = clone(pipeline).set_params(**parameters)
-            pipeline = pipeline.fit(features, labels)
-            print(pipeline[:-1].get_feature_names_out())
-            scores = classify_by_original_track_and_get_scores(pipeline, test_tracks_by_source[source], plot_confusion_matrix=True, confusion_matrix_title=str(row[0]), feature_names = feature_names)
+            parameters = eval(row_content['First parameters'].replace(': nan', ': np.nan'))
+            new_pipeline = clone(pipeline).set_params(**parameters)
+            new_pipeline = new_pipeline.fit(features, labels)
+            scores = classify_by_original_track_and_get_scores(new_pipeline, test_tracks_by_source[source], plot_confusion_matrix=True, confusion_matrix_title=str(row[0]), feature_names = feature_names)
             print(row[0], scores)
 
-all_tracks = import_tracks("datasets/emotify/clips", "datasets/emotify/emotify_data.csv", features_xml_path="datasets/emotify/emotify_values.xml",
-                     sources=["Mixed", "Instrumentals", "Vocals"], amount_to_take=None)
+all_tracks = get_cal_tracks("datasets/New dataset/new_annotated.txt", "datasets/New dataset/Clips", "datasets/New dataset/feature_values_1.xml")
 
 all_tracks = Track.remove_empty_tracks_and_number_removed(all_tracks)
 
 classifier = Pipeline([("SVC", OneVsRestClassifier(SVC(cache_size=500, max_iter=1000000, probability=False, random_state=42, class_weight='balanced', decision_function_shape='ovr')))])
 
-search_attributes = [{"Classifier__SVC__estimator__C": [1, 10, 100, 1000], "Classifier__SVC__estimator__kernel": ["linear"], "Scaler": [MinMaxScaler(), StandardScaler()], 'Selector__max_features': [2, 4, 6, 8, 10, 12, 14, 16, 18, 20, 24]},
-                     {"Classifier__SVC__estimator__C": [10, 100, 1000, 10000], "Classifier__SVC__estimator__gamma": [0.0001, 0.001, 0.01, 0.1],"Classifier__SVC__estimator__kernel": ["rbf"], "Scaler": [MinMaxScaler(), StandardScaler()], 'Selector__max_features': [2, 4, 6, 8, 10, 12, 14, 16, 18, 20, 24]},
-                     {"Classifier__SVC__estimator__C": [0.0001, 0.001, 0.01, 0.1], "Classifier__SVC__estimator__gamma": [0.0001, 0.001, 0.01, 0.1], "Classifier__SVC__estimator__degree": [3, 5], "Classifier__SVC__estimator__coef0": [2, 4, 6],"Classifier__SVC__estimator__kernel": ["poly"], "Scaler": [MinMaxScaler(), StandardScaler()], 'Selector__max_features': [2, 4, 6, 8, 10, 12, 14, 16, 18, 20, 24]}]
+search_attributes = [{"Classifier__SVC__estimator__C": [0.01, 0.1, 1, 10, 100], "Classifier__SVC__estimator__kernel": ["linear"], "Scaler": [MinMaxScaler(), StandardScaler()], 'Selector__max_features': [4, 8, 12, 16, 20, 24, 28, 32]},
+                     {"Classifier__SVC__estimator__C": [0.01, 0.1, 1, 10, 100], "Classifier__SVC__estimator__gamma": [0.0001, 0.001, 0.01, 0.1],"Classifier__SVC__estimator__kernel": ["rbf"], "Scaler": [MinMaxScaler(), StandardScaler()], 'Selector__max_features': [4, 8, 12, 16, 20, 24, 28, 32]},
+                     {"Classifier__SVC__estimator__C": [0.01, 0.1, 1, 10, 100], "Classifier__SVC__estimator__gamma": [0.0001, 0.001, 0.01, 0.1], "Classifier__SVC__estimator__degree": [2, 4, 6, 8], "Classifier__SVC__estimator__coef0": [2, 4, 6, 8],"Classifier__SVC__estimator__kernel": ["poly"], "Scaler": [MinMaxScaler(), StandardScaler()], 'Selector__max_features': [4, 8, 12, 16, 20, 24, 28, 32]}]
 
 #steps = [("Imputer", SimpleImputer(strategy="mean")), ("Scaler", StandardScaler()), ("PCA", PCA(random_state=42)), ('Selector', SelectFromModel(LinearSVC())), ("Classifier", classifier)]
 steps = [("Imputer", SimpleImputer(strategy="mean")), ("Scaler", MinMaxScaler()), ('Selector', SelectFromModel(LinearSVC(random_state=42))), ("Classifier", classifier)]

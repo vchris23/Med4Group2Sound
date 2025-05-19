@@ -105,7 +105,7 @@ def _get_tracks_with_sound_and_source(music_folder_path:str, source_types:list, 
         for content in folder_content:
 
             content_path = os.path.join(genre_folder, content)
-            song = librosa.load(content_path, sr=sampling_rate)
+            song = librosa.load(content_path, sr=sampling_rate)[0]
 
             source, number, part = content.split('_')
             source = source.split(".")[0]
