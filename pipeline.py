@@ -123,7 +123,7 @@ def get_and_test_optimal_pipelines_for_every_source(tracks:list, list_of_steps:l
                         if estimator_peer == estimator: continue
                         if (estimator, estimator_peer) in combinations or (estimator_peer, estimator) in combinations: continue
                         print(source, source_peer, id(source_peer), f"{i}/{(len(estimators_by_source[source]) * len(list(estimators_by_source.keys())) * (len(list(estimators_by_source.keys())) - 1))*10}")
-                        results = classify_by_original_track_and_get_scores([estimator, estimator_peer], [[track for track in test_tracks if track.source == source], [track for track in test_tracks if track.source == source_peer]], feature_names=feature_names, plot_confusion_matrix=False, confusion_matrix_title=f"{source} + {source_peer} {i + 60}")
+                        results = classify_by_original_track_and_get_scores([estimator, estimator_peer], [[track for track in test_tracks if track.source == source], [track for track in test_tracks if track.source == source_peer]], feature_names=feature_names)
 
                         data['source(s)'].append(f"{source} + {source_peer}")
                         data['Oversampling'].append(use_oversampler)
