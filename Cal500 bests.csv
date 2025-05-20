@@ -1,0 +1,350 @@
+,source(s),Oversampling,First parameters,First features,Second parameters,Second features,Accuracy,Precision,Recall
+16,Instrumental,False,"{'memory': None, 'steps': [('Imputer', SimpleImputer()), ('Scaler', StandardScaler()), ('Selector', SelectFromModel(estimator=LinearSVC(random_state=42), max_features=20)), ('Classifier', Pipeline(steps=[('SVC',
+                 OneVsRestClassifier(estimator=SVC(C=100, cache_size=500,
+                                                   class_weight='balanced',
+                                                   coef0=6, degree=6,
+                                                   gamma=0.01, kernel='poly',
+                                                   max_iter=1000000,
+                                                   probability=True,
+                                                   random_state=42)))]))], 'transform_input': None, 'verbose': False, 'Imputer': SimpleImputer(), 'Scaler': StandardScaler(), 'Selector': SelectFromModel(estimator=LinearSVC(random_state=42), max_features=20), 'Classifier': Pipeline(steps=[('SVC',
+                 OneVsRestClassifier(estimator=SVC(C=100, cache_size=500,
+                                                   class_weight='balanced',
+                                                   coef0=6, degree=6,
+                                                   gamma=0.01, kernel='poly',
+                                                   max_iter=1000000,
+                                                   probability=True,
+                                                   random_state=42)))]), 'Imputer__add_indicator': False, 'Imputer__copy': True, 'Imputer__fill_value': None, 'Imputer__keep_empty_features': False, 'Imputer__missing_values': nan, 'Imputer__strategy': 'mean', 'Scaler__copy': True, 'Scaler__with_mean': True, 'Scaler__with_std': True, 'Selector__estimator__C': 1.0, 'Selector__estimator__class_weight': None, 'Selector__estimator__dual': 'auto', 'Selector__estimator__fit_intercept': True, 'Selector__estimator__intercept_scaling': 1, 'Selector__estimator__loss': 'squared_hinge', 'Selector__estimator__max_iter': 1000, 'Selector__estimator__multi_class': 'ovr', 'Selector__estimator__penalty': 'l2', 'Selector__estimator__random_state': 42, 'Selector__estimator__tol': 0.0001, 'Selector__estimator__verbose': 0, 'Selector__estimator': LinearSVC(random_state=42), 'Selector__importance_getter': 'auto', 'Selector__max_features': 20, 'Selector__norm_order': 1, 'Selector__prefit': False, 'Selector__threshold': None, 'Classifier__memory': None, 'Classifier__steps': [('SVC', OneVsRestClassifier(estimator=SVC(C=100, cache_size=500,
+                                  class_weight='balanced', coef0=6, degree=6,
+                                  gamma=0.01, kernel='poly', max_iter=1000000,
+                                  probability=True, random_state=42)))], 'Classifier__transform_input': None, 'Classifier__verbose': False, 'Classifier__SVC': OneVsRestClassifier(estimator=SVC(C=100, cache_size=500,
+                                  class_weight='balanced', coef0=6, degree=6,
+                                  gamma=0.01, kernel='poly', max_iter=1000000,
+                                  probability=True, random_state=42)), 'Classifier__SVC__estimator__C': 100, 'Classifier__SVC__estimator__break_ties': False, 'Classifier__SVC__estimator__cache_size': 500, 'Classifier__SVC__estimator__class_weight': 'balanced', 'Classifier__SVC__estimator__coef0': 6, 'Classifier__SVC__estimator__decision_function_shape': 'ovr', 'Classifier__SVC__estimator__degree': 6, 'Classifier__SVC__estimator__gamma': 0.01, 'Classifier__SVC__estimator__kernel': 'poly', 'Classifier__SVC__estimator__max_iter': 1000000, 'Classifier__SVC__estimator__probability': True, 'Classifier__SVC__estimator__random_state': 42, 'Classifier__SVC__estimator__shrinking': True, 'Classifier__SVC__estimator__tol': 0.001, 'Classifier__SVC__estimator__verbose': False, 'Classifier__SVC__estimator': SVC(C=100, cache_size=500, class_weight='balanced', coef0=6, degree=6,
+    gamma=0.01, kernel='poly', max_iter=1000000, probability=True,
+    random_state=42), 'Classifier__SVC__n_jobs': None, 'Classifier__SVC__verbose': 0}","['Spectral Variability Overall Standard Deviation'
+ 'Root Mean Square Overall Standard Deviation'
+ 'Zero Crossings Overall Standard Deviation'
+ 'LPC Overall Standard Deviation 1'
+ 'Method of Moments Overall Standard Deviation 3'
+ 'Method of Moments Overall Standard Deviation 5'
+ 'Spectral Centroid Overall Average'
+ 'Spectral Rolloff Point Overall Average'
+ 'Spectral Variability Overall Average' 'Root Mean Square Overall Average'
+ 'Zero Crossings Overall Average' 'MFCC Overall Average 1'
+ 'MFCC Overall Average 2' 'LPC Overall Average 1' 'LPC Overall Average 2'
+ 'Method of Moments Overall Average 1'
+ 'Method of Moments Overall Average 2'
+ 'Method of Moments Overall Average 3'
+ 'Method of Moments Overall Average 4'
+ 'Method of Moments Overall Average 5']",,,0.2222222222222222,0.12323232323232323,0.15915915915915915
+35,Mixed,False,"{'memory': None, 'steps': [('Imputer', SimpleImputer()), ('Scaler', MinMaxScaler()), ('Selector', SelectFromModel(estimator=LinearSVC(random_state=42), max_features=24)), ('Classifier', Pipeline(steps=[('SVC',
+                 OneVsRestClassifier(estimator=SVC(C=100, cache_size=500,
+                                                   class_weight='balanced',
+                                                   coef0=6, degree=8, gamma=0.1,
+                                                   kernel='poly',
+                                                   max_iter=1000000,
+                                                   probability=True,
+                                                   random_state=42)))]))], 'transform_input': None, 'verbose': False, 'Imputer': SimpleImputer(), 'Scaler': MinMaxScaler(), 'Selector': SelectFromModel(estimator=LinearSVC(random_state=42), max_features=24), 'Classifier': Pipeline(steps=[('SVC',
+                 OneVsRestClassifier(estimator=SVC(C=100, cache_size=500,
+                                                   class_weight='balanced',
+                                                   coef0=6, degree=8, gamma=0.1,
+                                                   kernel='poly',
+                                                   max_iter=1000000,
+                                                   probability=True,
+                                                   random_state=42)))]), 'Imputer__add_indicator': False, 'Imputer__copy': True, 'Imputer__fill_value': None, 'Imputer__keep_empty_features': False, 'Imputer__missing_values': nan, 'Imputer__strategy': 'mean', 'Scaler__clip': False, 'Scaler__copy': True, 'Scaler__feature_range': (0, 1), 'Selector__estimator__C': 1.0, 'Selector__estimator__class_weight': None, 'Selector__estimator__dual': 'auto', 'Selector__estimator__fit_intercept': True, 'Selector__estimator__intercept_scaling': 1, 'Selector__estimator__loss': 'squared_hinge', 'Selector__estimator__max_iter': 1000, 'Selector__estimator__multi_class': 'ovr', 'Selector__estimator__penalty': 'l2', 'Selector__estimator__random_state': 42, 'Selector__estimator__tol': 0.0001, 'Selector__estimator__verbose': 0, 'Selector__estimator': LinearSVC(random_state=42), 'Selector__importance_getter': 'auto', 'Selector__max_features': 24, 'Selector__norm_order': 1, 'Selector__prefit': False, 'Selector__threshold': None, 'Classifier__memory': None, 'Classifier__steps': [('SVC', OneVsRestClassifier(estimator=SVC(C=100, cache_size=500,
+                                  class_weight='balanced', coef0=6, degree=8,
+                                  gamma=0.1, kernel='poly', max_iter=1000000,
+                                  probability=True, random_state=42)))], 'Classifier__transform_input': None, 'Classifier__verbose': False, 'Classifier__SVC': OneVsRestClassifier(estimator=SVC(C=100, cache_size=500,
+                                  class_weight='balanced', coef0=6, degree=8,
+                                  gamma=0.1, kernel='poly', max_iter=1000000,
+                                  probability=True, random_state=42)), 'Classifier__SVC__estimator__C': 100, 'Classifier__SVC__estimator__break_ties': False, 'Classifier__SVC__estimator__cache_size': 500, 'Classifier__SVC__estimator__class_weight': 'balanced', 'Classifier__SVC__estimator__coef0': 6, 'Classifier__SVC__estimator__decision_function_shape': 'ovr', 'Classifier__SVC__estimator__degree': 8, 'Classifier__SVC__estimator__gamma': 0.1, 'Classifier__SVC__estimator__kernel': 'poly', 'Classifier__SVC__estimator__max_iter': 1000000, 'Classifier__SVC__estimator__probability': True, 'Classifier__SVC__estimator__random_state': 42, 'Classifier__SVC__estimator__shrinking': True, 'Classifier__SVC__estimator__tol': 0.001, 'Classifier__SVC__estimator__verbose': False, 'Classifier__SVC__estimator': SVC(C=100, cache_size=500, class_weight='balanced', coef0=6, degree=8,
+    gamma=0.1, kernel='poly', max_iter=1000000, probability=True,
+    random_state=42), 'Classifier__SVC__n_jobs': None, 'Classifier__SVC__verbose': 0}","['Spectral Flux Overall Standard Deviation'
+ 'Compactness Overall Standard Deviation'
+ 'MFCC Overall Standard Deviation 4'
+ 'Method of Moments Overall Standard Deviation 1'
+ 'Method of Moments Overall Standard Deviation 4'
+ 'Method of Moments Overall Standard Deviation 5'
+ 'Spectral Flux Overall Average' 'Compactness Overall Average'
+ 'Fraction Of Low Energy Windows Overall Average' 'MFCC Overall Average 1'
+ 'MFCC Overall Average 2' 'MFCC Overall Average 5'
+ 'MFCC Overall Average 6' 'MFCC Overall Average 7'
+ 'MFCC Overall Average 8' 'MFCC Overall Average 9'
+ 'MFCC Overall Average 10' 'MFCC Overall Average 11'
+ 'LPC Overall Average 3' 'Method of Moments Overall Average 1'
+ 'Method of Moments Overall Average 3'
+ 'Method of Moments Overall Average 4' 'Chroma feature 5'
+ 'Chroma feature 10']",,,0.19444444444444445,0.09145622895622896,0.11156898656898656
+64,Vocals,False,"{'memory': None, 'steps': [('Imputer', SimpleImputer()), ('Scaler', StandardScaler()), ('Selector', SelectFromModel(estimator=LinearSVC(random_state=42), max_features=24)), ('Classifier', Pipeline(steps=[('SVC',
+                 OneVsRestClassifier(estimator=SVC(C=100, cache_size=500,
+                                                   class_weight='balanced',
+                                                   coef0=6, degree=4,
+                                                   gamma=0.01, kernel='poly',
+                                                   max_iter=1000000,
+                                                   probability=True,
+                                                   random_state=42)))]))], 'transform_input': None, 'verbose': False, 'Imputer': SimpleImputer(), 'Scaler': StandardScaler(), 'Selector': SelectFromModel(estimator=LinearSVC(random_state=42), max_features=24), 'Classifier': Pipeline(steps=[('SVC',
+                 OneVsRestClassifier(estimator=SVC(C=100, cache_size=500,
+                                                   class_weight='balanced',
+                                                   coef0=6, degree=4,
+                                                   gamma=0.01, kernel='poly',
+                                                   max_iter=1000000,
+                                                   probability=True,
+                                                   random_state=42)))]), 'Imputer__add_indicator': False, 'Imputer__copy': True, 'Imputer__fill_value': None, 'Imputer__keep_empty_features': False, 'Imputer__missing_values': nan, 'Imputer__strategy': 'mean', 'Scaler__copy': True, 'Scaler__with_mean': True, 'Scaler__with_std': True, 'Selector__estimator__C': 1.0, 'Selector__estimator__class_weight': None, 'Selector__estimator__dual': 'auto', 'Selector__estimator__fit_intercept': True, 'Selector__estimator__intercept_scaling': 1, 'Selector__estimator__loss': 'squared_hinge', 'Selector__estimator__max_iter': 1000, 'Selector__estimator__multi_class': 'ovr', 'Selector__estimator__penalty': 'l2', 'Selector__estimator__random_state': 42, 'Selector__estimator__tol': 0.0001, 'Selector__estimator__verbose': 0, 'Selector__estimator': LinearSVC(random_state=42), 'Selector__importance_getter': 'auto', 'Selector__max_features': 24, 'Selector__norm_order': 1, 'Selector__prefit': False, 'Selector__threshold': None, 'Classifier__memory': None, 'Classifier__steps': [('SVC', OneVsRestClassifier(estimator=SVC(C=100, cache_size=500,
+                                  class_weight='balanced', coef0=6, degree=4,
+                                  gamma=0.01, kernel='poly', max_iter=1000000,
+                                  probability=True, random_state=42)))], 'Classifier__transform_input': None, 'Classifier__verbose': False, 'Classifier__SVC': OneVsRestClassifier(estimator=SVC(C=100, cache_size=500,
+                                  class_weight='balanced', coef0=6, degree=4,
+                                  gamma=0.01, kernel='poly', max_iter=1000000,
+                                  probability=True, random_state=42)), 'Classifier__SVC__estimator__C': 100, 'Classifier__SVC__estimator__break_ties': False, 'Classifier__SVC__estimator__cache_size': 500, 'Classifier__SVC__estimator__class_weight': 'balanced', 'Classifier__SVC__estimator__coef0': 6, 'Classifier__SVC__estimator__decision_function_shape': 'ovr', 'Classifier__SVC__estimator__degree': 4, 'Classifier__SVC__estimator__gamma': 0.01, 'Classifier__SVC__estimator__kernel': 'poly', 'Classifier__SVC__estimator__max_iter': 1000000, 'Classifier__SVC__estimator__probability': True, 'Classifier__SVC__estimator__random_state': 42, 'Classifier__SVC__estimator__shrinking': True, 'Classifier__SVC__estimator__tol': 0.001, 'Classifier__SVC__estimator__verbose': False, 'Classifier__SVC__estimator': SVC(C=100, cache_size=500, class_weight='balanced', coef0=6, degree=4,
+    gamma=0.01, kernel='poly', max_iter=1000000, probability=True,
+    random_state=42), 'Classifier__SVC__n_jobs': None, 'Classifier__SVC__verbose': 0}","['Spectral Centroid Overall Standard Deviation'
+ 'Spectral Rolloff Point Overall Standard Deviation'
+ 'Compactness Overall Standard Deviation'
+ 'Spectral Variability Overall Standard Deviation'
+ 'Root Mean Square Overall Standard Deviation'
+ 'Zero Crossings Overall Standard Deviation'
+ 'MFCC Overall Standard Deviation 1'
+ 'Method of Moments Overall Standard Deviation 2'
+ 'Method of Moments Overall Standard Deviation 3'
+ 'Spectral Centroid Overall Average'
+ 'Spectral Rolloff Point Overall Average' 'Spectral Flux Overall Average'
+ 'Compactness Overall Average' 'Spectral Variability Overall Average'
+ 'Root Mean Square Overall Average' 'Zero Crossings Overall Average'
+ 'MFCC Overall Average 1' 'LPC Overall Average 1' 'LPC Overall Average 2'
+ 'Method of Moments Overall Average 1'
+ 'Method of Moments Overall Average 2'
+ 'Method of Moments Overall Average 3'
+ 'Method of Moments Overall Average 4'
+ 'Method of Moments Overall Average 5']",,,0.3055555555555556,0.1422979797979798,0.2388392857142857
+590,Instrumental + Mixed,False,"{'memory': None, 'steps': [('Imputer', SimpleImputer()), ('Scaler', StandardScaler()), ('Selector', SelectFromModel(estimator=LinearSVC(random_state=42), max_features=20)), ('Classifier', Pipeline(steps=[('SVC',
+                 OneVsRestClassifier(estimator=SVC(C=100, cache_size=500,
+                                                   class_weight='balanced',
+                                                   coef0=6, degree=6,
+                                                   gamma=0.01, kernel='poly',
+                                                   max_iter=1000000,
+                                                   probability=True,
+                                                   random_state=42)))]))], 'transform_input': None, 'verbose': False, 'Imputer': SimpleImputer(), 'Scaler': StandardScaler(), 'Selector': SelectFromModel(estimator=LinearSVC(random_state=42), max_features=20), 'Classifier': Pipeline(steps=[('SVC',
+                 OneVsRestClassifier(estimator=SVC(C=100, cache_size=500,
+                                                   class_weight='balanced',
+                                                   coef0=6, degree=6,
+                                                   gamma=0.01, kernel='poly',
+                                                   max_iter=1000000,
+                                                   probability=True,
+                                                   random_state=42)))]), 'Imputer__add_indicator': False, 'Imputer__copy': True, 'Imputer__fill_value': None, 'Imputer__keep_empty_features': False, 'Imputer__missing_values': nan, 'Imputer__strategy': 'mean', 'Scaler__copy': True, 'Scaler__with_mean': True, 'Scaler__with_std': True, 'Selector__estimator__C': 1.0, 'Selector__estimator__class_weight': None, 'Selector__estimator__dual': 'auto', 'Selector__estimator__fit_intercept': True, 'Selector__estimator__intercept_scaling': 1, 'Selector__estimator__loss': 'squared_hinge', 'Selector__estimator__max_iter': 1000, 'Selector__estimator__multi_class': 'ovr', 'Selector__estimator__penalty': 'l2', 'Selector__estimator__random_state': 42, 'Selector__estimator__tol': 0.0001, 'Selector__estimator__verbose': 0, 'Selector__estimator': LinearSVC(random_state=42), 'Selector__importance_getter': 'auto', 'Selector__max_features': 20, 'Selector__norm_order': 1, 'Selector__prefit': False, 'Selector__threshold': None, 'Classifier__memory': None, 'Classifier__steps': [('SVC', OneVsRestClassifier(estimator=SVC(C=100, cache_size=500,
+                                  class_weight='balanced', coef0=6, degree=6,
+                                  gamma=0.01, kernel='poly', max_iter=1000000,
+                                  probability=True, random_state=42)))], 'Classifier__transform_input': None, 'Classifier__verbose': False, 'Classifier__SVC': OneVsRestClassifier(estimator=SVC(C=100, cache_size=500,
+                                  class_weight='balanced', coef0=6, degree=6,
+                                  gamma=0.01, kernel='poly', max_iter=1000000,
+                                  probability=True, random_state=42)), 'Classifier__SVC__estimator__C': 100, 'Classifier__SVC__estimator__break_ties': False, 'Classifier__SVC__estimator__cache_size': 500, 'Classifier__SVC__estimator__class_weight': 'balanced', 'Classifier__SVC__estimator__coef0': 6, 'Classifier__SVC__estimator__decision_function_shape': 'ovr', 'Classifier__SVC__estimator__degree': 6, 'Classifier__SVC__estimator__gamma': 0.01, 'Classifier__SVC__estimator__kernel': 'poly', 'Classifier__SVC__estimator__max_iter': 1000000, 'Classifier__SVC__estimator__probability': True, 'Classifier__SVC__estimator__random_state': 42, 'Classifier__SVC__estimator__shrinking': True, 'Classifier__SVC__estimator__tol': 0.001, 'Classifier__SVC__estimator__verbose': False, 'Classifier__SVC__estimator': SVC(C=100, cache_size=500, class_weight='balanced', coef0=6, degree=6,
+    gamma=0.01, kernel='poly', max_iter=1000000, probability=True,
+    random_state=42), 'Classifier__SVC__n_jobs': None, 'Classifier__SVC__verbose': 0}","['Spectral Variability Overall Standard Deviation'
+ 'Root Mean Square Overall Standard Deviation'
+ 'Zero Crossings Overall Standard Deviation'
+ 'LPC Overall Standard Deviation 1'
+ 'Method of Moments Overall Standard Deviation 3'
+ 'Method of Moments Overall Standard Deviation 5'
+ 'Spectral Centroid Overall Average'
+ 'Spectral Rolloff Point Overall Average'
+ 'Spectral Variability Overall Average' 'Root Mean Square Overall Average'
+ 'Zero Crossings Overall Average' 'MFCC Overall Average 1'
+ 'MFCC Overall Average 2' 'LPC Overall Average 1' 'LPC Overall Average 2'
+ 'Method of Moments Overall Average 1'
+ 'Method of Moments Overall Average 2'
+ 'Method of Moments Overall Average 3'
+ 'Method of Moments Overall Average 4'
+ 'Method of Moments Overall Average 5']","{'memory': None, 'steps': [('Imputer', SimpleImputer()), ('Scaler', MinMaxScaler()), ('Selector', SelectFromModel(estimator=LinearSVC(random_state=42), max_features=32)), ('Classifier', Pipeline(steps=[('SVC',
+                 OneVsRestClassifier(estimator=SVC(C=10, cache_size=500,
+                                                   class_weight='balanced',
+                                                   coef0=6, degree=4, gamma=0.1,
+                                                   kernel='poly',
+                                                   max_iter=1000000,
+                                                   probability=True,
+                                                   random_state=42)))]))], 'transform_input': None, 'verbose': False, 'Imputer': SimpleImputer(), 'Scaler': MinMaxScaler(), 'Selector': SelectFromModel(estimator=LinearSVC(random_state=42), max_features=32), 'Classifier': Pipeline(steps=[('SVC',
+                 OneVsRestClassifier(estimator=SVC(C=10, cache_size=500,
+                                                   class_weight='balanced',
+                                                   coef0=6, degree=4, gamma=0.1,
+                                                   kernel='poly',
+                                                   max_iter=1000000,
+                                                   probability=True,
+                                                   random_state=42)))]), 'Imputer__add_indicator': False, 'Imputer__copy': True, 'Imputer__fill_value': None, 'Imputer__keep_empty_features': False, 'Imputer__missing_values': nan, 'Imputer__strategy': 'mean', 'Scaler__clip': False, 'Scaler__copy': True, 'Scaler__feature_range': (0, 1), 'Selector__estimator__C': 1.0, 'Selector__estimator__class_weight': None, 'Selector__estimator__dual': 'auto', 'Selector__estimator__fit_intercept': True, 'Selector__estimator__intercept_scaling': 1, 'Selector__estimator__loss': 'squared_hinge', 'Selector__estimator__max_iter': 1000, 'Selector__estimator__multi_class': 'ovr', 'Selector__estimator__penalty': 'l2', 'Selector__estimator__random_state': 42, 'Selector__estimator__tol': 0.0001, 'Selector__estimator__verbose': 0, 'Selector__estimator': LinearSVC(random_state=42), 'Selector__importance_getter': 'auto', 'Selector__max_features': 32, 'Selector__norm_order': 1, 'Selector__prefit': False, 'Selector__threshold': None, 'Classifier__memory': None, 'Classifier__steps': [('SVC', OneVsRestClassifier(estimator=SVC(C=10, cache_size=500, class_weight='balanced',
+                                  coef0=6, degree=4, gamma=0.1, kernel='poly',
+                                  max_iter=1000000, probability=True,
+                                  random_state=42)))], 'Classifier__transform_input': None, 'Classifier__verbose': False, 'Classifier__SVC': OneVsRestClassifier(estimator=SVC(C=10, cache_size=500, class_weight='balanced',
+                                  coef0=6, degree=4, gamma=0.1, kernel='poly',
+                                  max_iter=1000000, probability=True,
+                                  random_state=42)), 'Classifier__SVC__estimator__C': 10, 'Classifier__SVC__estimator__break_ties': False, 'Classifier__SVC__estimator__cache_size': 500, 'Classifier__SVC__estimator__class_weight': 'balanced', 'Classifier__SVC__estimator__coef0': 6, 'Classifier__SVC__estimator__decision_function_shape': 'ovr', 'Classifier__SVC__estimator__degree': 4, 'Classifier__SVC__estimator__gamma': 0.1, 'Classifier__SVC__estimator__kernel': 'poly', 'Classifier__SVC__estimator__max_iter': 1000000, 'Classifier__SVC__estimator__probability': True, 'Classifier__SVC__estimator__random_state': 42, 'Classifier__SVC__estimator__shrinking': True, 'Classifier__SVC__estimator__tol': 0.001, 'Classifier__SVC__estimator__verbose': False, 'Classifier__SVC__estimator': SVC(C=10, cache_size=500, class_weight='balanced', coef0=6, degree=4, gamma=0.1,
+    kernel='poly', max_iter=1000000, probability=True, random_state=42), 'Classifier__SVC__n_jobs': None, 'Classifier__SVC__verbose': 0}","['Spectral Flux Overall Standard Deviation'
+ 'Compactness Overall Standard Deviation'
+ 'MFCC Overall Standard Deviation 2' 'MFCC Overall Standard Deviation 4'
+ 'LPC Overall Standard Deviation 9'
+ 'Method of Moments Overall Standard Deviation 1'
+ 'Method of Moments Overall Standard Deviation 4'
+ 'Method of Moments Overall Standard Deviation 5'
+ 'Spectral Rolloff Point Overall Average' 'Spectral Flux Overall Average'
+ 'Compactness Overall Average'
+ 'Fraction Of Low Energy Windows Overall Average' 'MFCC Overall Average 1'
+ 'MFCC Overall Average 2' 'MFCC Overall Average 5'
+ 'MFCC Overall Average 6' 'MFCC Overall Average 7'
+ 'MFCC Overall Average 8' 'MFCC Overall Average 9'
+ 'MFCC Overall Average 10' 'MFCC Overall Average 11'
+ 'LPC Overall Average 3' 'Method of Moments Overall Average 1'
+ 'Method of Moments Overall Average 2'
+ 'Method of Moments Overall Average 3'
+ 'Method of Moments Overall Average 4' 'Chroma feature 1'
+ 'Chroma feature 4' 'Chroma feature 5' 'Chroma feature 8'
+ 'Chroma feature 9' 'Chroma feature 10']",0.2638888888888889,0.13573232323232323,0.18769230769230769
+990,Instrumental + Vocals,False,"{'memory': None, 'steps': [('Imputer', SimpleImputer()), ('Scaler', StandardScaler()), ('Selector', SelectFromModel(estimator=LinearSVC(random_state=42), max_features=32)), ('Classifier', Pipeline(steps=[('SVC',
+                 OneVsRestClassifier(estimator=SVC(C=100, cache_size=500,
+                                                   class_weight='balanced',
+                                                   gamma=0.01, max_iter=1000000,
+                                                   probability=True,
+                                                   random_state=42)))]))], 'transform_input': None, 'verbose': False, 'Imputer': SimpleImputer(), 'Scaler': StandardScaler(), 'Selector': SelectFromModel(estimator=LinearSVC(random_state=42), max_features=32), 'Classifier': Pipeline(steps=[('SVC',
+                 OneVsRestClassifier(estimator=SVC(C=100, cache_size=500,
+                                                   class_weight='balanced',
+                                                   gamma=0.01, max_iter=1000000,
+                                                   probability=True,
+                                                   random_state=42)))]), 'Imputer__add_indicator': False, 'Imputer__copy': True, 'Imputer__fill_value': None, 'Imputer__keep_empty_features': False, 'Imputer__missing_values': nan, 'Imputer__strategy': 'mean', 'Scaler__copy': True, 'Scaler__with_mean': True, 'Scaler__with_std': True, 'Selector__estimator__C': 1.0, 'Selector__estimator__class_weight': None, 'Selector__estimator__dual': 'auto', 'Selector__estimator__fit_intercept': True, 'Selector__estimator__intercept_scaling': 1, 'Selector__estimator__loss': 'squared_hinge', 'Selector__estimator__max_iter': 1000, 'Selector__estimator__multi_class': 'ovr', 'Selector__estimator__penalty': 'l2', 'Selector__estimator__random_state': 42, 'Selector__estimator__tol': 0.0001, 'Selector__estimator__verbose': 0, 'Selector__estimator': LinearSVC(random_state=42), 'Selector__importance_getter': 'auto', 'Selector__max_features': 32, 'Selector__norm_order': 1, 'Selector__prefit': False, 'Selector__threshold': None, 'Classifier__memory': None, 'Classifier__steps': [('SVC', OneVsRestClassifier(estimator=SVC(C=100, cache_size=500,
+                                  class_weight='balanced', gamma=0.01,
+                                  max_iter=1000000, probability=True,
+                                  random_state=42)))], 'Classifier__transform_input': None, 'Classifier__verbose': False, 'Classifier__SVC': OneVsRestClassifier(estimator=SVC(C=100, cache_size=500,
+                                  class_weight='balanced', gamma=0.01,
+                                  max_iter=1000000, probability=True,
+                                  random_state=42)), 'Classifier__SVC__estimator__C': 100, 'Classifier__SVC__estimator__break_ties': False, 'Classifier__SVC__estimator__cache_size': 500, 'Classifier__SVC__estimator__class_weight': 'balanced', 'Classifier__SVC__estimator__coef0': 0.0, 'Classifier__SVC__estimator__decision_function_shape': 'ovr', 'Classifier__SVC__estimator__degree': 3, 'Classifier__SVC__estimator__gamma': 0.01, 'Classifier__SVC__estimator__kernel': 'rbf', 'Classifier__SVC__estimator__max_iter': 1000000, 'Classifier__SVC__estimator__probability': True, 'Classifier__SVC__estimator__random_state': 42, 'Classifier__SVC__estimator__shrinking': True, 'Classifier__SVC__estimator__tol': 0.001, 'Classifier__SVC__estimator__verbose': False, 'Classifier__SVC__estimator': SVC(C=100, cache_size=500, class_weight='balanced', gamma=0.01,
+    max_iter=1000000, probability=True, random_state=42), 'Classifier__SVC__n_jobs': None, 'Classifier__SVC__verbose': 0}","['Spectral Centroid Overall Standard Deviation'
+ 'Spectral Rolloff Point Overall Standard Deviation'
+ 'Spectral Flux Overall Standard Deviation'
+ 'Spectral Variability Overall Standard Deviation'
+ 'Root Mean Square Overall Standard Deviation'
+ 'Zero Crossings Overall Standard Deviation'
+ 'LPC Overall Standard Deviation 1'
+ 'Method of Moments Overall Standard Deviation 2'
+ 'Method of Moments Overall Standard Deviation 3'
+ 'Method of Moments Overall Standard Deviation 4'
+ 'Method of Moments Overall Standard Deviation 5'
+ 'Spectral Centroid Overall Average'
+ 'Spectral Rolloff Point Overall Average' 'Spectral Flux Overall Average'
+ 'Spectral Variability Overall Average' 'Root Mean Square Overall Average'
+ 'Zero Crossings Overall Average' 'MFCC Overall Average 1'
+ 'MFCC Overall Average 2' 'LPC Overall Average 1' 'LPC Overall Average 2'
+ 'LPC Overall Average 3' 'Method of Moments Overall Average 1'
+ 'Method of Moments Overall Average 2'
+ 'Method of Moments Overall Average 3'
+ 'Method of Moments Overall Average 4'
+ 'Method of Moments Overall Average 5' 'Chroma feature 1'
+ 'Chroma feature 2' 'Chroma feature 10' 'Chroma feature 11']","{'memory': None, 'steps': [('Imputer', SimpleImputer()), ('Scaler', MinMaxScaler()), ('Selector', SelectFromModel(estimator=LinearSVC(random_state=42), max_features=28)), ('Classifier', Pipeline(steps=[('SVC',
+                 OneVsRestClassifier(estimator=SVC(C=1, cache_size=500,
+                                                   class_weight='balanced',
+                                                   coef0=2, degree=8, gamma=0.1,
+                                                   kernel='poly',
+                                                   max_iter=1000000,
+                                                   probability=True,
+                                                   random_state=42)))]))], 'transform_input': None, 'verbose': False, 'Imputer': SimpleImputer(), 'Scaler': MinMaxScaler(), 'Selector': SelectFromModel(estimator=LinearSVC(random_state=42), max_features=28), 'Classifier': Pipeline(steps=[('SVC',
+                 OneVsRestClassifier(estimator=SVC(C=1, cache_size=500,
+                                                   class_weight='balanced',
+                                                   coef0=2, degree=8, gamma=0.1,
+                                                   kernel='poly',
+                                                   max_iter=1000000,
+                                                   probability=True,
+                                                   random_state=42)))]), 'Imputer__add_indicator': False, 'Imputer__copy': True, 'Imputer__fill_value': None, 'Imputer__keep_empty_features': False, 'Imputer__missing_values': nan, 'Imputer__strategy': 'mean', 'Scaler__clip': False, 'Scaler__copy': True, 'Scaler__feature_range': (0, 1), 'Selector__estimator__C': 1.0, 'Selector__estimator__class_weight': None, 'Selector__estimator__dual': 'auto', 'Selector__estimator__fit_intercept': True, 'Selector__estimator__intercept_scaling': 1, 'Selector__estimator__loss': 'squared_hinge', 'Selector__estimator__max_iter': 1000, 'Selector__estimator__multi_class': 'ovr', 'Selector__estimator__penalty': 'l2', 'Selector__estimator__random_state': 42, 'Selector__estimator__tol': 0.0001, 'Selector__estimator__verbose': 0, 'Selector__estimator': LinearSVC(random_state=42), 'Selector__importance_getter': 'auto', 'Selector__max_features': 28, 'Selector__norm_order': 1, 'Selector__prefit': False, 'Selector__threshold': None, 'Classifier__memory': None, 'Classifier__steps': [('SVC', OneVsRestClassifier(estimator=SVC(C=1, cache_size=500, class_weight='balanced',
+                                  coef0=2, degree=8, gamma=0.1, kernel='poly',
+                                  max_iter=1000000, probability=True,
+                                  random_state=42)))], 'Classifier__transform_input': None, 'Classifier__verbose': False, 'Classifier__SVC': OneVsRestClassifier(estimator=SVC(C=1, cache_size=500, class_weight='balanced',
+                                  coef0=2, degree=8, gamma=0.1, kernel='poly',
+                                  max_iter=1000000, probability=True,
+                                  random_state=42)), 'Classifier__SVC__estimator__C': 1, 'Classifier__SVC__estimator__break_ties': False, 'Classifier__SVC__estimator__cache_size': 500, 'Classifier__SVC__estimator__class_weight': 'balanced', 'Classifier__SVC__estimator__coef0': 2, 'Classifier__SVC__estimator__decision_function_shape': 'ovr', 'Classifier__SVC__estimator__degree': 8, 'Classifier__SVC__estimator__gamma': 0.1, 'Classifier__SVC__estimator__kernel': 'poly', 'Classifier__SVC__estimator__max_iter': 1000000, 'Classifier__SVC__estimator__probability': True, 'Classifier__SVC__estimator__random_state': 42, 'Classifier__SVC__estimator__shrinking': True, 'Classifier__SVC__estimator__tol': 0.001, 'Classifier__SVC__estimator__verbose': False, 'Classifier__SVC__estimator': SVC(C=1, cache_size=500, class_weight='balanced', coef0=2, degree=8, gamma=0.1,
+    kernel='poly', max_iter=1000000, probability=True, random_state=42), 'Classifier__SVC__n_jobs': None, 'Classifier__SVC__verbose': 0}","['Spectral Rolloff Point Overall Standard Deviation'
+ 'Compactness Overall Standard Deviation'
+ 'Root Mean Square Overall Standard Deviation'
+ 'Zero Crossings Overall Standard Deviation'
+ 'MFCC Overall Standard Deviation 1' 'MFCC Overall Standard Deviation 7'
+ 'LPC Overall Standard Deviation 1' 'LPC Overall Standard Deviation 7'
+ 'Method of Moments Overall Standard Deviation 1'
+ 'Spectral Rolloff Point Overall Average' 'Spectral Flux Overall Average'
+ 'Compactness Overall Average' 'Spectral Variability Overall Average'
+ 'Zero Crossings Overall Average' 'MFCC Overall Average 1'
+ 'MFCC Overall Average 2' 'MFCC Overall Average 3'
+ 'MFCC Overall Average 5' 'MFCC Overall Average 6'
+ 'MFCC Overall Average 12' 'LPC Overall Average 1' 'LPC Overall Average 3'
+ 'LPC Overall Average 6' 'Method of Moments Overall Average 1'
+ 'Method of Moments Overall Average 2'
+ 'Method of Moments Overall Average 4' 'Chroma feature 3'
+ 'Chroma feature 9']",0.2916666666666667,0.13947811447811448,0.16912708938571008
+2280,Mixed + Vocals,False,"{'memory': None, 'steps': [('Imputer', SimpleImputer()), ('Scaler', MinMaxScaler()), ('Selector', SelectFromModel(estimator=LinearSVC(random_state=42), max_features=32)), ('Classifier', Pipeline(steps=[('SVC',
+                 OneVsRestClassifier(estimator=SVC(C=10, cache_size=500,
+                                                   class_weight='balanced',
+                                                   coef0=4, degree=6, gamma=0.1,
+                                                   kernel='poly',
+                                                   max_iter=1000000,
+                                                   probability=True,
+                                                   random_state=42)))]))], 'transform_input': None, 'verbose': False, 'Imputer': SimpleImputer(), 'Scaler': MinMaxScaler(), 'Selector': SelectFromModel(estimator=LinearSVC(random_state=42), max_features=32), 'Classifier': Pipeline(steps=[('SVC',
+                 OneVsRestClassifier(estimator=SVC(C=10, cache_size=500,
+                                                   class_weight='balanced',
+                                                   coef0=4, degree=6, gamma=0.1,
+                                                   kernel='poly',
+                                                   max_iter=1000000,
+                                                   probability=True,
+                                                   random_state=42)))]), 'Imputer__add_indicator': False, 'Imputer__copy': True, 'Imputer__fill_value': None, 'Imputer__keep_empty_features': False, 'Imputer__missing_values': nan, 'Imputer__strategy': 'mean', 'Scaler__clip': False, 'Scaler__copy': True, 'Scaler__feature_range': (0, 1), 'Selector__estimator__C': 1.0, 'Selector__estimator__class_weight': None, 'Selector__estimator__dual': 'auto', 'Selector__estimator__fit_intercept': True, 'Selector__estimator__intercept_scaling': 1, 'Selector__estimator__loss': 'squared_hinge', 'Selector__estimator__max_iter': 1000, 'Selector__estimator__multi_class': 'ovr', 'Selector__estimator__penalty': 'l2', 'Selector__estimator__random_state': 42, 'Selector__estimator__tol': 0.0001, 'Selector__estimator__verbose': 0, 'Selector__estimator': LinearSVC(random_state=42), 'Selector__importance_getter': 'auto', 'Selector__max_features': 32, 'Selector__norm_order': 1, 'Selector__prefit': False, 'Selector__threshold': None, 'Classifier__memory': None, 'Classifier__steps': [('SVC', OneVsRestClassifier(estimator=SVC(C=10, cache_size=500, class_weight='balanced',
+                                  coef0=4, degree=6, gamma=0.1, kernel='poly',
+                                  max_iter=1000000, probability=True,
+                                  random_state=42)))], 'Classifier__transform_input': None, 'Classifier__verbose': False, 'Classifier__SVC': OneVsRestClassifier(estimator=SVC(C=10, cache_size=500, class_weight='balanced',
+                                  coef0=4, degree=6, gamma=0.1, kernel='poly',
+                                  max_iter=1000000, probability=True,
+                                  random_state=42)), 'Classifier__SVC__estimator__C': 10, 'Classifier__SVC__estimator__break_ties': False, 'Classifier__SVC__estimator__cache_size': 500, 'Classifier__SVC__estimator__class_weight': 'balanced', 'Classifier__SVC__estimator__coef0': 4, 'Classifier__SVC__estimator__decision_function_shape': 'ovr', 'Classifier__SVC__estimator__degree': 6, 'Classifier__SVC__estimator__gamma': 0.1, 'Classifier__SVC__estimator__kernel': 'poly', 'Classifier__SVC__estimator__max_iter': 1000000, 'Classifier__SVC__estimator__probability': True, 'Classifier__SVC__estimator__random_state': 42, 'Classifier__SVC__estimator__shrinking': True, 'Classifier__SVC__estimator__tol': 0.001, 'Classifier__SVC__estimator__verbose': False, 'Classifier__SVC__estimator': SVC(C=10, cache_size=500, class_weight='balanced', coef0=4, degree=6, gamma=0.1,
+    kernel='poly', max_iter=1000000, probability=True, random_state=42), 'Classifier__SVC__n_jobs': None, 'Classifier__SVC__verbose': 0}","['Spectral Flux Overall Standard Deviation'
+ 'Compactness Overall Standard Deviation'
+ 'MFCC Overall Standard Deviation 2' 'MFCC Overall Standard Deviation 4'
+ 'LPC Overall Standard Deviation 9'
+ 'Method of Moments Overall Standard Deviation 1'
+ 'Method of Moments Overall Standard Deviation 4'
+ 'Method of Moments Overall Standard Deviation 5'
+ 'Spectral Rolloff Point Overall Average' 'Spectral Flux Overall Average'
+ 'Compactness Overall Average'
+ 'Fraction Of Low Energy Windows Overall Average' 'MFCC Overall Average 1'
+ 'MFCC Overall Average 2' 'MFCC Overall Average 5'
+ 'MFCC Overall Average 6' 'MFCC Overall Average 7'
+ 'MFCC Overall Average 8' 'MFCC Overall Average 9'
+ 'MFCC Overall Average 10' 'MFCC Overall Average 11'
+ 'LPC Overall Average 3' 'Method of Moments Overall Average 1'
+ 'Method of Moments Overall Average 2'
+ 'Method of Moments Overall Average 3'
+ 'Method of Moments Overall Average 4' 'Chroma feature 1'
+ 'Chroma feature 4' 'Chroma feature 5' 'Chroma feature 8'
+ 'Chroma feature 9' 'Chroma feature 10']","{'memory': None, 'steps': [('Imputer', SimpleImputer()), ('Scaler', MinMaxScaler()), ('Selector', SelectFromModel(estimator=LinearSVC(random_state=42), max_features=28)), ('Classifier', Pipeline(steps=[('SVC',
+                 OneVsRestClassifier(estimator=SVC(C=1, cache_size=500,
+                                                   class_weight='balanced',
+                                                   coef0=2, degree=8, gamma=0.1,
+                                                   kernel='poly',
+                                                   max_iter=1000000,
+                                                   probability=True,
+                                                   random_state=42)))]))], 'transform_input': None, 'verbose': False, 'Imputer': SimpleImputer(), 'Scaler': MinMaxScaler(), 'Selector': SelectFromModel(estimator=LinearSVC(random_state=42), max_features=28), 'Classifier': Pipeline(steps=[('SVC',
+                 OneVsRestClassifier(estimator=SVC(C=1, cache_size=500,
+                                                   class_weight='balanced',
+                                                   coef0=2, degree=8, gamma=0.1,
+                                                   kernel='poly',
+                                                   max_iter=1000000,
+                                                   probability=True,
+                                                   random_state=42)))]), 'Imputer__add_indicator': False, 'Imputer__copy': True, 'Imputer__fill_value': None, 'Imputer__keep_empty_features': False, 'Imputer__missing_values': nan, 'Imputer__strategy': 'mean', 'Scaler__clip': False, 'Scaler__copy': True, 'Scaler__feature_range': (0, 1), 'Selector__estimator__C': 1.0, 'Selector__estimator__class_weight': None, 'Selector__estimator__dual': 'auto', 'Selector__estimator__fit_intercept': True, 'Selector__estimator__intercept_scaling': 1, 'Selector__estimator__loss': 'squared_hinge', 'Selector__estimator__max_iter': 1000, 'Selector__estimator__multi_class': 'ovr', 'Selector__estimator__penalty': 'l2', 'Selector__estimator__random_state': 42, 'Selector__estimator__tol': 0.0001, 'Selector__estimator__verbose': 0, 'Selector__estimator': LinearSVC(random_state=42), 'Selector__importance_getter': 'auto', 'Selector__max_features': 28, 'Selector__norm_order': 1, 'Selector__prefit': False, 'Selector__threshold': None, 'Classifier__memory': None, 'Classifier__steps': [('SVC', OneVsRestClassifier(estimator=SVC(C=1, cache_size=500, class_weight='balanced',
+                                  coef0=2, degree=8, gamma=0.1, kernel='poly',
+                                  max_iter=1000000, probability=True,
+                                  random_state=42)))], 'Classifier__transform_input': None, 'Classifier__verbose': False, 'Classifier__SVC': OneVsRestClassifier(estimator=SVC(C=1, cache_size=500, class_weight='balanced',
+                                  coef0=2, degree=8, gamma=0.1, kernel='poly',
+                                  max_iter=1000000, probability=True,
+                                  random_state=42)), 'Classifier__SVC__estimator__C': 1, 'Classifier__SVC__estimator__break_ties': False, 'Classifier__SVC__estimator__cache_size': 500, 'Classifier__SVC__estimator__class_weight': 'balanced', 'Classifier__SVC__estimator__coef0': 2, 'Classifier__SVC__estimator__decision_function_shape': 'ovr', 'Classifier__SVC__estimator__degree': 8, 'Classifier__SVC__estimator__gamma': 0.1, 'Classifier__SVC__estimator__kernel': 'poly', 'Classifier__SVC__estimator__max_iter': 1000000, 'Classifier__SVC__estimator__probability': True, 'Classifier__SVC__estimator__random_state': 42, 'Classifier__SVC__estimator__shrinking': True, 'Classifier__SVC__estimator__tol': 0.001, 'Classifier__SVC__estimator__verbose': False, 'Classifier__SVC__estimator': SVC(C=1, cache_size=500, class_weight='balanced', coef0=2, degree=8, gamma=0.1,
+    kernel='poly', max_iter=1000000, probability=True, random_state=42), 'Classifier__SVC__n_jobs': None, 'Classifier__SVC__verbose': 0}","['Spectral Rolloff Point Overall Standard Deviation'
+ 'Compactness Overall Standard Deviation'
+ 'Root Mean Square Overall Standard Deviation'
+ 'Zero Crossings Overall Standard Deviation'
+ 'MFCC Overall Standard Deviation 1' 'MFCC Overall Standard Deviation 7'
+ 'LPC Overall Standard Deviation 1' 'LPC Overall Standard Deviation 7'
+ 'Method of Moments Overall Standard Deviation 1'
+ 'Spectral Rolloff Point Overall Average' 'Spectral Flux Overall Average'
+ 'Compactness Overall Average' 'Spectral Variability Overall Average'
+ 'Zero Crossings Overall Average' 'MFCC Overall Average 1'
+ 'MFCC Overall Average 2' 'MFCC Overall Average 3'
+ 'MFCC Overall Average 5' 'MFCC Overall Average 6'
+ 'MFCC Overall Average 12' 'LPC Overall Average 1' 'LPC Overall Average 3'
+ 'LPC Overall Average 6' 'Method of Moments Overall Average 1'
+ 'Method of Moments Overall Average 2'
+ 'Method of Moments Overall Average 4' 'Chroma feature 3'
+ 'Chroma feature 9']",0.2638888888888889,0.12365319865319867,0.26345172151623764

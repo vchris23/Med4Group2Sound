@@ -185,7 +185,7 @@ def make_confusion_matrices(pipeline:Pipeline, csv_file, all_tracks, feature_nam
                 features, labels = training_tracks_by_source[source]
                 pipelines[i].fit(features, labels)
             scores = classify_by_original_track_and_get_scores(pipelines, [[track for track in test if track.source == sources[0]], [track for track in test if track.source == sources[1]]],
-                                                      plot_confusion_matrix=True, confusion_matrix_title=str(row[0]),
+                                                      plot_confusion_matrix=True, confusion_matrix_title=str(row[1]['source(s)']),
                                                       feature_names=feature_names)
             print(row[0], scores)
 
@@ -199,10 +199,7 @@ def make_confusion_matrices(pipeline:Pipeline, csv_file, all_tracks, feature_nam
             print(row[0], scores)
 
 path_to_ss_clips = 'datasets/MIREX-like_mood/SS_and_clipped_audio/Separated_and_mixed_versions/'
-categories = 'datasets/MIREX-like_mood/categories.txt'
-clusters = 'datasets/MIREX-like_mood/clusters.txt'
-
-all_tracks = make_tracks_list(path_to_ss_clips, 1000000000, path_to_categories=categories, using_clusters_instead_of_categories=False)
+all_tracks = get_cal_tracks("datasets/New dataset/new_annotated.txt", "datasets/New dataset/Clips", "datasets/New dataset/feature_values_1.xml")
 
 all_tracks = Track.remove_empty_tracks_and_number_removed(all_tracks)
 
@@ -216,10 +213,10 @@ steps = [("Imputer", SimpleImputer(strategy="mean")), ("Scaler", StandardScaler)
 
 feature_names = get_feature_names("datasets/emotify/emotify_values.xml", True)
 
-#make_confusion_matrices(Pipeline(steps=steps), "Pipeline results.csv", all_tracks, feature_names)
+make_confusion_matrices(Pipeline(steps=steps), "Cal500 bests.csv", all_tracks, feature_names)
 
 start_time = time.time()
-get_and_test_optimal_pipelines_for_every_source(all_tracks, steps, search_attributes, Searchers.GRID, use_oversampler = False, feature_names = feature_names)
+#get_and_test_optimal_pipelines_for_every_source(all_tracks, steps, search_attributes, Searchers.GRID, use_oversampler = False, feature_names = feature_names)
 print(f"Took {time.time()-start_time}")
 
 
