@@ -14,6 +14,7 @@ from sklearn.svm import SVC, LinearSVC
 from copy import copy
 
 from CAL_data_sound_pros import get_cal_tracks
+from dataset_import import make_tracks_list
 from music_svm import classify_by_original_track_and_get_scores
 from process_sound import split_into_train_and_test
 from data_import import import_tracks, get_feature_names
@@ -197,7 +198,11 @@ def make_confusion_matrices(pipeline:Pipeline, csv_file, all_tracks, feature_nam
             scores = classify_by_original_track_and_get_scores(new_pipeline, test_tracks_by_source[source], plot_confusion_matrix=True, confusion_matrix_title=str(row[0]), feature_names = feature_names)
             print(row[0], scores)
 
-all_tracks = get_cal_tracks("datasets/New dataset/new_annotated.txt", "datasets/New dataset/Clips", "datasets/New dataset/feature_values_1.xml")
+path_to_ss_clips = 'datasets/MIREX-like_mood/SS_and_clipped_audio/Separated_and_mixed_versions/'
+categories = 'datasets/MIREX-like_mood/categories.txt'
+clusters = 'datasets/MIREX-like_mood/clusters.txt'
+
+all_tracks = make_tracks_list(path_to_ss_clips, 1000000000, path_to_categories=categories, using_clusters_instead_of_categories=False)
 
 all_tracks = Track.remove_empty_tracks_and_number_removed(all_tracks)
 

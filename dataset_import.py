@@ -30,7 +30,7 @@ def make_tracks_list(path_to_clips:str, tracks_nr: int, path_to_categories: str 
     correct_index = index - 1
     audio_source = a.split("_")[0] #splitting each element and returning the zero'th index
 
-    name_from_path = get_name_from_path(sound_full_path, use_forward_slash=True)
+    name_from_path = get_name_from_path(sound_full_path)
 
     if not using_clusters_instead_of_categories:
         label = categories_list[correct_index]
@@ -53,5 +53,5 @@ path_to_ss_clips = 'datasets/MIREX-like_mood/SS_and_clipped_audio/Separated_and_
 categories = 'datasets/MIREX-like_mood/categories.txt'
 clusters = 'datasets/MIREX-like_mood/clusters.txt'
 
-final_list = make_tracks_list(path_to_ss_clips, 10, path_to_categories=categories, using_clusters_instead_of_categories=False)
-print(final_list[0])
+#final_list = make_tracks_list(path_to_ss_clips, 10, path_to_categories=categories, using_clusters_instead_of_categories=False)
+#print(final_list[0])
