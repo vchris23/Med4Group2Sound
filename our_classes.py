@@ -125,14 +125,14 @@ class Track:
         return pd.DataFrame.from_dict(data)
 
     @staticmethod
-    def graph_energy_in_tracks(tracks:list):
+    def graph_energy_in_tracks(tracks:list, title:str):
 
         energy_markers = []
         for track in tracks:
             energy_markers.append(np.mean(rms(y=track.sound)))
 
         pd.DataFrame.from_dict({'Energy': energy_markers}).hist()
-        plt.title("Funsies are a fun")
+        plt.title(title)
         plt.show()
 
 
