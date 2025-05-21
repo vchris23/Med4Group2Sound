@@ -6,6 +6,8 @@ from librosa.feature import rms
 from librosa.display import specshow
 import pandas as pd
 import numpy as np
+from pandas.core.interchange.dataframe_protocol import DataFrame
+
 from OurSound import get_spectrogram
 from matplotlib import pyplot as plt
 
@@ -122,7 +124,16 @@ class Track:
                 data[feature_names[i]].append(track.features[i])
         return pd.DataFrame.from_dict(data)
 
+    @staticmethod
+    def graph_energy_in_tracks(tracks:list):
 
+        energy_markers = []
+        for track in tracks:
+            energy_markers.append(np.mean(rms(y=track.sound)))
+
+        pd.DataFrame.from_dict({'Energy': energy_markers}).hist()
+        plt.title("Funsies are a fun")
+        plt.show()
 
 
     def __init__(self, sound = None, label = None, source = None, original_track = None, name = None):

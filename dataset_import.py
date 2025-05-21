@@ -20,7 +20,7 @@ def make_tracks_list(path_to_clips:str, tracks_nr: int, path_to_categories: str 
   # Labelsss lists
   categories_list = np.loadtxt(path_to_categories, dtype=str, delimiter="@") if path_to_categories is not None else None
   clusters_list = np.loadtxt(path_to_clusters, dtype=str, delimiter="@") if path_to_clusters is not None else None
-
+  print(clusters_list)
   tracks_list = []
   i = 0
   for a in SS_and_clipped_audio_list:
