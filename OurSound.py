@@ -4,7 +4,7 @@ import numpy as np
 import soundfile
 from enum import Enum
 import soundfile as sf
-
+print("librosa version: ", librosa.version.version)
 class SpectrogramAxis:
     frequency_LOG:str = 'log'
     frequency_linear:str = 'linear'

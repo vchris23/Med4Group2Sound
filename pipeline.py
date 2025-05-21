@@ -12,7 +12,7 @@ from sklearn.pipeline import Pipeline
 from sklearn.preprocessing import StandardScaler, MinMaxScaler
 from sklearn.svm import SVC, LinearSVC
 from copy import copy
-
+from matplotlib import pyplot as plt
 from CAL_data_sound_pros import get_cal_tracks
 from dataset_import import make_tracks_list
 from music_svm import classify_by_original_track_and_get_scores
@@ -157,7 +157,6 @@ def get_and_test_optimal_pipelines_for_every_source(tracks:list, list_of_steps:l
     pd.DataFrame.from_dict(data).to_csv("Pipeline results.csv")
 
 def make_confusion_matrices(pipeline:Pipeline, csv_file, all_tracks, feature_names):
-    pipeline = clone(pipeline)
     training, test = split_into_train_and_test(all_tracks, 0.8, seed=42, stratify=True)
     training_source_lists = Track.separate_tracks_by_source(training)
     training_tracks_by_source = {}
@@ -187,7 +186,7 @@ def make_confusion_matrices(pipeline:Pipeline, csv_file, all_tracks, feature_nam
             scores = classify_by_original_track_and_get_scores(pipelines, [[track for track in test if track.source == sources[0]], [track for track in test if track.source == sources[1]]],
                                                       plot_confusion_matrix=True, confusion_matrix_title=str(row[1]['source(s)']),
                                                       feature_names=feature_names)
-            print(row[0], scores)
+            print(row[1]['source(s)'], scores)
 
         else:
             source = row_content['source(s)'] if row_content['source(s)'].count('*') == 0 else row_content['source(s)'].replace('*', '').replace(' ', '')
@@ -195,12 +194,16 @@ def make_confusion_matrices(pipeline:Pipeline, csv_file, all_tracks, feature_nam
             parameters = eval(row_content['First parameters'].replace(': nan', ': np.nan'))
             new_pipeline = clone(pipeline).set_params(**parameters)
             new_pipeline = new_pipeline.fit(features, labels)
-            scores = classify_by_original_track_and_get_scores(new_pipeline, test_tracks_by_source[source], plot_confusion_matrix=True, confusion_matrix_title=str(row[0]), feature_names = feature_names)
-            print(row[0], scores)
+            scores = classify_by_original_track_and_get_scores(new_pipeline, test_tracks_by_source[source], plot_confusion_matrix=True, confusion_matrix_title=str(row[1]['source(s)']), feature_names = feature_names)
+            print(row[1]['source(s)'], scores)
 
 path_to_ss_clips = 'datasets/MIREX-like_mood/SS_and_clipped_audio/Separated_and_mixed_versions/'
-all_tracks = get_cal_tracks("datasets/New dataset/new_annotated.txt", "datasets/New dataset/Clips", "datasets/New dataset/feature_values_1.xml")
+categories = 'datasets/MIREX-like_mood/categories.txt'
+clusters = 'datasets/MIREX-like_mood/clusters.txt'
 
+all_tracks = make_tracks_list(path_to_ss_clips, 100000000, path_to_categories=categories, path_to_clusters=clusters, using_clusters_instead_of_categories=True)
+
+Track.graph_energy_in_tracks([track for track in all_tracks if track.source == 'Vocals'])
 all_tracks = Track.remove_empty_tracks_and_number_removed(all_tracks)
 
 classifier = Pipeline([("SVC", OneVsRestClassifier(SVC(cache_size=500, max_iter=1000000, probability=False, random_state=rng, class_weight='balanced', decision_function_shape='ovr')))])
@@ -213,10 +216,10 @@ steps = [("Imputer", SimpleImputer(strategy="mean")), ("Scaler", StandardScaler)
 
 feature_names = get_feature_names("datasets/emotify/emotify_values.xml", True)
 
-make_confusion_matrices(Pipeline(steps=steps), "Cal500 bests.csv", all_tracks, feature_names)
+#make_confusion_matrices(Pipeline(steps=steps), "Emotify bests.csv", all_tracks, feature_names)
 
 start_time = time.time()
-#get_and_test_optimal_pipelines_for_every_source(all_tracks, steps, search_attributes, Searchers.GRID, use_oversampler = False, feature_names = feature_names)
+get_and_test_optimal_pipelines_for_every_source(all_tracks, steps, search_attributes, Searchers.GRID, use_oversampler = False, feature_names = feature_names)
 print(f"Took {time.time()-start_time}")
 
 
