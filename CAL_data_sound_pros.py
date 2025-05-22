@@ -121,7 +121,7 @@ def get_cal_tracks(annoated_path:str, sound_folder_path:str, feature_xml_path):
     _assign_labels_to_tracks(tracks, annoated_path)
     tracks = _assign_features_to_tracks(tracks, names_and_features)
     tracks = [track for track in tracks if track.label is not None]
-    tracks = Track.remove_empty_tracks_and_number_removed(tracks)
+    #tracks = Track.remove_empty_tracks_and_number_removed(tracks)
 
     return tracks
 

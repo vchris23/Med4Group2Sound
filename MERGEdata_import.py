@@ -31,7 +31,7 @@ def filling_track_list(clips_folder_path: str, xml_file_path, tracks_amount: int
 
     features = _get_names_and_features_from_xml(xml_file_path)
     tracks_with_features = _assign_features_to_tracks(tracks_list, features)
-    tracks_with_features = Track.remove_empty_tracks_and_number_removed(tracks_with_features)
+    #tracks_with_features = Track.remove_empty_tracks_and_number_removed(tracks_with_features)
     return tracks_with_features
 
 #filled_tracks_list = filling_track_list('MERGE-datas/AllSongs15Sec', 'MERGE-datas/feature_values_1.xml', None)
