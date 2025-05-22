@@ -22,6 +22,7 @@ from our_classes import Track
 from sklearn.model_selection import GridSearchCV, RandomizedSearchCV
 import pandas as pd
 import warnings
+from MERGEdata_import import filling_track_list
 warnings.filterwarnings('always')
 
 rng = np.random.RandomState(42)
@@ -156,7 +157,7 @@ def get_and_test_optimal_pipelines_for_every_source(tracks:list, list_of_steps:l
 
     pd.DataFrame.from_dict(data).to_csv("Pipeline results.csv")
 
-def make_confusion_matrices(pipeline:Pipeline, csv_file, all_tracks, feature_names):
+def make_confusion_matrices(pipeline:Pipeline, csv_file, all_tracks, feature_names, dataset:str = ''):
     training, test = split_into_train_and_test(all_tracks, 0.8, seed=42, stratify=True)
     training_source_lists = Track.separate_tracks_by_source(training)
     training_tracks_by_source = {}
@@ -184,7 +185,7 @@ def make_confusion_matrices(pipeline:Pipeline, csv_file, all_tracks, feature_nam
                 features, labels = training_tracks_by_source[source]
                 pipelines[i].fit(features, labels)
             scores = classify_by_original_track_and_get_scores(pipelines, [[track for track in test if track.source == sources[0]], [track for track in test if track.source == sources[1]]],
-                                                      plot_confusion_matrix=True, confusion_matrix_title=str(row[1]['source(s)']),
+                                                      plot_confusion_matrix=True, confusion_matrix_title=f"{dataset_name} {str(row[1]['source(s)'].replace('*', ''))}",
                                                       feature_names=feature_names)
             print(row[1]['source(s)'], scores)
 
@@ -194,32 +195,83 @@ def make_confusion_matrices(pipeline:Pipeline, csv_file, all_tracks, feature_nam
             parameters = eval(row_content['First parameters'].replace(': nan', ': np.nan'))
             new_pipeline = clone(pipeline).set_params(**parameters)
             new_pipeline = new_pipeline.fit(features, labels)
-            scores = classify_by_original_track_and_get_scores(new_pipeline, test_tracks_by_source[source], plot_confusion_matrix=True, confusion_matrix_title=str(row[1]['source(s)']), feature_names = feature_names)
+            scores = classify_by_original_track_and_get_scores(new_pipeline, test_tracks_by_source[source], plot_confusion_matrix=True, confusion_matrix_title=f"{dataset_name} {str(row[1]['source(s)'].replace('*', ''))}", feature_names = feature_names)
             print(row[1]['source(s)'], scores)
 
-path_to_ss_clips = 'datasets/MIREX-like_mood/SS_and_clipped_audio/Separated_and_mixed_versions/'
-categories = 'datasets/MIREX-like_mood/categories.txt'
-clusters = 'datasets/MIREX-like_mood/clusters.txt'
+#path_to_ss_clips = 'datasets/MIREX-like_mood/SS_and_clipped_audio/Separated_and_mixed_versions/'
+#categories = 'datasets/MIREX-like_mood/categories.txt'
+#clusters = 'datasets/MIREX-like_mood/clusters.txt'
 
-all_tracks = make_tracks_list(path_to_ss_clips, 100000000, path_to_categories=categories, path_to_clusters=clusters, using_clusters_instead_of_categories=True)
+#all_tracks = get_cal_tracks("datasets/New dataset/new_annotated.txt", "datasets/New dataset/Clips", "datasets/New dataset/feature_values_1.xml")
 
-Track.graph_energy_in_tracks([track for track in all_tracks if track.source == 'Vocals'])
-all_tracks = Track.remove_empty_tracks_and_number_removed(all_tracks)
+#Track.graph_energy_in_tracks([track for track in all_tracks if track.source == 'Vocals'], "Energy in vocal clips for Cal500 before pruning")
+
+#all_tracks = Track.remove_empty_tracks_and_number_removed(all_tracks)
+
+#Track.graph_energy_in_tracks([track for track in all_tracks if track.source == 'Vocals'], "Energy in vocal clips for Cal500 after pruning")
 
 classifier = Pipeline([("SVC", OneVsRestClassifier(SVC(cache_size=500, max_iter=1000000, probability=False, random_state=rng, class_weight='balanced', decision_function_shape='ovr')))])
 
-search_attributes = [{"Classifier__SVC__estimator__C": [0.01, 0.1, 1, 10, 100], "Classifier__SVC__estimator__kernel": ["linear"], "Scaler": [MinMaxScaler(), StandardScaler()], 'Selector__max_features': [4, 8, 12, 16, 20, 24, 28, 32]},
-                     {"Classifier__SVC__estimator__C": [0.01, 0.1, 1, 10, 100], "Classifier__SVC__estimator__gamma": [0.0001, 0.001, 0.01, 0.1],"Classifier__SVC__estimator__kernel": ["rbf"], "Scaler": [MinMaxScaler(), StandardScaler()], 'Selector__max_features': [4, 8, 12, 16, 20, 24, 28, 32]},
-                     {"Classifier__SVC__estimator__C": [0.01, 0.1, 1, 10, 100], "Classifier__SVC__estimator__gamma": [0.0001, 0.001, 0.01, 0.1], "Classifier__SVC__estimator__degree": [2, 4, 6, 8], "Classifier__SVC__estimator__coef0": [2, 4, 6, 8],"Classifier__SVC__estimator__kernel": ["poly"], "Scaler": [MinMaxScaler(), StandardScaler()], 'Selector__max_features': [4, 8, 12, 16, 20, 24, 28, 32]}]
+#search_attributes = [{"Classifier__SVC__estimator__C": [0.01, 0.1, 1, 10, 100], "Classifier__SVC__estimator__kernel": ["linear"], "Scaler": [MinMaxScaler(), StandardScaler()], 'Selector__max_features': [4, 8, 12, 16, 20, 24, 28, 32]},
+#                     {"Classifier__SVC__estimator__C": [0.01, 0.1, 1, 10, 100], "Classifier__SVC__estimator__gamma": [0.0001, 0.001, 0.01, 0.1],"Classifier__SVC__estimator__kernel": ["rbf"], "Scaler": [MinMaxScaler(), StandardScaler()], 'Selector__max_features': [4, 8, 12, 16, 20, 24, 28, 32]},
+#                     {"Classifier__SVC__estimator__C": [0.01, 0.1, 1, 10, 100], "Classifier__SVC__estimator__gamma": [0.0001, 0.001, 0.01, 0.1], "Classifier__SVC__estimator__degree": [2, 4, 6, 8], "Classifier__SVC__estimator__coef0": [2, 4, 6, 8],"Classifier__SVC__estimator__kernel": ["poly"], "Scaler": [MinMaxScaler(), StandardScaler()], 'Selector__max_features': [4, 8, 12, 16, 20, 24, 28, 32]}]
 
 steps = [("Imputer", SimpleImputer(strategy="mean")), ("Scaler", StandardScaler), ('Selector', SelectFromModel(LinearSVC(random_state=rng))), ("Classifier", classifier)]
 
 feature_names = get_feature_names("datasets/emotify/emotify_values.xml", True)
 
-#make_confusion_matrices(Pipeline(steps=steps), "Emotify bests.csv", all_tracks, feature_names)
+#make_confusion_matrices(Pipeline(steps=steps), "Cal500 bests.csv", all_tracks, feature_names)
+
+
+
+path_to_ss_clips = 'datasets/MIREX-like_mood/SS_and_clipped_audio/Separated_and_mixed_versions/'
+categories = 'datasets/MIREX-like_mood/categories.txt'
+clusters = 'datasets/MIREX-like_mood/clusters.txt'
+
+cal_tracks = get_cal_tracks("datasets/New dataset/new_annotated.txt", "datasets/New dataset/Clips", "datasets/New dataset/feature_values_1.xml")
+merge_tracks = filling_track_list('MERGE-datas/AllSongs15Sec', 'MERGE-datas/feature_values_1.xml', None)
+mirex_cluster_tracks = make_tracks_list(path_to_ss_clips, 100000000, path_to_categories=categories, path_to_clusters=clusters, using_clusters_instead_of_categories=True)
+mirex_category_tracks = make_tracks_list(path_to_ss_clips, 100000000, path_to_categories=categories, path_to_clusters=clusters, using_clusters_instead_of_categories=False)
+emotify_tracks = import_tracks("datasets/emotify/clips", "datasets/emotify/emotify_data.csv", features_xml_path="datasets/emotify/emotify_values.xml",
+                     sources=["Mixed", "Instrumentals", "Vocals"], amount_to_take=None) if False else []
+
+datasets = {'Cal500': cal_tracks, 'Merge': merge_tracks, 'Mirex_Cluster': mirex_cluster_tracks, 'Mirex_Categories': mirex_category_tracks, 'Emotify': emotify_tracks}
+bests = {'Cal500': 'Cal500 bests.csv', 'Merge': 'Merge bests.csv', 'Mirex_Cluster': 'Mixed cluster bests.csv', 'Mirex_Categories': 'Mirex category bests.csv', 'Emotify': 'Emotify bests.csv'}
+
+for dataset_name in datasets.keys():
+    print(dataset_name)
+    plt.title(dataset_name)
+    plt.show()
+
+    print("Before pruning:\n")
+    tracks = datasets[dataset_name]
+    Track.get_class_balance(tracks)
+    mixed = [track for track in tracks if track.source == "Vocals"]
+    vocals = [track for track in tracks if track.source == "Mixed"]
+    instrumental = [track for track in tracks if track.source == "Instrumental"]
+    Track.graph_energy_in_tracks(vocals, f"Vocal energy for {dataset_name} before removing songs with low energy source parts")
+    Track.graph_energy_in_tracks(mixed, f"Combined energy for {dataset_name} before removing songs with low energy source parts")
+    Track.graph_energy_in_tracks(instrumental, f"Instrumental energy for {dataset_name} before removing songs with low energy source parts")
+
+    print("After pruning:\n")
+
+    tracks = Track.remove_empty_tracks_and_number_removed(tracks)
+    Track.get_class_balance(tracks)
+    mixed = [track for track in tracks if track.source == "Vocals"]
+    vocals = [track for track in tracks if track.source == "Mixed"]
+    instrumental = [track for track in tracks if track.source == "Instrumental"]
+    Track.graph_energy_in_tracks(vocals, f"Vocal energy for {dataset_name} after removing songs with low energy source parts")
+    Track.graph_energy_in_tracks(mixed, f"Combined energy for {dataset_name} after removing songs with low energy source parts")
+    Track.graph_energy_in_tracks(instrumental, f"Instrumental energy for {dataset_name} after removing songs with low energy source parts")
+
+    make_confusion_matrices(Pipeline(steps=steps), bests[dataset_name], tracks, feature_names, dataset=dataset_name)
+
+    print("\n \n")
+
+
 
 start_time = time.time()
-get_and_test_optimal_pipelines_for_every_source(all_tracks, steps, search_attributes, Searchers.GRID, use_oversampler = False, feature_names = feature_names)
+#get_and_test_optimal_pipelines_for_every_source(all_tracks, steps, search_attributes, Searchers.GRID, use_oversampler = False, feature_names = feature_names)
 print(f"Took {time.time()-start_time}")
 
 

@@ -5,6 +5,8 @@
       <excludeFolder url="file://$MODULE_DIR$/cache" />
       <excludeFolder url="file://$MODULE_DIR$/datasets" />
       <excludeFolder url="file://$MODULE_DIR$/MERGE-datas" />
+      <excludeFolder url="file://$MODULE_DIR$/Confusion matrices" />
+      <excludeFolder url="file://$MODULE_DIR$/Energy Histograms" />
     </content>
     <orderEntry type="jdk" jdkName="SourceSep" jdkType="Python SDK" />
     <orderEntry type="sourceFolder" forTests="false" />

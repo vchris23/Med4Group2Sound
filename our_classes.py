@@ -46,7 +46,7 @@ class Track:
 
     @staticmethod
     def remove_empty_tracks_and_number_removed(tracks:list, threshold:float = 0.01):
-        """Removes all tracks, where one of the streams has an average root mean square less than 0.01"""
+        """Removes all tracks, where one of the streams has an average root-mean-square less than 0.01"""
         tracks.sort(key = lambda x: x.original_track)
         tracks_by_original_track = groupby(tracks, key=lambda x: x.original_track)
         cleaned_tracks = []
@@ -125,14 +125,14 @@ class Track:
         return pd.DataFrame.from_dict(data)
 
     @staticmethod
-    def graph_energy_in_tracks(tracks:list):
+    def graph_energy_in_tracks(tracks:list, title:str):
 
         energy_markers = []
         for track in tracks:
             energy_markers.append(np.mean(rms(y=track.sound)))
 
         pd.DataFrame.from_dict({'Energy': energy_markers}).hist()
-        plt.title("Funsies are a fun")
+        plt.title(title)
         plt.show()
 
 
