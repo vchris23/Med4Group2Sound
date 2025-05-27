@@ -125,15 +125,19 @@ class Track:
         return pd.DataFrame.from_dict(data)
 
     @staticmethod
-    def graph_energy_in_tracks(tracks:list, title:str):
+    def graph_energy_in_tracks(tracks:list, title:str, opacity=1.0, show=True, axis=None, color=None):
 
         energy_markers = []
         for track in tracks:
             energy_markers.append(np.mean(rms(y=track.sound)))
 
-        pd.DataFrame.from_dict({'Energy': energy_markers}).hist()
-        plt.title(title)
-        plt.show()
+        frame = pd.DataFrame.from_dict({'Energy': energy_markers})
+        frame.hist(ax = axis, **{'alpha': opacity, 'color': color})
+        print(f"Source: {tracks[0].source}")
+        print(f"Mean: {frame.mean(axis='rows')}, Median: {frame.median(axis='rows')},\n STD: {frame.std(axis='rows')}, Variance: {frame.var(axis='rows')},\n Skew: {frame.skew(axis='rows')}")
+        if show:
+            plt.title(title)
+            plt.show()
 
 
     def __init__(self, sound = None, label = None, source = None, original_track = None, name = None):

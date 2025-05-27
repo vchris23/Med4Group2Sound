@@ -185,7 +185,7 @@ def make_confusion_matrices(pipeline:Pipeline, csv_file, all_tracks, feature_nam
                 features, labels = training_tracks_by_source[source]
                 pipelines[i].fit(features, labels)
             scores = classify_by_original_track_and_get_scores(pipelines, [[track for track in test if track.source == sources[0]], [track for track in test if track.source == sources[1]]],
-                                                      plot_confusion_matrix=True, confusion_matrix_title=f"{dataset_name} {str(row[1]['source(s)'].replace('*', ''))}",
+                                                      plot_confusion_matrix=True, confusion_matrix_title=f"{str(row[1]['source(s)'].replace('*', ''))}",
                                                       feature_names=feature_names)
             print(row[1]['source(s)'], scores)
 
@@ -195,7 +195,7 @@ def make_confusion_matrices(pipeline:Pipeline, csv_file, all_tracks, feature_nam
             parameters = eval(row_content['First parameters'].replace(': nan', ': np.nan'))
             new_pipeline = clone(pipeline).set_params(**parameters)
             new_pipeline = new_pipeline.fit(features, labels)
-            scores = classify_by_original_track_and_get_scores(new_pipeline, test_tracks_by_source[source], plot_confusion_matrix=True, confusion_matrix_title=f"{dataset_name} {str(row[1]['source(s)'].replace('*', ''))}", feature_names = feature_names)
+            scores = classify_by_original_track_and_get_scores(new_pipeline, test_tracks_by_source[source], plot_confusion_matrix=True, confusion_matrix_title=f"{str(row[1]['source(s)'].replace('*', ''))}", feature_names = feature_names)
             print(row[1]['source(s)'], scores)
 
 #path_to_ss_clips = 'datasets/MIREX-like_mood/SS_and_clipped_audio/Separated_and_mixed_versions/'
@@ -222,21 +222,24 @@ feature_names = get_feature_names("datasets/emotify/emotify_values.xml", True)
 
 #make_confusion_matrices(Pipeline(steps=steps), "Cal500 bests.csv", all_tracks, feature_names)
 
-
+#df = pd.read_csv("Energy distribution to results.csv")
+#df.corr(numeric_only = True).to_csv("Correlation of energy distributions.csv")
 
 path_to_ss_clips = 'datasets/MIREX-like_mood/SS_and_clipped_audio/Separated_and_mixed_versions/'
 categories = 'datasets/MIREX-like_mood/categories.txt'
 clusters = 'datasets/MIREX-like_mood/clusters.txt'
 
-cal_tracks = get_cal_tracks("datasets/New dataset/new_annotated.txt", "datasets/New dataset/Clips", "datasets/New dataset/feature_values_1.xml")
-merge_tracks = filling_track_list('MERGE-datas/AllSongs15Sec', 'MERGE-datas/feature_values_1.xml', None)
+#cal_tracks = get_cal_tracks("datasets/New dataset/new_annotated.txt", "datasets/New dataset/Clips", "datasets/New dataset/feature_values_1.xml")
+#merge_tracks = filling_track_list('MERGE-datas/AllSongs15Sec', 'MERGE-datas/feature_values_1.xml', None)
 mirex_cluster_tracks = make_tracks_list(path_to_ss_clips, 100000000, path_to_categories=categories, path_to_clusters=clusters, using_clusters_instead_of_categories=True)
-mirex_category_tracks = make_tracks_list(path_to_ss_clips, 100000000, path_to_categories=categories, path_to_clusters=clusters, using_clusters_instead_of_categories=False)
-emotify_tracks = import_tracks("datasets/emotify/clips", "datasets/emotify/emotify_data.csv", features_xml_path="datasets/emotify/emotify_values.xml",
-                     sources=["Mixed", "Instrumentals", "Vocals"], amount_to_take=None) if False else []
+#mirex_category_tracks = make_tracks_list(path_to_ss_clips, 100000000, path_to_categories=categories, path_to_clusters=clusters, using_clusters_instead_of_categories=False)
+#emotify_tracks = import_tracks("datasets/emotify/clips", "datasets/emotify/emotify_data.csv", features_xml_path="datasets/emotify/emotify_values.xml",
+#                     sources=["Mixed", "Instrumentals", "Vocals"], amount_to_take=None)
 
-datasets = {'Cal500': cal_tracks, 'Merge': merge_tracks, 'Mirex_Cluster': mirex_cluster_tracks, 'Mirex_Categories': mirex_category_tracks, 'Emotify': emotify_tracks}
-bests = {'Cal500': 'Cal500 bests.csv', 'Merge': 'Merge bests.csv', 'Mirex_Cluster': 'Mixed cluster bests.csv', 'Mirex_Categories': 'Mirex category bests.csv', 'Emotify': 'Emotify bests.csv'}
+#'Cal500': cal_tracks, 'Merge': merge_tracks, 'Mirex_Cluster': mirex_cluster_tracks, 'Mirex_Categories': mirex_category_tracks,
+# 'Emotify': emotify_tracks
+datasets = {'MIREX-like': mirex_cluster_tracks}
+bests = {'CAL500': 'Cal500 bests.csv', 'MERGE': 'Merge bests.csv', 'Mirex_Cluster': 'Mixed cluster bests.csv', 'Mirex_Categories': 'Mirex category bests.csv', 'Emotify': 'Emotify bests.csv'}
 
 for dataset_name in datasets.keys():
     print(dataset_name)
@@ -246,25 +249,44 @@ for dataset_name in datasets.keys():
     print("Before pruning:\n")
     tracks = datasets[dataset_name]
     Track.get_class_balance(tracks)
-    mixed = [track for track in tracks if track.source == "Vocals"]
-    vocals = [track for track in tracks if track.source == "Mixed"]
-    instrumental = [track for track in tracks if track.source == "Instrumental"]
-    Track.graph_energy_in_tracks(vocals, f"Vocal energy for {dataset_name} before removing songs with low energy source parts")
-    Track.graph_energy_in_tracks(mixed, f"Combined energy for {dataset_name} before removing songs with low energy source parts")
-    Track.graph_energy_in_tracks(instrumental, f"Instrumental energy for {dataset_name} before removing songs with low energy source parts")
+    mixed = [track for track in tracks if track.source == "Mixed"]
+    vocals = [track for track in tracks if track.source == "Vocals"]
+    instrumentals = [track for track in tracks if track.source == "Instrumental"]
+
+    fig = plt.figure()
+    ax = fig.add_subplot(111)
+
+    #Track.graph_energy_in_tracks(vocals, f"Vocal energy for {dataset_name} before\n removing songs with low energy source parts", 0.5, False, ax)
+    #Track.graph_energy_in_tracks(mixed, f"Combined energy for {dataset_name} before\n removing songs with low energy source parts", 0.5, False, ax)
+    #Track.graph_energy_in_tracks(instrumentals, f"Instrumental energy for {dataset_name} before\n removing songs with low energy source parts", 0.4, False, ax)
+    #plt.title(f"Energy distribution of {dataset_name} vocal clips")
 
     print("After pruning:\n")
 
     tracks = Track.remove_empty_tracks_and_number_removed(tracks)
     Track.get_class_balance(tracks)
-    mixed = [track for track in tracks if track.source == "Vocals"]
-    vocals = [track for track in tracks if track.source == "Mixed"]
-    instrumental = [track for track in tracks if track.source == "Instrumental"]
-    Track.graph_energy_in_tracks(vocals, f"Vocal energy for {dataset_name} after removing songs with low energy source parts")
-    Track.graph_energy_in_tracks(mixed, f"Combined energy for {dataset_name} after removing songs with low energy source parts")
-    Track.graph_energy_in_tracks(instrumental, f"Instrumental energy for {dataset_name} after removing songs with low energy source parts")
+    mixed = [track for track in tracks if track.source == "Mixed"]
+    vocals = [track for track in tracks if track.source == "Vocals"]
+    instrumentals = [track for track in tracks if track.source == "Instrumental"]
 
-    make_confusion_matrices(Pipeline(steps=steps), bests[dataset_name], tracks, feature_names, dataset=dataset_name)
+    Track.graph_energy_in_tracks(vocals, f"Vocal energy for {dataset_name} after\n removing songs with low energy source parts", 0.4, False, ax, color='b')
+    Track.graph_energy_in_tracks(mixed, f"Combined energy for {dataset_name} after\n removing songs with low energy source parts", 0.5, False, ax, color='g')
+    plt.title(f"Energy distribution of vocal and mixed clips in {dataset_name}")
+    plt.legend(["Vocal clips", "Mixed clips"])
+    fig.show()
+
+    fig = plt.figure()
+    ax = fig.add_subplot(111)
+
+
+    Track.graph_energy_in_tracks(instrumentals, f"Instrumental energy for {dataset_name} after\n removing songs with low energy source parts", 0.4, False, ax, color='r')
+    Track.graph_energy_in_tracks(mixed,f"Combined energy for {dataset_name} after\n removing songs with low energy source parts",0.5, False, ax, color='g')
+
+    plt.title(f"Energy distribution of instrumental and mixed clips in {dataset_name}")
+    plt.legend(["Instrumental clips", "Mixed clips"])
+    fig.show()
+
+    #make_confusion_matrices(Pipeline(steps=steps), bests[dataset_name], tracks, feature_names, dataset=dataset_name)
 
     print("\n \n")
 

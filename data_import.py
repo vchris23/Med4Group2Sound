@@ -216,7 +216,7 @@ def import_tracks(music_folder_path:str, label_csv_path:str, features_xml_path:s
     names_and_features = _get_names_and_features_from_xml(features_xml_path)
     tracks = _get_tracks(music_folder_path, label_csv_path,
                          sources, amount_to_take=amount_to_take)
-    tracks = Track.remove_empty_tracks_and_number_removed(tracks)
+    #tracks = Track.remove_empty_tracks_and_number_removed(tracks)
     tracks = _assign_features_to_tracks(tracks, names_and_features)
     tracks = [track for track in tracks if track.label != 'amazement']
 
