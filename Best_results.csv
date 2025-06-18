@@ -1,0 +1,10 @@
+dataset,sources,accuracy
+Emotify,Instrumental,-0.012658227848101278
+Emotify,Instrumental + Instrumental,0.03797468354430383
+Emotify,Instrumental + Mixed,0.012658227848101222
+Emotify,Instrumental + Vocals,0.0253164556962025
+Emotify,Mixed,0.0
+Emotify,Mixed + Mixed,-0.012658227848101278
+Emotify,Mixed + Vocals,-0.0253164556962025
+Emotify,Vocals,-0.06329113924050628
+Emotify,Vocals + Vocals,-0.07594936708860756

@@ -3,6 +3,7 @@ from collections import defaultdict
 from enum import Enum
 import traceback
 import numpy as np
+import pandas.core.series
 from imblearn.over_sampling import RandomOverSampler
 from sklearn.base import clone
 from sklearn.feature_selection import SelectFromModel
@@ -23,9 +24,17 @@ from sklearn.model_selection import GridSearchCV, RandomizedSearchCV
 import pandas as pd
 import warnings
 from MERGEdata_import import filling_track_list
+
+trackDict = {
+        "emotify_tracks": lambda : import_tracks("datasets/emotify/clips", "datasets/emotify/emotify_data.csv", features_xml_path="datasets/emotify/emotify_values.xml", sources=["Mixed", "Instrumentals", "Vocals"], amount_to_take=None),
+        "cal_tracks" : lambda : get_cal_tracks("datasets/New dataset/new_annotated.txt", "datasets/New dataset/Clips", "datasets/New dataset/feature_values_1.xml"),
+        "merge_tracks" : lambda : filling_track_list('MERGE-datas/AllSongs15Sec', 'MERGE-datas/feature_values_1.xml', None), 
+        "mirex_category_tracks" : lambda : make_tracks_list(path_to_ss_clips, 100000000, path_to_categories=categories, path_to_clusters=clusters, using_clusters_instead_of_categories=False),
+        }
+
 warnings.filterwarnings('always')
 
-rng = np.random.RandomState(42)
+
 class Searchers(Enum):
     RANDOM = 0
     GRID = 1
@@ -73,24 +82,24 @@ def get_optimal_estimators(list_of_steps:list, training_tracks, search_attribute
 
     return best_estimators
 
-def make_parameters_saveable(parameters:dict):
+def make_parameters_saveable(parameters:dict, seed:int = 42):
     new_parameters = copy(parameters)
-    new_parameters['Selector'].estimator.set_params(**{'random_state': 42})
-    new_parameters['steps'][-1][1][-1].estimator.set_params(**{'random_state': 42})
-    new_parameters['steps'][-2][1].estimator.set_params(**{'random_state': 42})
-    new_parameters['Classifier'][-1].estimator.set_params(**{'random_state': 42})
-    new_parameters['Classifier__steps'][0][1].estimator.set_params(**{'random_state': 42})
-    new_parameters['Classifier__SVC'].estimator.set_params(**{'random_state': 42})
-    new_parameters['Classifier__SVC__estimator'].set_params(**{'random_state': 42})
-    new_parameters['Classifier__SVC__estimator__random_state'] = 42
-    new_parameters['Selector__estimator'].set_params(**{'random_state': 42})
-    new_parameters['Selector__estimator__random_state'] = 42
+    new_parameters['Selector'].estimator.set_params(**{'random_state': seed})
+    new_parameters['steps'][-1][1][-1].estimator.set_params(**{'random_state': seed})
+    new_parameters['steps'][-2][1].estimator.set_params(**{'random_state': seed})
+    new_parameters['Classifier'][-1].estimator.set_params(**{'random_state': seed})
+    new_parameters['Classifier__steps'][0][1].estimator.set_params(**{'random_state': seed})
+    new_parameters['Classifier__SVC'].estimator.set_params(**{'random_state': seed})
+    new_parameters['Classifier__SVC__estimator'].set_params(**{'random_state': seed})
+    new_parameters['Classifier__SVC__estimator__random_state'] = seed
+    new_parameters['Selector__estimator'].set_params(**{'random_state': seed})
+    new_parameters['Selector__estimator__random_state'] = seed
     return new_parameters
 
-def get_and_test_optimal_pipelines_for_every_source(tracks:list, list_of_steps:list, search_attributes:dict | list, search_type:Searchers, use_oversampler = False, feature_names:list = None):
+def get_and_test_optimal_pipelines_for_every_source(tracks:list, list_of_steps:list, search_attributes:dict | list, search_type:Searchers, use_oversampler = False, feature_names:list = None, pipeline_results_file_name = "pipeline results", seed:int = 42):
 
     estimators_by_source = defaultdict(list)
-    training_tracks, test_tracks = split_into_train_and_test(tracks, 0.8, seed=42, stratify=True)
+    training_tracks, test_tracks = split_into_train_and_test(tracks, 0.8, seed=seed, stratify=True)
 
     data = defaultdict(list)
     try:
@@ -113,7 +122,7 @@ def get_and_test_optimal_pipelines_for_every_source(tracks:list, list_of_steps:l
                 results = classify_by_original_track_and_get_scores(estimator, [track for track in test_tracks if track.source == source], feature_names= feature_names, plot_confusion_matrix=False, confusion_matrix_title=f"{source} {i}")
                 data['source(s)'].append(source)
                 data['Oversampling'].append(use_oversampler)
-                data['First parameters'].append(make_parameters_saveable(estimator.get_params()))
+                data['First parameters'].append(make_parameters_saveable(estimator.get_params(), seed))
                 data['First features'].append(estimator[:-1].get_feature_names_out())
                 data['Second parameters'].append(None)
                 data['Second features'].append(None)
@@ -126,7 +135,7 @@ def get_and_test_optimal_pipelines_for_every_source(tracks:list, list_of_steps:l
         i = 0
         for source in estimators_by_source.keys():
             for source_peer in estimators_by_source.keys():
-                if source_peer == source: continue
+                #if source_peer == source: continue
                 if (source, source_peer) in combinations or (source_peer, source) in combinations: continue
                 combinations.append((source, source_peer))
                 for estimator in estimators_by_source[source]:
@@ -142,9 +151,9 @@ def get_and_test_optimal_pipelines_for_every_source(tracks:list, list_of_steps:l
 
                         data['source(s)'].append(f"{source} + {source_peer}")
                         data['Oversampling'].append(use_oversampler)
-                        data['First parameters'].append(make_parameters_saveable(estimator.get_params()))
+                        data['First parameters'].append(make_parameters_saveable(estimator.get_params(), seed))
                         data['First features'].append(estimator[:-1].get_feature_names_out())
-                        data['Second parameters'].append(make_parameters_saveable(estimator_peer.get_params()))
+                        data['Second parameters'].append(make_parameters_saveable(estimator_peer.get_params(), seed))
                         data['Second features'].append(estimator_peer[:-1].get_feature_names_out())
                         data['Accuracy'].append(results[0])
                         data['Precision'].append(results[1])
@@ -155,7 +164,43 @@ def get_and_test_optimal_pipelines_for_every_source(tracks:list, list_of_steps:l
         traceback.print_exc()
         pd.DataFrame.from_dict(data).to_csv("Pipeline results errored.csv")
 
-    pd.DataFrame.from_dict(data).to_csv("Pipeline results.csv")
+    pd.DataFrame.from_dict(data).to_csv(pipeline_results_file_name + ".csv")
+
+def process_datasets(track_dictionary:dict, list_of_steps:list, search_attributes:dict | list, feature_names:list = None, dictionary_keys_list:list = None, filename_append = "", seed:int = 42):
+    if dictionary_keys_list is None:
+        dictionary_keys_list = track_dictionary.keys()
+    for key in dictionary_keys_list:
+        dataset_tracks = track_dictionary[key].__call__()
+        filename = f"{key}_results_{filename_append}"
+        get_and_test_optimal_pipelines_for_every_source(dataset_tracks, list_of_steps, search_attributes, search_type=Searchers.GRID, feature_names=feature_names, pipeline_results_file_name=filename, seed = seed)
+
+def big_test(test_range:list, track_dictionary:dict, dictionary_keys_list:list = None):
+    for i in test_range:
+        rng = np.random.RandomState(i+1)
+
+        classifier = Pipeline([("SVC", OneVsRestClassifier(
+            SVC(cache_size=500, max_iter=1000000, probability=False, random_state=rng, class_weight='balanced',
+                decision_function_shape='ovr')))])
+
+        search_attributes = [
+            {"Classifier__SVC__estimator__C": [0.01, 0.1, 1, 10, 100], "Classifier__SVC__estimator__kernel": ["linear"],
+             "Scaler": [MinMaxScaler(), StandardScaler()], 'Selector__max_features': [4, 8, 12, 16, 20, 24, 28, 32]},
+            {"Classifier__SVC__estimator__C": [0.01, 0.1, 1, 10, 100],
+             "Classifier__SVC__estimator__gamma": [0.0001, 0.001, 0.01, 0.1],
+             "Classifier__SVC__estimator__kernel": ["rbf"], "Scaler": [MinMaxScaler(), StandardScaler()],
+             'Selector__max_features': [4, 8, 12, 16, 20, 24, 28, 32]},
+            {"Classifier__SVC__estimator__C": [0.01, 0.1, 1, 10, 100],
+             "Classifier__SVC__estimator__gamma": [0.0001, 0.001, 0.01, 0.1],
+             "Classifier__SVC__estimator__degree": [2, 4, 6, 8], "Classifier__SVC__estimator__coef0": [2, 4, 6, 8],
+             "Classifier__SVC__estimator__kernel": ["poly"], "Scaler": [MinMaxScaler(), StandardScaler()],
+             'Selector__max_features': [4, 8, 12, 16, 20, 24, 28, 32]}]
+
+        steps = [("Imputer", SimpleImputer(strategy="mean")), ("Scaler", StandardScaler),
+                 ('Selector', SelectFromModel(LinearSVC(random_state=rng))), ("Classifier", classifier)]
+
+        feature_names = get_feature_names("datasets/emotify/emotify_values.xml", True)
+
+        process_datasets(track_dictionary, steps, search_attributes, feature_names, dictionary_keys_list, filename_append=f"{i+1}", seed=i+1)
 
 def make_confusion_matrices(pipeline:Pipeline, csv_file, all_tracks, feature_names, dataset:str = ''):
     training, test = split_into_train_and_test(all_tracks, 0.8, seed=42, stratify=True)
@@ -198,6 +243,34 @@ def make_confusion_matrices(pipeline:Pipeline, csv_file, all_tracks, feature_nam
             scores = classify_by_original_track_and_get_scores(new_pipeline, test_tracks_by_source[source], plot_confusion_matrix=True, confusion_matrix_title=f"{str(row[1]['source(s)'].replace('*', ''))}", feature_names = feature_names)
             print(row[1]['source(s)'], scores)
 
+
+def fetch_best_results(dataset_results:dict):
+
+    collected_best ={"dataset": [], "sources": [], "accuracy": []}
+
+    for key in dataset_results.keys():
+        results_list = dataset_results[key]
+        for path in results_list:
+            df:pd.DataFrame = pd.read_csv(path)
+            for group in df.groupby("source(s)"):
+                df_group = group[1]
+                df_group = df_group.sort_values(["Accuracy", "Precision", "Recall"], ascending=False)
+                best = df_group.head(1)
+                collected_best["dataset"].append(key)
+                collected_best["sources"].append(best["source(s)"].values[0])
+                collected_best["accuracy"].append(best["Accuracy"].values[0])
+
+    bests_df = pd.DataFrame.from_dict(collected_best)
+    index_of_mixed = bests_df.index[bests_df["sources"]=="Mixed"][0]
+    mixed_accuracy = bests_df.take([index_of_mixed]).values[0][2]
+    differences = bests_df["accuracy"].sub(mixed_accuracy)
+    bests_df["accuracy"] = differences
+    bests_df.to_csv("Best_results.csv", index=False)
+
+
+results = {"Emotify": ["emotify_tracks_results_.csv"]}
+fetch_best_results(results)
+
 #path_to_ss_clips = 'datasets/MIREX-like_mood/SS_and_clipped_audio/Separated_and_mixed_versions/'
 #categories = 'datasets/MIREX-like_mood/categories.txt'
 #clusters = 'datasets/MIREX-like_mood/clusters.txt'
@@ -210,25 +283,16 @@ def make_confusion_matrices(pipeline:Pipeline, csv_file, all_tracks, feature_nam
 
 #Track.graph_energy_in_tracks([track for track in all_tracks if track.source == 'Vocals'], "Energy in vocal clips for Cal500 after pruning")
 
-classifier = Pipeline([("SVC", OneVsRestClassifier(SVC(cache_size=500, max_iter=1000000, probability=False, random_state=rng, class_weight='balanced', decision_function_shape='ovr')))])
-
-#search_attributes = [{"Classifier__SVC__estimator__C": [0.01, 0.1, 1, 10, 100], "Classifier__SVC__estimator__kernel": ["linear"], "Scaler": [MinMaxScaler(), StandardScaler()], 'Selector__max_features': [4, 8, 12, 16, 20, 24, 28, 32]},
-#                     {"Classifier__SVC__estimator__C": [0.01, 0.1, 1, 10, 100], "Classifier__SVC__estimator__gamma": [0.0001, 0.001, 0.01, 0.1],"Classifier__SVC__estimator__kernel": ["rbf"], "Scaler": [MinMaxScaler(), StandardScaler()], 'Selector__max_features': [4, 8, 12, 16, 20, 24, 28, 32]},
-#                     {"Classifier__SVC__estimator__C": [0.01, 0.1, 1, 10, 100], "Classifier__SVC__estimator__gamma": [0.0001, 0.001, 0.01, 0.1], "Classifier__SVC__estimator__degree": [2, 4, 6, 8], "Classifier__SVC__estimator__coef0": [2, 4, 6, 8],"Classifier__SVC__estimator__kernel": ["poly"], "Scaler": [MinMaxScaler(), StandardScaler()], 'Selector__max_features': [4, 8, 12, 16, 20, 24, 28, 32]}]
-
-steps = [("Imputer", SimpleImputer(strategy="mean")), ("Scaler", StandardScaler), ('Selector', SelectFromModel(LinearSVC(random_state=rng))), ("Classifier", classifier)]
-
-feature_names = get_feature_names("datasets/emotify/emotify_values.xml", True)
 
 #make_confusion_matrices(Pipeline(steps=steps), "Cal500 bests.csv", all_tracks, feature_names)
 
 #df = pd.read_csv("Energy distribution to results.csv")
 #df.corr(numeric_only = True).to_csv("Correlation of energy distributions.csv")
 
-path_to_ss_clips = 'datasets/MIREX-like_mood/SS_and_clipped_audio/Separated_and_mixed_versions/'
+"""path_to_ss_clips = 'datasets/MIREX-like_mood/SS_and_clipped_audio/Separated_and_mixed_versions/'
 categories = 'datasets/MIREX-like_mood/categories.txt'
 clusters = 'datasets/MIREX-like_mood/clusters.txt'
-
+#here
 #cal_tracks = get_cal_tracks("datasets/New dataset/new_annotated.txt", "datasets/New dataset/Clips", "datasets/New dataset/feature_values_1.xml")
 #merge_tracks = filling_track_list('MERGE-datas/AllSongs15Sec', 'MERGE-datas/feature_values_1.xml', None)
 mirex_cluster_tracks = make_tracks_list(path_to_ss_clips, 100000000, path_to_categories=categories, path_to_clusters=clusters, using_clusters_instead_of_categories=True)
@@ -294,6 +358,6 @@ for dataset_name in datasets.keys():
 
 start_time = time.time()
 #get_and_test_optimal_pipelines_for_every_source(all_tracks, steps, search_attributes, Searchers.GRID, use_oversampler = False, feature_names = feature_names)
-print(f"Took {time.time()-start_time}")
+print(f"Took {time.time()-start_time}")"""
 
 
