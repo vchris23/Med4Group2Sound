@@ -1,4 +1,5 @@
-﻿import time
+﻿import os.path
+import time
 from collections import defaultdict
 from enum import Enum
 import traceback
@@ -172,6 +173,7 @@ def process_datasets(track_dictionary:dict, list_of_steps:list, search_attribute
     for key in dictionary_keys_list:
         dataset_tracks = track_dictionary[key].__call__()
         filename = f"{key}_results_{filename_append}"
+        if os.path.exists(filename): return
         get_and_test_optimal_pipelines_for_every_source(dataset_tracks, list_of_steps, search_attributes, search_type=Searchers.GRID, feature_names=feature_names, pipeline_results_file_name=filename, seed = seed)
 
 def big_test(test_range:list, track_dictionary:dict, dictionary_keys_list:list = None):
@@ -267,9 +269,10 @@ def fetch_best_results(dataset_results:dict):
     bests_df["accuracy"] = differences
     bests_df.to_csv("Best_results.csv", index=False)
 
+big_test([10, 20], trackDict)
 
-results = {"Emotify": ["emotify_tracks_results_.csv"]}
-fetch_best_results(results)
+#results = {"Emotify": ["emotify_tracks_results_.csv"]}
+#fetch_best_results(results)
 
 #path_to_ss_clips = 'datasets/MIREX-like_mood/SS_and_clipped_audio/Separated_and_mixed_versions/'
 #categories = 'datasets/MIREX-like_mood/categories.txt'
