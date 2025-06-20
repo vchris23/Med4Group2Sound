@@ -176,9 +176,9 @@ def process_datasets(track_dictionary:dict, list_of_steps:list, search_attribute
         dictionary_keys_list = track_dictionary.keys()
     for key in dictionary_keys_list:
         filename = f"{key}_results_{filename_append}"
+        if os.path.exists(filename): return
         dataset_tracks = track_dictionary[key].__call__()
         dataset_tracks = Track.remove_empty_tracks_and_number_removed(dataset_tracks)
-        if os.path.exists(filename): return
         get_and_test_optimal_pipelines_for_every_source(dataset_tracks, list_of_steps, search_attributes, search_type=Searchers.GRID, feature_names=feature_names, pipeline_results_file_name=filename, seed = seed)
 
 def big_test(test_range:list, track_dictionary:dict, dictionary_keys_list:list = None):
