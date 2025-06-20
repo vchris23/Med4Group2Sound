@@ -175,8 +175,9 @@ def process_datasets(track_dictionary:dict, list_of_steps:list, search_attribute
     if dictionary_keys_list is None:
         dictionary_keys_list = track_dictionary.keys()
     for key in dictionary_keys_list:
-        filename = f"{key}_results_{filename_append}"
-        if os.path.exists(filename): return
+        filename = f"{key}_results_{filename_append}.csv    "
+        print(filename)
+        if os.path.exists(filename): continue
         dataset_tracks = track_dictionary[key].__call__()
         dataset_tracks = Track.remove_empty_tracks_and_number_removed(dataset_tracks)
         get_and_test_optimal_pipelines_for_every_source(dataset_tracks, list_of_steps, search_attributes, search_type=Searchers.GRID, feature_names=feature_names, pipeline_results_file_name=filename, seed = seed)
