@@ -26,11 +26,15 @@ import pandas as pd
 import warnings
 from MERGEdata_import import filling_track_list
 
+path_to_ss_clips = 'datasets/MIREX-like_mood/SS_and_clipped_audio/Separated_and_mixed_versions/'
+categories = 'datasets/MIREX-like_mood/categories.txt'
+clusters = 'datasets/MIREX-like_mood/clusters.txt'
 trackDict = {
-        "emotify_tracks": lambda : import_tracks("datasets/emotify/clips", "datasets/emotify/emotify_data.csv", features_xml_path="datasets/emotify/emotify_values.xml", sources=["Mixed", "Instrumentals", "Vocals"], amount_to_take=None),
-        "cal_tracks" : lambda : get_cal_tracks("datasets/New dataset/new_annotated.txt", "datasets/New dataset/Clips", "datasets/New dataset/feature_values_1.xml"),
-        "merge_tracks" : lambda : filling_track_list('MERGE-datas/AllSongs15Sec', 'MERGE-datas/feature_values_1.xml', None), 
-        "mirex_category_tracks" : lambda : make_tracks_list(path_to_ss_clips, 100000000, path_to_categories=categories, path_to_clusters=clusters, using_clusters_instead_of_categories=False),
+        "Emotify": lambda : import_tracks("datasets/emotify/clips", "datasets/emotify/emotify_data.csv", features_xml_path="datasets/emotify/emotify_values.xml", sources=["Mixed", "Instrumentals", "Vocals"], amount_to_take=None),
+        "Cal500" : lambda : get_cal_tracks("datasets/New dataset/new_annotated.txt", "datasets/New dataset/Clips", "datasets/New dataset/feature_values_1.xml"),
+        "Merge" : lambda : filling_track_list('MERGE-datas/AllSongs15Sec', 'MERGE-datas/feature_values_1.xml', None),
+        "MirexLike_Categories" : lambda : make_tracks_list(path_to_ss_clips, 100000000, path_to_categories=categories, path_to_clusters=clusters, using_clusters_instead_of_categories=False),
+        "MirexLike_Cluster" : lambda : make_tracks_list(path_to_ss_clips, 100000000, path_to_categories=categories, path_to_clusters=clusters, using_clusters_instead_of_categories=True),
         }
 
 warnings.filterwarnings('always')
@@ -172,6 +176,7 @@ def process_datasets(track_dictionary:dict, list_of_steps:list, search_attribute
         dictionary_keys_list = track_dictionary.keys()
     for key in dictionary_keys_list:
         dataset_tracks = track_dictionary[key].__call__()
+        dataset_tracks = Track.remove_empty_tracks_and_number_removed(dataset_tracks)
         filename = f"{key}_results_{filename_append}"
         if os.path.exists(filename): return
         get_and_test_optimal_pipelines_for_every_source(dataset_tracks, list_of_steps, search_attributes, search_type=Searchers.GRID, feature_names=feature_names, pipeline_results_file_name=filename, seed = seed)
@@ -245,6 +250,73 @@ def make_confusion_matrices(pipeline:Pipeline, csv_file, all_tracks, feature_nam
             scores = classify_by_original_track_and_get_scores(new_pipeline, test_tracks_by_source[source], plot_confusion_matrix=True, confusion_matrix_title=f"{str(row[1]['source(s)'].replace('*', ''))}", feature_names = feature_names)
             print(row[1]['source(s)'], scores)
 
+def retest(csv_file, dataset_dict, seeds:list):
+
+    result_dict = {"dataset": [], "sources": [], "accuracy": []}
+
+    dataframe = pd.read_csv(csv_file)
+    for group in dataframe.groupby("dataset"):
+
+        all_tracks = dataset_dict[group[0]]()
+
+        for seed in seeds:
+
+            rng = np.random.RandomState(seed)
+
+            classifier = Pipeline([("SVC", OneVsRestClassifier(
+                SVC(cache_size=500, max_iter=1000000, probability=False, random_state=rng, class_weight='balanced',
+                    decision_function_shape='ovr')))])
+
+            pipeline = Pipeline([("Imputer", SimpleImputer(strategy="mean")), ("Scaler", StandardScaler),
+                        ('Selector', SelectFromModel(LinearSVC(random_state=rng))), ("Classifier", classifier)])
+
+            feature_names = get_feature_names("datasets/emotify/emotify_values.xml", True)
+
+            training, test = split_into_train_and_test(all_tracks, 0.8, seed=seed, stratify=True)
+            training_source_lists = Track.separate_tracks_by_source(training)
+            training_tracks_by_source = {}
+            for source_list in training_source_lists:
+                training_tracks_by_source[source_list[0].source] = Track.tracks_features_to_dataframe(source_list, feature_names), Track.tracks_to_features_and_labels(source_list)[1]
+
+            test_source_lists = Track.separate_tracks_by_source(test)
+            test_tracks_by_source = {}
+            for source_list in test_source_lists:
+                test_tracks_by_source[source_list[0].source] = source_list
+
+                dfgroup = group[1]
+                for row in dfgroup.iterrows():
+                    row_content = row[1]
+                    is_ensemble = row_content['sources'].count('+') != 0
+                    if is_ensemble:
+                        source = row_content['sources'].replace('*', "")
+                        sources = "".join(source.split())
+                        sources = sources.split('+')
+
+                        pipelines = [clone(pipeline), clone(pipeline)]
+                        pipelines[0] = pipelines[0].set_params(**eval(row_content['First parameters'].replace(': nan', ': np.nan')))
+                        pipelines[1] = pipelines[1].set_params(**eval(row_content['Second parameters'].replace(': nan', ': np.nan')))
+                        for i in range(len(sources)):
+                            source = sources[i]
+                            features, labels = training_tracks_by_source[source]
+                            pipelines[i].fit(features, labels)
+                        scores = classify_by_original_track_and_get_scores(pipelines, [[track for track in test if track.source == sources[0]],
+                                                                                       [track for track in test if track.source == sources[1]]], feature_names=feature_names)
+                        print(row[1]['sources'], scores)
+
+                    else:
+                        source = row_content['sources'] if row_content['sources'].count('*') == 0 else row_content['sources'].replace('*', '').replace(' ', '')
+                        features, labels = training_tracks_by_source[source]
+                        parameters = eval(row_content['First parameters'].replace(': nan', ': np.nan'))
+                        new_pipeline = clone(pipeline).set_params(**parameters)
+                        new_pipeline = new_pipeline.fit(features, labels)
+                        scores = classify_by_original_track_and_get_scores(new_pipeline, test_tracks_by_source[source], feature_names = feature_names)
+                        print(row[1]['source(s)'], scores)
+
+                    result_dict["dataset"].append(group[0])
+                    result_dict["sources"].append(source)
+                    result_dict["accuracy"].append(scores[0])
+
+    pd.DataFrame.from_dict(result_dict).to_csv("Repeat_results.csv", index=False)
 
 def fetch_best_results(dataset_results:dict):
 
@@ -274,10 +346,12 @@ def fetch_best_results(dataset_results:dict):
     mixed_accuracy = bests_df.take([index_of_mixed]).values[0][2]
     bests_df.to_csv("Best_results.csv", index=False)
 
-#big_test([20], trackDict)
+big_test([10, 20], trackDict)
 
 results = {"Emotify": ["emotify_tracks_results_.csv"]}
 fetch_best_results(results)
+
+retest("Best_results.csv", trackDict, [1])
 
 #path_to_ss_clips = 'datasets/MIREX-like_mood/SS_and_clipped_audio/Separated_and_mixed_versions/'
 #categories = 'datasets/MIREX-like_mood/categories.txt'
