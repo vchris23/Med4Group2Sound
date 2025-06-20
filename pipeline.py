@@ -50,6 +50,8 @@ def pipeline_search(pipeline, training_tracks, search_attributes:dict | list, se
 
     features, labels = Track.tracks_to_features_and_labels(training_tracks)
     features = Track.tracks_features_to_dataframe(training_tracks, feature_names)
+    if use_oversampler:
+        features, labels = RandomOverSampler(random_state=rng).fit_resample(features, labels)
 
     match search_type:
         case Searchers.RANDOM:
@@ -114,6 +116,7 @@ def get_and_test_optimal_pipelines_for_every_source(tracks:list, list_of_steps:l
 
                 features, labels = Track.tracks_to_features_and_labels(tracks_by_source)
                 features = Track.tracks_features_to_dataframe(tracks_by_source, feature_names)
+                if use_oversampler: features, labels = RandomOverSampler(random_state = rng).fit_resample(features, labels)
                 best_estimator.fit(features, labels)
                 estimators_by_source[tracks_by_source[0].source].append(best_estimator)
         i = 0
@@ -319,7 +322,7 @@ def retest(csv_file, dataset_dict, seeds:list):
 
 def fetch_best_results(dataset_results:dict):
 
-    collected_best ={"dataset": [], "sources": [], "accuracy": [], "First parameters": [], "Second parameters": []}
+    collected_best ={"dataset": [], "sources": [], "accuracy": [], "first_parameters": [], "second_parameters": []}
 
     for key in dataset_results.keys():
         results_list = dataset_results[key]
@@ -333,10 +336,10 @@ def fetch_best_results(dataset_results:dict):
                 collected_best["dataset"].append(key)
                 collected_best["sources"].append(bests["source(s)"].values[0])
                 collected_best["accuracy"].append(bests["Accuracy"].values[0])
-                collected_best["First parameters"].append(bests["First parameters"].values[0])
-                collected_best["First parameters"].append(bests["First parameters"].values[1])
-                collected_best["Second parameters"].append(bests["Second parameters"].values[0])
-                collected_best["Second parameters"].append(bests["Second parameters"].values[1])
+                collected_best["first_parameters"].append(bests["First parameters"].values[0])
+                collected_best["first_parameters"].append(bests["First parameters"].values[1])
+                collected_best["second_parameters"].append(bests["Second parameters"].values[0])
+                collected_best["second_parameters"].append(bests["Second parameters"].values[1])
                 collected_best["sources"].append(bests["source(s)"].values[1])
                 collected_best["accuracy"].append(bests["Accuracy"].values[1])
 
@@ -345,7 +348,7 @@ def fetch_best_results(dataset_results:dict):
     mixed_accuracy = bests_df.take([index_of_mixed]).values[0][2]
     bests_df.to_csv("Best_results.csv", index=False)
 
-#big_test([10, 20], trackDict)
+big_test([10, 20], trackDict)
 
 results = {"Emotify": ["emotify_tracks_results_.csv"]}
 fetch_best_results(results)
