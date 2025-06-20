@@ -248,7 +248,7 @@ def make_confusion_matrices(pipeline:Pipeline, csv_file, all_tracks, feature_nam
 
 def fetch_best_results(dataset_results:dict):
 
-    collected_best ={"dataset": [], "sources": [], "accuracy": []}
+    collected_best ={"dataset": [], "sources": [], "accuracy": [], "first_parameters": [], "second_parameters": []}
 
     for key in dataset_results.keys():
         results_list = dataset_results[key]
@@ -256,23 +256,28 @@ def fetch_best_results(dataset_results:dict):
             df:pd.DataFrame = pd.read_csv(path)
             for group in df.groupby("source(s)"):
                 df_group = group[1]
-                df_group = df_group.sort_values(["Accuracy", "Precision", "Recall"], ascending=False)
-                best = df_group.head(1)
+                #df_group = df_group.sort_values(["Accuracy", "Precision", "Recall"], ascending=False)
+                bests = df_group.head(2)
                 collected_best["dataset"].append(key)
-                collected_best["sources"].append(best["source(s)"].values[0])
-                collected_best["accuracy"].append(best["Accuracy"].values[0])
+                collected_best["dataset"].append(key)
+                collected_best["sources"].append(bests["source(s)"].values[0])
+                collected_best["accuracy"].append(bests["Accuracy"].values[0])
+                collected_best["first_parameters"].append(bests["First parameters"].values[0])
+                collected_best["first_parameters"].append(bests["First parameters"].values[1])
+                collected_best["second_parameters"].append(bests["Second parameters"].values[0])
+                collected_best["second_parameters"].append(bests["Second parameters"].values[1])
+                collected_best["sources"].append(bests["source(s)"].values[1])
+                collected_best["accuracy"].append(bests["Accuracy"].values[1])
 
     bests_df = pd.DataFrame.from_dict(collected_best)
     index_of_mixed = bests_df.index[bests_df["sources"]=="Mixed"][0]
     mixed_accuracy = bests_df.take([index_of_mixed]).values[0][2]
-    differences = bests_df["accuracy"].sub(mixed_accuracy)
-    bests_df["accuracy"] = differences
     bests_df.to_csv("Best_results.csv", index=False)
 
-big_test([10, 20], trackDict)
+#big_test([20], trackDict)
 
-#results = {"Emotify": ["emotify_tracks_results_.csv"]}
-#fetch_best_results(results)
+results = {"Emotify": ["emotify_tracks_results_.csv"]}
+fetch_best_results(results)
 
 #path_to_ss_clips = 'datasets/MIREX-like_mood/SS_and_clipped_audio/Separated_and_mixed_versions/'
 #categories = 'datasets/MIREX-like_mood/categories.txt'
