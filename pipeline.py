@@ -346,7 +346,7 @@ def fetch_best_results(dataset_results:dict):
     mixed_accuracy = bests_df.take([index_of_mixed]).values[0][2]
     bests_df.to_csv("Best_results.csv", index=False)
 
-big_test([10, 20], trackDict)
+big_test([20], trackDict)
 
 results = {"Emotify": ["emotify_tracks_results_.csv"]}
 fetch_best_results(results)
