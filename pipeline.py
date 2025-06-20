@@ -175,9 +175,9 @@ def process_datasets(track_dictionary:dict, list_of_steps:list, search_attribute
     if dictionary_keys_list is None:
         dictionary_keys_list = track_dictionary.keys()
     for key in dictionary_keys_list:
+        filename = f"{key}_results_{filename_append}"
         dataset_tracks = track_dictionary[key].__call__()
         dataset_tracks = Track.remove_empty_tracks_and_number_removed(dataset_tracks)
-        filename = f"{key}_results_{filename_append}"
         if os.path.exists(filename): return
         get_and_test_optimal_pipelines_for_every_source(dataset_tracks, list_of_steps, search_attributes, search_type=Searchers.GRID, feature_names=feature_names, pipeline_results_file_name=filename, seed = seed)
 
@@ -257,7 +257,7 @@ def retest(csv_file, dataset_dict, seeds:list):
     dataframe = pd.read_csv(csv_file)
     for group in dataframe.groupby("dataset"):
 
-        all_tracks = dataset_dict[group[0]]()
+        all_tracks = Track.remove_empty_tracks_and_number_removed(dataset_dict[group[0]]())
 
         for seed in seeds:
 
@@ -279,42 +279,44 @@ def retest(csv_file, dataset_dict, seeds:list):
                 training_tracks_by_source[source_list[0].source] = Track.tracks_features_to_dataframe(source_list, feature_names), Track.tracks_to_features_and_labels(source_list)[1]
 
             test_source_lists = Track.separate_tracks_by_source(test)
+            print(test_source_lists)
             test_tracks_by_source = {}
             for source_list in test_source_lists:
                 test_tracks_by_source[source_list[0].source] = source_list
 
-                dfgroup = group[1]
-                for row in dfgroup.iterrows():
-                    row_content = row[1]
-                    is_ensemble = row_content['sources'].count('+') != 0
-                    if is_ensemble:
-                        source = row_content['sources'].replace('*', "")
-                        sources = "".join(source.split())
-                        sources = sources.split('+')
+            dfgroup = group[1]
+            for row in dfgroup.iterrows():
+                row_content = row[1]
+                is_ensemble = row_content['sources'].count('+') != 0
+                if is_ensemble:
+                    source = row_content['sources'].replace('*', "")
+                    sources = "".join(source.split())
+                    sources = sources.split('+')
 
-                        pipelines = [clone(pipeline), clone(pipeline)]
-                        pipelines[0] = pipelines[0].set_params(**eval(row_content['First parameters'].replace(': nan', ': np.nan')))
-                        pipelines[1] = pipelines[1].set_params(**eval(row_content['Second parameters'].replace(': nan', ': np.nan')))
-                        for i in range(len(sources)):
-                            source = sources[i]
-                            features, labels = training_tracks_by_source[source]
-                            pipelines[i].fit(features, labels)
-                        scores = classify_by_original_track_and_get_scores(pipelines, [[track for track in test if track.source == sources[0]],
+                    pipelines = [clone(pipeline), clone(pipeline)]
+                    pipelines[0] = pipelines[0].set_params(**eval(row_content['First parameters'].replace(': nan', ': np.nan')))
+                    pipelines[1] = pipelines[1].set_params(**eval(row_content['Second parameters'].replace(': nan', ': np.nan')))
+                    for i in range(len(sources)):
+                        sourcee = sources[i]
+                        features, labels = training_tracks_by_source[sourcee]
+                        pipelines[i].fit(features, labels)
+                    scores = classify_by_original_track_and_get_scores(pipelines, [[track for track in test if track.source == sources[0]],
                                                                                        [track for track in test if track.source == sources[1]]], feature_names=feature_names)
-                        print(row[1]['sources'], scores)
+                    print(row[1]['sources'], scores)
 
-                    else:
-                        source = row_content['sources'] if row_content['sources'].count('*') == 0 else row_content['sources'].replace('*', '').replace(' ', '')
-                        features, labels = training_tracks_by_source[source]
-                        parameters = eval(row_content['First parameters'].replace(': nan', ': np.nan'))
-                        new_pipeline = clone(pipeline).set_params(**parameters)
-                        new_pipeline = new_pipeline.fit(features, labels)
-                        scores = classify_by_original_track_and_get_scores(new_pipeline, test_tracks_by_source[source], feature_names = feature_names)
-                        print(row[1]['source(s)'], scores)
+                else:
+                    source = row_content['sources'] if row_content['sources'].count('*') == 0 else row_content['sources'].replace('*', '').replace(' ', '')
+                    features, labels = training_tracks_by_source[source]
+                    parameters = eval(row_content['First parameters'].replace(': nan', ': np.nan'))
+                    new_pipeline = clone(pipeline).set_params(**parameters)
+                    new_pipeline = new_pipeline.fit(features, labels)
+                    print(test_tracks_by_source.keys())
+                    scores = classify_by_original_track_and_get_scores(new_pipeline, test_tracks_by_source[source], feature_names = feature_names)
+                    print(row[1]['sources'], scores)
 
-                    result_dict["dataset"].append(group[0])
-                    result_dict["sources"].append(source)
-                    result_dict["accuracy"].append(scores[0])
+                result_dict["dataset"].append(group[0])
+                result_dict["sources"].append(source)
+                result_dict["accuracy"].append(scores[0])
 
     pd.DataFrame.from_dict(result_dict).to_csv("Repeat_results.csv", index=False)
 
@@ -351,7 +353,7 @@ big_test([20], trackDict)
 results = {"Emotify": ["emotify_tracks_results_.csv"]}
 fetch_best_results(results)
 
-retest("Best_results.csv", trackDict, [1])
+retest("Best_results.csv", trackDict, [42])
 
 #path_to_ss_clips = 'datasets/MIREX-like_mood/SS_and_clipped_audio/Separated_and_mixed_versions/'
 #categories = 'datasets/MIREX-like_mood/categories.txt'
