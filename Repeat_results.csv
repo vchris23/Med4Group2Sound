@@ -1,0 +1,19 @@
+dataset,sources,accuracy
+Emotify,Instrumental,0.2558139534883721
+Emotify,Instrumental,0.2558139534883721
+Emotify,Instrumental + Instrumental,0.2558139534883721
+Emotify,Instrumental + Instrumental,0.3023255813953488
+Emotify,Instrumental + Mixed,0.3023255813953488
+Emotify,Instrumental + Mixed,0.27906976744186046
+Emotify,Instrumental + Vocals,0.20930232558139536
+Emotify,Instrumental + Vocals,0.20930232558139536
+Emotify,Mixed,0.3953488372093023
+Emotify,Mixed,0.23255813953488372
+Emotify,Mixed + Mixed,0.3023255813953488
+Emotify,Mixed + Mixed,0.3953488372093023
+Emotify,Mixed + Vocals,0.3023255813953488
+Emotify,Mixed + Vocals,0.23255813953488372
+Emotify,Vocals,0.2558139534883721
+Emotify,Vocals,0.32558139534883723
+Emotify,Vocals + Vocals,0.27906976744186046
+Emotify,Vocals + Vocals,0.27906976744186046
