@@ -1,4 +1,4 @@
-dataset,sources,accuracy,First parameters,Second parameters
+dataset,sources,accuracy,first_parameters,second_parameters
 Emotify,Instrumental,0.430379746835443,"{'memory': None, 'steps': [('Imputer', SimpleImputer()), ('Scaler', StandardScaler()), ('Selector', SelectFromModel(estimator=LinearSVC(random_state=42), max_features=24)), ('Classifier', Pipeline(steps=[('SVC',
                  OneVsRestClassifier(estimator=SVC(C=0.01, cache_size=500,
                                                    class_weight='balanced',
