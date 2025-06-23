@@ -1,6 +1,7 @@
 ﻿import os.path
 import time
 from collections import defaultdict
+from email.policy import default
 from enum import Enum
 import traceback
 import numpy as np
@@ -50,8 +51,6 @@ def pipeline_search(pipeline, training_tracks, search_attributes:dict | list, se
 
     features, labels = Track.tracks_to_features_and_labels(training_tracks)
     features = Track.tracks_features_to_dataframe(training_tracks, feature_names)
-    if use_oversampler:
-        features, labels = RandomOverSampler(random_state=rng).fit_resample(features, labels)
 
     match search_type:
         case Searchers.RANDOM:
@@ -116,7 +115,6 @@ def get_and_test_optimal_pipelines_for_every_source(tracks:list, list_of_steps:l
 
                 features, labels = Track.tracks_to_features_and_labels(tracks_by_source)
                 features = Track.tracks_features_to_dataframe(tracks_by_source, feature_names)
-                if use_oversampler: features, labels = RandomOverSampler(random_state = rng).fit_resample(features, labels)
                 best_estimator.fit(features, labels)
                 estimators_by_source[tracks_by_source[0].source].append(best_estimator)
         i = 0
@@ -175,12 +173,32 @@ def process_datasets(track_dictionary:dict, list_of_steps:list, search_attribute
     if dictionary_keys_list is None:
         dictionary_keys_list = track_dictionary.keys()
     for key in dictionary_keys_list:
-        filename = f"{key}_results_{filename_append}.csv    "
+        filename = f"{key}_results_{filename_append}"
         print(filename)
-        if os.path.exists(filename): continue
+        if os.path.exists(f"{filename}.csv"): continue
         dataset_tracks = track_dictionary[key].__call__()
         dataset_tracks = Track.remove_empty_tracks_and_number_removed(dataset_tracks)
         get_and_test_optimal_pipelines_for_every_source(dataset_tracks, list_of_steps, search_attributes, search_type=Searchers.GRID, feature_names=feature_names, pipeline_results_file_name=filename, seed = seed)
+
+def retrieve_parameters(parameters:dict|str):
+    if type(parameters) == str:
+        parameters = eval(parameters)
+
+    c = parameters["Classifier__SVC__estimator__C"]
+    gamma = parameters["Classifier__SVC__estimator__gamma"]
+    degree = parameters["Classifier__SVC__estimator__degree"]
+    kernel = parameters["Classifier__SVC__estimator__kernel"]
+    scaler = parameters["Scaler"]
+    max_features = parameters["Selector__max_features"]
+    coef = parameters["Classifier__SVC__estimator__coef0"]
+
+    parameter_string = f"{c}, {gamma}, {degree}, {kernel}, {scaler}, {max_features}, {coef}"
+
+    print(parameter_string)
+
+    return parameter_string
+
+
 
 def big_test(test_range:list, track_dictionary:dict, dictionary_keys_list:list = None):
     for i in test_range:
@@ -253,7 +271,9 @@ def make_confusion_matrices(pipeline:Pipeline, csv_file, all_tracks, feature_nam
 
 def retest(csv_file, dataset_dict, seeds:list):
 
-    result_dict = {"dataset": [], "sources": [], "accuracy": []}
+    result_dict = {"dataset": [], "sources": [], "accuracy": [], "ID": [], "Seed": [], "Parameters": []}
+
+    previous_parameters = []
 
     dataframe = pd.read_csv(csv_file)
     for group in dataframe.groupby("dataset"):
@@ -268,7 +288,7 @@ def retest(csv_file, dataset_dict, seeds:list):
                 SVC(cache_size=500, max_iter=1000000, probability=False, random_state=rng, class_weight='balanced',
                     decision_function_shape='ovr')))])
 
-            pipeline = Pipeline([("Imputer", SimpleImputer(strategy="mean")), ("Scaler", StandardScaler),
+            pipeline = Pipeline([("Imputer", SimpleImputer(strategy="mean")), ("Scaler", StandardScaler()),
                         ('Selector', SelectFromModel(LinearSVC(random_state=rng))), ("Classifier", classifier)])
 
             feature_names = get_feature_names("datasets/emotify/emotify_values.xml", True)
@@ -285,8 +305,10 @@ def retest(csv_file, dataset_dict, seeds:list):
             for source_list in test_source_lists:
                 test_tracks_by_source[source_list[0].source] = source_list
 
+            source_counter = defaultdict(int)
             dfgroup = group[1]
             for row in dfgroup.iterrows():
+                parameter = ""
                 row_content = row[1]
                 is_ensemble = row_content['sources'].count('+') != 0
                 if is_ensemble:
@@ -294,9 +316,19 @@ def retest(csv_file, dataset_dict, seeds:list):
                     sources = "".join(source.split())
                     sources = sources.split('+')
 
+                    first_values = retrieve_parameters(eval(row_content['first_parameters'].replace(': nan', ': np.nan')))
+                    second_values = retrieve_parameters(eval(row_content['second_parameters'].replace(': nan', ': np.nan')))
+                    parameter = f"{first_values} + {second_values}"
+                    parameter = f"{source}, {group[0]}, {parameter}"
+                    if parameter not in previous_parameters:
+                        previous_parameters.append(parameter)
+
+                    result_dict["Parameters"].append(previous_parameters.index(parameter))
                     pipelines = [clone(pipeline), clone(pipeline)]
-                    pipelines[0] = pipelines[0].set_params(**eval(row_content['First parameters'].replace(': nan', ': np.nan')))
-                    pipelines[1] = pipelines[1].set_params(**eval(row_content['Second parameters'].replace(': nan', ': np.nan')))
+                    pipelines[0] = pipelines[0].set_params(**eval(row_content['first_parameters'].replace(': nan', ': np.nan')))
+                    #pipelines[0] = pipelines[0].set_params(**{"Classifier__SVC__estimator__max_iter": None})
+                    pipelines[1] = pipelines[1].set_params(**eval(row_content['second_parameters'].replace(': nan', ': np.nan')))
+                    #pipelines[1] = pipelines[1].set_params(**{"Classifier__SVC__estimator__max_iter": None})
                     for i in range(len(sources)):
                         sourcee = sources[i]
                         features, labels = training_tracks_by_source[sourcee]
@@ -308,8 +340,14 @@ def retest(csv_file, dataset_dict, seeds:list):
                 else:
                     source = row_content['sources'] if row_content['sources'].count('*') == 0 else row_content['sources'].replace('*', '').replace(' ', '')
                     features, labels = training_tracks_by_source[source]
-                    parameters = eval(row_content['First parameters'].replace(': nan', ': np.nan'))
+                    parameters = eval(row_content['first_parameters'].replace(': nan', ': np.nan'))
+                    parameter = f"{source}, {group[0]}, {retrieve_parameters(parameters)}"
+                    if parameter not in previous_parameters:
+                        previous_parameters.append(parameter)
+
+                    result_dict["Parameters"].append(previous_parameters.index(parameter))
                     new_pipeline = clone(pipeline).set_params(**parameters)
+                    #new_pipeline = new_pipeline.set_params(**{"Classifier__SVC__estimator__max_iter": None})
                     new_pipeline = new_pipeline.fit(features, labels)
                     print(test_tracks_by_source.keys())
                     scores = classify_by_original_track_and_get_scores(new_pipeline, test_tracks_by_source[source], feature_names = feature_names)
@@ -317,7 +355,11 @@ def retest(csv_file, dataset_dict, seeds:list):
 
                 result_dict["dataset"].append(group[0])
                 result_dict["sources"].append(source)
+                source_counter[source] += 1
+                result_dict["ID"].append(source_counter[source] + seed)
                 result_dict["accuracy"].append(scores[0])
+                result_dict["Seed"].append(seed)
+
 
     pd.DataFrame.from_dict(result_dict).to_csv("Repeat_results.csv", index=False)
 
@@ -349,12 +391,47 @@ def fetch_best_results(dataset_results:dict):
     mixed_accuracy = bests_df.take([index_of_mixed]).values[0][2]
     bests_df.to_csv("Best_results.csv", index=False)
 
-big_test([20], trackDict)
+def plot_scaled_features(track_dictionary, seed):
 
-results = {"Emotify": ["emotify_tracks_results_.csv"]}
+    for group in track_dictionary.keys():
+
+        all_tracks = Track.remove_empty_tracks_and_number_removed(track_dictionary[group]())
+
+        rng = np.random.RandomState(seed)
+
+        pipeline = Pipeline([("Imputer", SimpleImputer(strategy="mean")), ("Scaler", MinMaxScaler()),
+                             ('Selector', SelectFromModel(LinearSVC(random_state=rng)))])
+
+        feature_names = get_feature_names("datasets/emotify/emotify_values.xml", True)
+
+        training, test = split_into_train_and_test(all_tracks, 0.8, seed=seed, stratify=True)
+
+        train_features, train_labels = Track.tracks_to_features_and_labels(training)
+
+        test_features = Track.tracks_to_features_and_labels(test)[0]
+
+        pipeline.fit(train_features, train_labels)
+
+        transformed_train = pipeline.transform(train_features)
+        transformed_test = pipeline.transform(test_features)
+
+        for i in range(len(transformed_train[0])):
+            ith_feature = [transformed_train[j][i] for j in range(len(transformed_train))]
+            ith_feature.extend([transformed_test[j][i] for j in range(len(transformed_test))])
+            print(ith_feature)
+            plt.scatter(ith_feature, range(len(ith_feature)))
+            plt.show()
+
+
+#plot_scaled_features(trackDict, 42)
+
+
+#big_test([10], trackDict)
+
+results = {"Emotify": ["Emotify_bad_results_11.csv", "Emotify_bad_results_21.csv"]} #, "Cal500": ["Cal500_results_11.csv"]
 fetch_best_results(results)
 
-retest("Best_results.csv", trackDict, [42])
+retest("Best_results.csv", trackDict, [11, 21, 31, 41, 51, 61, 71, 81, 91, 101, 111])
 
 #path_to_ss_clips = 'datasets/MIREX-like_mood/SS_and_clipped_audio/Separated_and_mixed_versions/'
 #categories = 'datasets/MIREX-like_mood/categories.txt'

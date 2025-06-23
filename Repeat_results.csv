@@ -1,19 +1,397 @@
-dataset,sources,accuracy
-Emotify,Instrumental,0.2558139534883721
-Emotify,Instrumental,0.2558139534883721
-Emotify,Instrumental + Instrumental,0.2558139534883721
-Emotify,Instrumental + Instrumental,0.3023255813953488
-Emotify,Instrumental + Mixed,0.3023255813953488
-Emotify,Instrumental + Mixed,0.27906976744186046
-Emotify,Instrumental + Vocals,0.20930232558139536
-Emotify,Instrumental + Vocals,0.20930232558139536
-Emotify,Mixed,0.3953488372093023
-Emotify,Mixed,0.23255813953488372
-Emotify,Mixed + Mixed,0.3023255813953488
-Emotify,Mixed + Mixed,0.3953488372093023
-Emotify,Mixed + Vocals,0.3023255813953488
-Emotify,Mixed + Vocals,0.23255813953488372
-Emotify,Vocals,0.2558139534883721
-Emotify,Vocals,0.32558139534883723
-Emotify,Vocals + Vocals,0.27906976744186046
-Emotify,Vocals + Vocals,0.27906976744186046
+dataset,sources,accuracy,ID,Seed,Parameters
+Emotify,Instrumental,0.37209302325581395,12,11,0
+Emotify,Instrumental,0.3953488372093023,13,11,1
+Emotify,Instrumental + Instrumental,0.37209302325581395,12,11,2
+Emotify,Instrumental + Instrumental,0.37209302325581395,13,11,3
+Emotify,Instrumental + Mixed,0.32558139534883723,12,11,4
+Emotify,Instrumental + Mixed,0.32558139534883723,13,11,5
+Emotify,Instrumental + Vocals,0.3488372093023256,12,11,6
+Emotify,Instrumental + Vocals,0.37209302325581395,13,11,7
+Emotify,Mixed,0.4186046511627907,12,11,8
+Emotify,Mixed,0.4418604651162791,13,11,9
+Emotify,Mixed + Mixed,0.4186046511627907,12,11,10
+Emotify,Mixed + Mixed,0.4186046511627907,13,11,11
+Emotify,Mixed + Vocals,0.37209302325581395,12,11,12
+Emotify,Mixed + Vocals,0.3953488372093023,13,11,13
+Emotify,Vocals,0.2558139534883721,12,11,14
+Emotify,Vocals,0.27906976744186046,13,11,15
+Emotify,Vocals + Vocals,0.27906976744186046,12,11,16
+Emotify,Vocals + Vocals,0.27906976744186046,13,11,17
+Emotify,Instrumental,0.3488372093023256,14,11,18
+Emotify,Instrumental,0.32558139534883723,15,11,19
+Emotify,Instrumental + Instrumental,0.3488372093023256,14,11,20
+Emotify,Instrumental + Instrumental,0.32558139534883723,15,11,21
+Emotify,Instrumental + Mixed,0.4883720930232558,14,11,22
+Emotify,Instrumental + Mixed,0.4883720930232558,15,11,23
+Emotify,Instrumental + Vocals,0.3488372093023256,14,11,24
+Emotify,Instrumental + Vocals,0.32558139534883723,15,11,25
+Emotify,Mixed,0.46511627906976744,14,11,26
+Emotify,Mixed,0.4186046511627907,15,11,27
+Emotify,Mixed + Mixed,0.3953488372093023,14,11,28
+Emotify,Mixed + Mixed,0.46511627906976744,15,11,29
+Emotify,Mixed + Vocals,0.4418604651162791,14,11,30
+Emotify,Mixed + Vocals,0.46511627906976744,15,11,31
+Emotify,Vocals,0.20930232558139536,14,11,32
+Emotify,Vocals,0.23255813953488372,15,11,33
+Emotify,Vocals + Vocals,0.20930232558139536,14,11,34
+Emotify,Vocals + Vocals,0.20930232558139536,15,11,35
+Emotify,Instrumental,0.32558139534883723,22,21,0
+Emotify,Instrumental,0.27906976744186046,23,21,1
+Emotify,Instrumental + Instrumental,0.3023255813953488,22,21,2
+Emotify,Instrumental + Instrumental,0.32558139534883723,23,21,3
+Emotify,Instrumental + Mixed,0.3023255813953488,22,21,4
+Emotify,Instrumental + Mixed,0.3023255813953488,23,21,5
+Emotify,Instrumental + Vocals,0.3488372093023256,22,21,6
+Emotify,Instrumental + Vocals,0.3953488372093023,23,21,7
+Emotify,Mixed,0.3023255813953488,22,21,8
+Emotify,Mixed,0.3023255813953488,23,21,9
+Emotify,Mixed + Mixed,0.3023255813953488,22,21,10
+Emotify,Mixed + Mixed,0.3023255813953488,23,21,11
+Emotify,Mixed + Vocals,0.32558139534883723,22,21,12
+Emotify,Mixed + Vocals,0.3953488372093023,23,21,13
+Emotify,Vocals,0.37209302325581395,22,21,14
+Emotify,Vocals,0.4186046511627907,23,21,15
+Emotify,Vocals + Vocals,0.3953488372093023,22,21,16
+Emotify,Vocals + Vocals,0.37209302325581395,23,21,17
+Emotify,Instrumental,0.3023255813953488,24,21,18
+Emotify,Instrumental,0.3023255813953488,25,21,19
+Emotify,Instrumental + Instrumental,0.3023255813953488,24,21,20
+Emotify,Instrumental + Instrumental,0.3488372093023256,25,21,21
+Emotify,Instrumental + Mixed,0.3488372093023256,24,21,22
+Emotify,Instrumental + Mixed,0.37209302325581395,25,21,23
+Emotify,Instrumental + Vocals,0.3488372093023256,24,21,24
+Emotify,Instrumental + Vocals,0.37209302325581395,25,21,25
+Emotify,Mixed,0.4418604651162791,24,21,26
+Emotify,Mixed,0.3953488372093023,25,21,27
+Emotify,Mixed + Mixed,0.3953488372093023,24,21,28
+Emotify,Mixed + Mixed,0.3488372093023256,25,21,29
+Emotify,Mixed + Vocals,0.4186046511627907,24,21,30
+Emotify,Mixed + Vocals,0.3953488372093023,25,21,31
+Emotify,Vocals,0.27906976744186046,24,21,32
+Emotify,Vocals,0.3023255813953488,25,21,33
+Emotify,Vocals + Vocals,0.27906976744186046,24,21,34
+Emotify,Vocals + Vocals,0.2558139534883721,25,21,35
+Emotify,Instrumental,0.32558139534883723,32,31,0
+Emotify,Instrumental,0.3023255813953488,33,31,1
+Emotify,Instrumental + Instrumental,0.32558139534883723,32,31,2
+Emotify,Instrumental + Instrumental,0.3023255813953488,33,31,3
+Emotify,Instrumental + Mixed,0.32558139534883723,32,31,4
+Emotify,Instrumental + Mixed,0.37209302325581395,33,31,5
+Emotify,Instrumental + Vocals,0.32558139534883723,32,31,6
+Emotify,Instrumental + Vocals,0.37209302325581395,33,31,7
+Emotify,Mixed,0.37209302325581395,32,31,8
+Emotify,Mixed,0.37209302325581395,33,31,9
+Emotify,Mixed + Mixed,0.37209302325581395,32,31,10
+Emotify,Mixed + Mixed,0.37209302325581395,33,31,11
+Emotify,Mixed + Vocals,0.3488372093023256,32,31,12
+Emotify,Mixed + Vocals,0.32558139534883723,33,31,13
+Emotify,Vocals,0.2558139534883721,32,31,14
+Emotify,Vocals,0.2558139534883721,33,31,15
+Emotify,Vocals + Vocals,0.27906976744186046,32,31,16
+Emotify,Vocals + Vocals,0.27906976744186046,33,31,17
+Emotify,Instrumental,0.3488372093023256,34,31,18
+Emotify,Instrumental,0.2558139534883721,35,31,19
+Emotify,Instrumental + Instrumental,0.27906976744186046,34,31,20
+Emotify,Instrumental + Instrumental,0.3953488372093023,35,31,21
+Emotify,Instrumental + Mixed,0.37209302325581395,34,31,22
+Emotify,Instrumental + Mixed,0.4418604651162791,35,31,23
+Emotify,Instrumental + Vocals,0.3488372093023256,34,31,24
+Emotify,Instrumental + Vocals,0.3488372093023256,35,31,25
+Emotify,Mixed,0.37209302325581395,34,31,26
+Emotify,Mixed,0.4186046511627907,35,31,27
+Emotify,Mixed + Mixed,0.37209302325581395,34,31,28
+Emotify,Mixed + Mixed,0.37209302325581395,35,31,29
+Emotify,Mixed + Vocals,0.4186046511627907,34,31,30
+Emotify,Mixed + Vocals,0.37209302325581395,35,31,31
+Emotify,Vocals,0.27906976744186046,34,31,32
+Emotify,Vocals,0.27906976744186046,35,31,33
+Emotify,Vocals + Vocals,0.27906976744186046,34,31,34
+Emotify,Vocals + Vocals,0.3023255813953488,35,31,35
+Emotify,Instrumental,0.37209302325581395,42,41,0
+Emotify,Instrumental,0.32558139534883723,43,41,1
+Emotify,Instrumental + Instrumental,0.32558139534883723,42,41,2
+Emotify,Instrumental + Instrumental,0.3488372093023256,43,41,3
+Emotify,Instrumental + Mixed,0.37209302325581395,42,41,4
+Emotify,Instrumental + Mixed,0.3488372093023256,43,41,5
+Emotify,Instrumental + Vocals,0.3488372093023256,42,41,6
+Emotify,Instrumental + Vocals,0.3953488372093023,43,41,7
+Emotify,Mixed,0.32558139534883723,42,41,8
+Emotify,Mixed,0.32558139534883723,43,41,9
+Emotify,Mixed + Mixed,0.32558139534883723,42,41,10
+Emotify,Mixed + Mixed,0.32558139534883723,43,41,11
+Emotify,Mixed + Vocals,0.32558139534883723,42,41,12
+Emotify,Mixed + Vocals,0.4186046511627907,43,41,13
+Emotify,Vocals,0.3023255813953488,42,41,14
+Emotify,Vocals,0.2558139534883721,43,41,15
+Emotify,Vocals + Vocals,0.27906976744186046,42,41,16
+Emotify,Vocals + Vocals,0.27906976744186046,43,41,17
+Emotify,Instrumental,0.32558139534883723,44,41,18
+Emotify,Instrumental,0.2558139534883721,45,41,19
+Emotify,Instrumental + Instrumental,0.3023255813953488,44,41,20
+Emotify,Instrumental + Instrumental,0.2558139534883721,45,41,21
+Emotify,Instrumental + Mixed,0.37209302325581395,44,41,22
+Emotify,Instrumental + Mixed,0.3953488372093023,45,41,23
+Emotify,Instrumental + Vocals,0.23255813953488372,44,41,24
+Emotify,Instrumental + Vocals,0.23255813953488372,45,41,25
+Emotify,Mixed,0.3953488372093023,44,41,26
+Emotify,Mixed,0.3953488372093023,45,41,27
+Emotify,Mixed + Mixed,0.3953488372093023,44,41,28
+Emotify,Mixed + Mixed,0.37209302325581395,45,41,29
+Emotify,Mixed + Vocals,0.32558139534883723,44,41,30
+Emotify,Mixed + Vocals,0.3488372093023256,45,41,31
+Emotify,Vocals,0.18604651162790697,44,41,32
+Emotify,Vocals,0.13953488372093023,45,41,33
+Emotify,Vocals + Vocals,0.11627906976744186,44,41,34
+Emotify,Vocals + Vocals,0.18604651162790697,45,41,35
+Emotify,Instrumental,0.27906976744186046,52,51,0
+Emotify,Instrumental,0.27906976744186046,53,51,1
+Emotify,Instrumental + Instrumental,0.27906976744186046,52,51,2
+Emotify,Instrumental + Instrumental,0.27906976744186046,53,51,3
+Emotify,Instrumental + Mixed,0.3488372093023256,52,51,4
+Emotify,Instrumental + Mixed,0.3488372093023256,53,51,5
+Emotify,Instrumental + Vocals,0.23255813953488372,52,51,6
+Emotify,Instrumental + Vocals,0.3023255813953488,53,51,7
+Emotify,Mixed,0.32558139534883723,52,51,8
+Emotify,Mixed,0.3488372093023256,53,51,9
+Emotify,Mixed + Mixed,0.3488372093023256,52,51,10
+Emotify,Mixed + Mixed,0.32558139534883723,53,51,11
+Emotify,Mixed + Vocals,0.3953488372093023,52,51,12
+Emotify,Mixed + Vocals,0.37209302325581395,53,51,13
+Emotify,Vocals,0.27906976744186046,52,51,14
+Emotify,Vocals,0.4186046511627907,53,51,15
+Emotify,Vocals + Vocals,0.3488372093023256,52,51,16
+Emotify,Vocals + Vocals,0.3488372093023256,53,51,17
+Emotify,Instrumental,0.3953488372093023,54,51,18
+Emotify,Instrumental,0.3488372093023256,55,51,19
+Emotify,Instrumental + Instrumental,0.4186046511627907,54,51,20
+Emotify,Instrumental + Instrumental,0.3488372093023256,55,51,21
+Emotify,Instrumental + Mixed,0.4186046511627907,54,51,22
+Emotify,Instrumental + Mixed,0.4418604651162791,55,51,23
+Emotify,Instrumental + Vocals,0.32558139534883723,54,51,24
+Emotify,Instrumental + Vocals,0.32558139534883723,55,51,25
+Emotify,Mixed,0.3953488372093023,54,51,26
+Emotify,Mixed,0.3488372093023256,55,51,27
+Emotify,Mixed + Mixed,0.3488372093023256,54,51,28
+Emotify,Mixed + Mixed,0.3953488372093023,55,51,29
+Emotify,Mixed + Vocals,0.37209302325581395,54,51,30
+Emotify,Mixed + Vocals,0.3488372093023256,55,51,31
+Emotify,Vocals,0.2558139534883721,54,51,32
+Emotify,Vocals,0.20930232558139536,55,51,33
+Emotify,Vocals + Vocals,0.20930232558139536,54,51,34
+Emotify,Vocals + Vocals,0.27906976744186046,55,51,35
+Emotify,Instrumental,0.32558139534883723,62,61,0
+Emotify,Instrumental,0.32558139534883723,63,61,1
+Emotify,Instrumental + Instrumental,0.32558139534883723,62,61,2
+Emotify,Instrumental + Instrumental,0.32558139534883723,63,61,3
+Emotify,Instrumental + Mixed,0.37209302325581395,62,61,4
+Emotify,Instrumental + Mixed,0.37209302325581395,63,61,5
+Emotify,Instrumental + Vocals,0.3023255813953488,62,61,6
+Emotify,Instrumental + Vocals,0.3488372093023256,63,61,7
+Emotify,Mixed,0.46511627906976744,62,61,8
+Emotify,Mixed,0.4186046511627907,63,61,9
+Emotify,Mixed + Mixed,0.4186046511627907,62,61,10
+Emotify,Mixed + Mixed,0.3953488372093023,63,61,11
+Emotify,Mixed + Vocals,0.4418604651162791,62,61,12
+Emotify,Mixed + Vocals,0.4883720930232558,63,61,13
+Emotify,Vocals,0.32558139534883723,62,61,14
+Emotify,Vocals,0.3953488372093023,63,61,15
+Emotify,Vocals + Vocals,0.37209302325581395,62,61,16
+Emotify,Vocals + Vocals,0.37209302325581395,63,61,17
+Emotify,Instrumental,0.3488372093023256,64,61,18
+Emotify,Instrumental,0.3023255813953488,65,61,19
+Emotify,Instrumental + Instrumental,0.3023255813953488,64,61,20
+Emotify,Instrumental + Instrumental,0.3023255813953488,65,61,21
+Emotify,Instrumental + Mixed,0.37209302325581395,64,61,22
+Emotify,Instrumental + Mixed,0.3488372093023256,65,61,23
+Emotify,Instrumental + Vocals,0.3023255813953488,64,61,24
+Emotify,Instrumental + Vocals,0.32558139534883723,65,61,25
+Emotify,Mixed,0.4186046511627907,64,61,26
+Emotify,Mixed,0.4186046511627907,65,61,27
+Emotify,Mixed + Mixed,0.3953488372093023,64,61,28
+Emotify,Mixed + Mixed,0.4186046511627907,65,61,29
+Emotify,Mixed + Vocals,0.4186046511627907,64,61,30
+Emotify,Mixed + Vocals,0.4418604651162791,65,61,31
+Emotify,Vocals,0.32558139534883723,64,61,32
+Emotify,Vocals,0.3488372093023256,65,61,33
+Emotify,Vocals + Vocals,0.3488372093023256,64,61,34
+Emotify,Vocals + Vocals,0.3488372093023256,65,61,35
+Emotify,Instrumental,0.37209302325581395,72,71,0
+Emotify,Instrumental,0.3953488372093023,73,71,1
+Emotify,Instrumental + Instrumental,0.37209302325581395,72,71,2
+Emotify,Instrumental + Instrumental,0.3488372093023256,73,71,3
+Emotify,Instrumental + Mixed,0.37209302325581395,72,71,4
+Emotify,Instrumental + Mixed,0.3488372093023256,73,71,5
+Emotify,Instrumental + Vocals,0.32558139534883723,72,71,6
+Emotify,Instrumental + Vocals,0.3488372093023256,73,71,7
+Emotify,Mixed,0.3023255813953488,72,71,8
+Emotify,Mixed,0.27906976744186046,73,71,9
+Emotify,Mixed + Mixed,0.27906976744186046,72,71,10
+Emotify,Mixed + Mixed,0.27906976744186046,73,71,11
+Emotify,Mixed + Vocals,0.27906976744186046,72,71,12
+Emotify,Mixed + Vocals,0.3023255813953488,73,71,13
+Emotify,Vocals,0.3488372093023256,72,71,14
+Emotify,Vocals,0.3023255813953488,73,71,15
+Emotify,Vocals + Vocals,0.3488372093023256,72,71,16
+Emotify,Vocals + Vocals,0.32558139534883723,73,71,17
+Emotify,Instrumental,0.37209302325581395,74,71,18
+Emotify,Instrumental,0.32558139534883723,75,71,19
+Emotify,Instrumental + Instrumental,0.3953488372093023,74,71,20
+Emotify,Instrumental + Instrumental,0.3953488372093023,75,71,21
+Emotify,Instrumental + Mixed,0.3953488372093023,74,71,22
+Emotify,Instrumental + Mixed,0.4883720930232558,75,71,23
+Emotify,Instrumental + Vocals,0.4418604651162791,74,71,24
+Emotify,Instrumental + Vocals,0.3953488372093023,75,71,25
+Emotify,Mixed,0.3488372093023256,74,71,26
+Emotify,Mixed,0.3953488372093023,75,71,27
+Emotify,Mixed + Mixed,0.4186046511627907,74,71,28
+Emotify,Mixed + Mixed,0.32558139534883723,75,71,29
+Emotify,Mixed + Vocals,0.3953488372093023,74,71,30
+Emotify,Mixed + Vocals,0.3953488372093023,75,71,31
+Emotify,Vocals,0.37209302325581395,74,71,32
+Emotify,Vocals,0.32558139534883723,75,71,33
+Emotify,Vocals + Vocals,0.32558139534883723,74,71,34
+Emotify,Vocals + Vocals,0.3488372093023256,75,71,35
+Emotify,Instrumental,0.37209302325581395,82,81,0
+Emotify,Instrumental,0.3488372093023256,83,81,1
+Emotify,Instrumental + Instrumental,0.3488372093023256,82,81,2
+Emotify,Instrumental + Instrumental,0.37209302325581395,83,81,3
+Emotify,Instrumental + Mixed,0.3488372093023256,82,81,4
+Emotify,Instrumental + Mixed,0.3488372093023256,83,81,5
+Emotify,Instrumental + Vocals,0.3488372093023256,82,81,6
+Emotify,Instrumental + Vocals,0.27906976744186046,83,81,7
+Emotify,Mixed,0.27906976744186046,82,81,8
+Emotify,Mixed,0.2558139534883721,83,81,9
+Emotify,Mixed + Mixed,0.2558139534883721,82,81,10
+Emotify,Mixed + Mixed,0.27906976744186046,83,81,11
+Emotify,Mixed + Vocals,0.37209302325581395,82,81,12
+Emotify,Mixed + Vocals,0.27906976744186046,83,81,13
+Emotify,Vocals,0.3023255813953488,82,81,14
+Emotify,Vocals,0.3023255813953488,83,81,15
+Emotify,Vocals + Vocals,0.3023255813953488,82,81,16
+Emotify,Vocals + Vocals,0.3023255813953488,83,81,17
+Emotify,Instrumental,0.3488372093023256,84,81,18
+Emotify,Instrumental,0.32558139534883723,85,81,19
+Emotify,Instrumental + Instrumental,0.37209302325581395,84,81,20
+Emotify,Instrumental + Instrumental,0.3953488372093023,85,81,21
+Emotify,Instrumental + Mixed,0.4186046511627907,84,81,22
+Emotify,Instrumental + Mixed,0.4186046511627907,85,81,23
+Emotify,Instrumental + Vocals,0.4186046511627907,84,81,24
+Emotify,Instrumental + Vocals,0.3953488372093023,85,81,25
+Emotify,Mixed,0.2558139534883721,84,81,26
+Emotify,Mixed,0.37209302325581395,85,81,27
+Emotify,Mixed + Mixed,0.27906976744186046,84,81,28
+Emotify,Mixed + Mixed,0.27906976744186046,85,81,29
+Emotify,Mixed + Vocals,0.3953488372093023,84,81,30
+Emotify,Mixed + Vocals,0.3953488372093023,85,81,31
+Emotify,Vocals,0.27906976744186046,84,81,32
+Emotify,Vocals,0.27906976744186046,85,81,33
+Emotify,Vocals + Vocals,0.2558139534883721,84,81,34
+Emotify,Vocals + Vocals,0.27906976744186046,85,81,35
+Emotify,Instrumental,0.27906976744186046,92,91,0
+Emotify,Instrumental,0.2558139534883721,93,91,1
+Emotify,Instrumental + Instrumental,0.2558139534883721,92,91,2
+Emotify,Instrumental + Instrumental,0.27906976744186046,93,91,3
+Emotify,Instrumental + Mixed,0.3023255813953488,92,91,4
+Emotify,Instrumental + Mixed,0.3023255813953488,93,91,5
+Emotify,Instrumental + Vocals,0.3023255813953488,92,91,6
+Emotify,Instrumental + Vocals,0.3023255813953488,93,91,7
+Emotify,Mixed,0.32558139534883723,92,91,8
+Emotify,Mixed,0.32558139534883723,93,91,9
+Emotify,Mixed + Mixed,0.32558139534883723,92,91,10
+Emotify,Mixed + Mixed,0.32558139534883723,93,91,11
+Emotify,Mixed + Vocals,0.3953488372093023,92,91,12
+Emotify,Mixed + Vocals,0.3023255813953488,93,91,13
+Emotify,Vocals,0.32558139534883723,92,91,14
+Emotify,Vocals,0.3488372093023256,93,91,15
+Emotify,Vocals + Vocals,0.3488372093023256,92,91,16
+Emotify,Vocals + Vocals,0.32558139534883723,93,91,17
+Emotify,Instrumental,0.46511627906976744,94,91,18
+Emotify,Instrumental,0.3488372093023256,95,91,19
+Emotify,Instrumental + Instrumental,0.3953488372093023,94,91,20
+Emotify,Instrumental + Instrumental,0.4418604651162791,95,91,21
+Emotify,Instrumental + Mixed,0.4418604651162791,94,91,22
+Emotify,Instrumental + Mixed,0.4883720930232558,95,91,23
+Emotify,Instrumental + Vocals,0.3953488372093023,94,91,24
+Emotify,Instrumental + Vocals,0.3953488372093023,95,91,25
+Emotify,Mixed,0.3488372093023256,94,91,26
+Emotify,Mixed,0.4186046511627907,95,91,27
+Emotify,Mixed + Mixed,0.3953488372093023,94,91,28
+Emotify,Mixed + Mixed,0.27906976744186046,95,91,29
+Emotify,Mixed + Vocals,0.3488372093023256,94,91,30
+Emotify,Mixed + Vocals,0.3953488372093023,95,91,31
+Emotify,Vocals,0.20930232558139536,94,91,32
+Emotify,Vocals,0.23255813953488372,95,91,33
+Emotify,Vocals + Vocals,0.20930232558139536,94,91,34
+Emotify,Vocals + Vocals,0.18604651162790697,95,91,35
+Emotify,Instrumental,0.32558139534883723,102,101,0
+Emotify,Instrumental,0.3488372093023256,103,101,1
+Emotify,Instrumental + Instrumental,0.3488372093023256,102,101,2
+Emotify,Instrumental + Instrumental,0.3488372093023256,103,101,3
+Emotify,Instrumental + Mixed,0.3953488372093023,102,101,4
+Emotify,Instrumental + Mixed,0.3953488372093023,103,101,5
+Emotify,Instrumental + Vocals,0.3488372093023256,102,101,6
+Emotify,Instrumental + Vocals,0.3953488372093023,103,101,7
+Emotify,Mixed,0.3023255813953488,102,101,8
+Emotify,Mixed,0.3023255813953488,103,101,9
+Emotify,Mixed + Mixed,0.3023255813953488,102,101,10
+Emotify,Mixed + Mixed,0.3488372093023256,103,101,11
+Emotify,Mixed + Vocals,0.27906976744186046,102,101,12
+Emotify,Mixed + Vocals,0.3023255813953488,103,101,13
+Emotify,Vocals,0.2558139534883721,102,101,14
+Emotify,Vocals,0.3023255813953488,103,101,15
+Emotify,Vocals + Vocals,0.3023255813953488,102,101,16
+Emotify,Vocals + Vocals,0.27906976744186046,103,101,17
+Emotify,Instrumental,0.27906976744186046,104,101,18
+Emotify,Instrumental,0.3023255813953488,105,101,19
+Emotify,Instrumental + Instrumental,0.27906976744186046,104,101,20
+Emotify,Instrumental + Instrumental,0.37209302325581395,105,101,21
+Emotify,Instrumental + Mixed,0.3023255813953488,104,101,22
+Emotify,Instrumental + Mixed,0.3488372093023256,105,101,23
+Emotify,Instrumental + Vocals,0.32558139534883723,104,101,24
+Emotify,Instrumental + Vocals,0.27906976744186046,105,101,25
+Emotify,Mixed,0.32558139534883723,104,101,26
+Emotify,Mixed,0.37209302325581395,105,101,27
+Emotify,Mixed + Mixed,0.3023255813953488,104,101,28
+Emotify,Mixed + Mixed,0.3488372093023256,105,101,29
+Emotify,Mixed + Vocals,0.37209302325581395,104,101,30
+Emotify,Mixed + Vocals,0.3488372093023256,105,101,31
+Emotify,Vocals,0.32558139534883723,104,101,32
+Emotify,Vocals,0.32558139534883723,105,101,33
+Emotify,Vocals + Vocals,0.32558139534883723,104,101,34
+Emotify,Vocals + Vocals,0.3023255813953488,105,101,35
+Emotify,Instrumental,0.32558139534883723,112,111,0
+Emotify,Instrumental,0.3023255813953488,113,111,1
+Emotify,Instrumental + Instrumental,0.3023255813953488,112,111,2
+Emotify,Instrumental + Instrumental,0.3023255813953488,113,111,3
+Emotify,Instrumental + Mixed,0.23255813953488372,112,111,4
+Emotify,Instrumental + Mixed,0.2558139534883721,113,111,5
+Emotify,Instrumental + Vocals,0.3023255813953488,112,111,6
+Emotify,Instrumental + Vocals,0.27906976744186046,113,111,7
+Emotify,Mixed,0.32558139534883723,112,111,8
+Emotify,Mixed,0.32558139534883723,113,111,9
+Emotify,Mixed + Mixed,0.32558139534883723,112,111,10
+Emotify,Mixed + Mixed,0.3023255813953488,113,111,11
+Emotify,Mixed + Vocals,0.3023255813953488,112,111,12
+Emotify,Mixed + Vocals,0.27906976744186046,113,111,13
+Emotify,Vocals,0.27906976744186046,112,111,14
+Emotify,Vocals,0.2558139534883721,113,111,15
+Emotify,Vocals + Vocals,0.20930232558139536,112,111,16
+Emotify,Vocals + Vocals,0.23255813953488372,113,111,17
+Emotify,Instrumental,0.37209302325581395,114,111,18
+Emotify,Instrumental,0.3488372093023256,115,111,19
+Emotify,Instrumental + Instrumental,0.3488372093023256,114,111,20
+Emotify,Instrumental + Instrumental,0.32558139534883723,115,111,21
+Emotify,Instrumental + Mixed,0.3953488372093023,114,111,22
+Emotify,Instrumental + Mixed,0.3488372093023256,115,111,23
+Emotify,Instrumental + Vocals,0.37209302325581395,114,111,24
+Emotify,Instrumental + Vocals,0.37209302325581395,115,111,25
+Emotify,Mixed,0.3488372093023256,114,111,26
+Emotify,Mixed,0.3953488372093023,115,111,27
+Emotify,Mixed + Mixed,0.37209302325581395,114,111,28
+Emotify,Mixed + Mixed,0.3488372093023256,115,111,29
+Emotify,Mixed + Vocals,0.3488372093023256,114,111,30
+Emotify,Mixed + Vocals,0.3488372093023256,115,111,31
+Emotify,Vocals,0.3023255813953488,114,111,32
+Emotify,Vocals,0.2558139534883721,115,111,33
+Emotify,Vocals + Vocals,0.2558139534883721,114,111,34
+Emotify,Vocals + Vocals,0.3488372093023256,115,111,35

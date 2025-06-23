@@ -2,6 +2,8 @@
 from collections import defaultdict
 from copy import deepcopy
 from itertools import groupby
+
+import librosa.feature
 from librosa.feature import rms
 from librosa.display import specshow
 import pandas as pd
@@ -138,6 +140,30 @@ class Track:
         if show:
             plt.title(title)
             plt.show()
+
+    @staticmethod
+    def find_similarity_between_stems(tracks:list):
+        grouped_tracks = Track.separate_tracks_by_source(tracks)
+
+        for i in range(len(grouped_tracks[0])):
+
+            feature_refs = []
+
+            for j in range(len(grouped_tracks)):
+                if grouped_tracks[j][i].source == "Mixed": break
+
+                audio = grouped_tracks[j][i].sound
+                feature_vector = librosa.feature.chroma_stft(y=audio)
+                time_delayed = librosa.feature.stack_memory(feature_vector, n_steps=10, delay=3)
+                feature_refs.append(time_delayed)
+
+            similarity = librosa.segment.cross_similarity(feature_refs[0], feature_refs[1])
+
+            for i in range(similarity.shape[0]):
+                print(similarity[i, i])
+
+
+
 
 
     def __init__(self, sound = None, label = None, source = None, original_track = None, name = None):

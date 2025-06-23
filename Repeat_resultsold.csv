@@ -1,0 +1,37 @@
+dataset,sources,accuracy
+Cal500,Instrumental,0.18055555555555555
+Cal500,Instrumental,0.18055555555555555
+Cal500,Instrumental + Instrumental,0.18055555555555555
+Cal500,Instrumental + Instrumental,0.18055555555555555
+Cal500,Instrumental + Mixed,0.18055555555555555
+Cal500,Instrumental + Mixed,0.18055555555555555
+Cal500,Instrumental + Vocals,0.20833333333333334
+Cal500,Instrumental + Vocals,0.20833333333333334
+Cal500,Mixed,0.19444444444444445
+Cal500,Mixed,0.18055555555555555
+Cal500,Mixed + Mixed,0.18055555555555555
+Cal500,Mixed + Mixed,0.19444444444444445
+Cal500,Mixed + Vocals,0.20833333333333334
+Cal500,Mixed + Vocals,0.20833333333333334
+Cal500,Vocals,0.2361111111111111
+Cal500,Vocals,0.20833333333333334
+Cal500,Vocals + Vocals,0.2361111111111111
+Cal500,Vocals + Vocals,0.25
+Emotify,Instrumental,0.3023255813953488
+Emotify,Instrumental,0.27906976744186046
+Emotify,Instrumental + Instrumental,0.3023255813953488
+Emotify,Instrumental + Instrumental,0.3023255813953488
+Emotify,Instrumental + Mixed,0.32558139534883723
+Emotify,Instrumental + Mixed,0.37209302325581395
+Emotify,Instrumental + Vocals,0.3488372093023256
+Emotify,Instrumental + Vocals,0.3488372093023256
+Emotify,Mixed,0.3488372093023256
+Emotify,Mixed,0.46511627906976744
+Emotify,Mixed + Mixed,0.3953488372093023
+Emotify,Mixed + Mixed,0.3953488372093023
+Emotify,Mixed + Vocals,0.27906976744186046
+Emotify,Mixed + Vocals,0.3488372093023256
+Emotify,Vocals,0.3488372093023256
+Emotify,Vocals,0.3023255813953488
+Emotify,Vocals + Vocals,0.3488372093023256
+Emotify,Vocals + Vocals,0.3023255813953488
