@@ -276,6 +276,7 @@ def retest(csv_file, dataset_dict, seeds:list):
     previous_parameters = []
 
     dataframe = pd.read_csv(csv_file)
+    number = 0
     for group in dataframe.groupby("dataset"):
 
         all_tracks = Track.remove_empty_tracks_and_number_removed(dataset_dict[group[0]]())
@@ -308,6 +309,8 @@ def retest(csv_file, dataset_dict, seeds:list):
             source_counter = defaultdict(int)
             dfgroup = group[1]
             for row in dfgroup.iterrows():
+                number += 1
+                print("Doing number", number)
                 parameter = ""
                 row_content = row[1]
                 is_ensemble = row_content['sources'].count('+') != 0
@@ -326,8 +329,10 @@ def retest(csv_file, dataset_dict, seeds:list):
                     result_dict["Parameters"].append(previous_parameters.index(parameter))
                     pipelines = [clone(pipeline), clone(pipeline)]
                     pipelines[0] = pipelines[0].set_params(**eval(row_content['first_parameters'].replace(': nan', ': np.nan')))
+                    pipelines[0] = pipelines[0].set_params(**{"Classifier__SVC__estimator__max_iter": -1})
                     #pipelines[0] = pipelines[0].set_params(**{"Classifier__SVC__estimator__max_iter": None})
                     pipelines[1] = pipelines[1].set_params(**eval(row_content['second_parameters'].replace(': nan', ': np.nan')))
+                    pipelines[1] = pipelines[1].set_params(**{"Classifier__SVC__estimator__max_iter": -1})
                     #pipelines[1] = pipelines[1].set_params(**{"Classifier__SVC__estimator__max_iter": None})
                     for i in range(len(sources)):
                         sourcee = sources[i]
@@ -348,6 +353,7 @@ def retest(csv_file, dataset_dict, seeds:list):
                     result_dict["Parameters"].append(previous_parameters.index(parameter))
                     new_pipeline = clone(pipeline).set_params(**parameters)
                     #new_pipeline = new_pipeline.set_params(**{"Classifier__SVC__estimator__max_iter": None})
+                    new_pipeline = new_pipeline.set_params(**{"Classifier__SVC__estimator__max_iter": -1})
                     new_pipeline = new_pipeline.fit(features, labels)
                     print(test_tracks_by_source.keys())
                     scores = classify_by_original_track_and_get_scores(new_pipeline, test_tracks_by_source[source], feature_names = feature_names)
@@ -369,22 +375,41 @@ def fetch_best_results(dataset_results:dict):
 
     for key in dataset_results.keys():
         results_list = dataset_results[key]
+        dataset_params = []
         for path in results_list:
             df:pd.DataFrame = pd.read_csv(path)
             for group in df.groupby("source(s)"):
                 df_group = group[1]
                 #df_group = df_group.sort_values(["Accuracy", "Precision", "Recall"], ascending=False)
                 bests = df_group.head(2)
-                collected_best["dataset"].append(key)
-                collected_best["dataset"].append(key)
-                collected_best["sources"].append(bests["source(s)"].values[0])
-                collected_best["accuracy"].append(bests["Accuracy"].values[0])
-                collected_best["first_parameters"].append(bests["First parameters"].values[0])
-                collected_best["first_parameters"].append(bests["First parameters"].values[1])
-                collected_best["second_parameters"].append(bests["Second parameters"].values[0])
-                collected_best["second_parameters"].append(bests["Second parameters"].values[1])
-                collected_best["sources"].append(bests["source(s)"].values[1])
-                collected_best["accuracy"].append(bests["Accuracy"].values[1])
+
+                best_first_params = retrieve_parameters(eval(bests["First parameters"].values[0].replace(': nan', ': np.nan')))
+                best_second_params = retrieve_parameters(eval(bests["Second parameters"].values[0].replace(': nan', ': np.nan'))) if type(bests["Second parameters"].values[0]) == str else ""
+                best_params = f"{best_first_params} + {best_second_params}"
+                if best_params not in dataset_params:
+                    dataset_params.append(best_params)
+                    collected_best["dataset"].append(key)
+                    collected_best["sources"].append(bests["source(s)"].values[0])
+                    collected_best["accuracy"].append(bests["Accuracy"].values[0])
+                    collected_best["first_parameters"].append(bests["First parameters"].values[0])
+                    collected_best["second_parameters"].append(bests["Second parameters"].values[0]) if type(bests["Second parameters"].values[0]) == str else collected_best["second_parameters"].append(bests["Second parameters"].values[0])
+                else:
+                    print("Skipped a best as it had same params")
+
+                second_first_params = retrieve_parameters(eval(bests["First parameters"].values[1].replace(': nan', ': np.nan')))
+                second_second_params = retrieve_parameters(eval(bests["Second parameters"].values[1].replace(': nan', ': np.nan'))) if type(bests["Second parameters"].values[1]) == str else ""
+                second_params = f"{second_first_params} + {second_second_params}"
+                if second_params not in dataset_params:
+                    dataset_params.append(second_params)
+                    collected_best["dataset"].append(key)
+                    collected_best["first_parameters"].append(bests["First parameters"].values[1])
+                    collected_best["second_parameters"].append(bests["Second parameters"].values[1]) if type(bests["Second parameters"].values[1]) == str else collected_best["second_parameters"].append(bests["Second parameters"].values[1])
+                    collected_best["sources"].append(bests["source(s)"].values[1])
+                    collected_best["accuracy"].append(bests["Accuracy"].values[1])
+                else:
+                    print("Skipped a best as it had same params")
+
+
 
     bests_df = pd.DataFrame.from_dict(collected_best)
     index_of_mixed = bests_df.index[bests_df["sources"]=="Mixed"][0]
@@ -422,16 +447,33 @@ def plot_scaled_features(track_dictionary, seed):
             plt.scatter(ith_feature, range(len(ith_feature)))
             plt.show()
 
+def convert_to_comparative(file_path:str):
+
+    df = pd.read_csv(file_path)
+    dataset_frames = df.groupby("dataset")
+
+    for dataset in dataset_frames:
+        dataset_frame = dataset[1]
+
+        for ID in dataset_frame.groupby("ID"):
+            ID_frame = ID[1]
+            index_of_mixed = ID_frame.index[ID_frame["sources"] == "Mixed"]
+            index_of_mixed_mixed = ID_frame.index[ID_frame["sources"] == "Mixed + Mixed"]
+
+            print(index_of_mixed, index_of_mixed_mixed)
+
 
 #plot_scaled_features(trackDict, 42)
 
+convert_to_comparative("Repeat_results.csv")
 
 #big_test([10], trackDict)
 
-results = {"Emotify": ["Emotify_bad_results_11.csv", "Emotify_bad_results_21.csv"]} #, "Cal500": ["Cal500_results_11.csv"]
-fetch_best_results(results)
+#results = {"Emotify": ["Emotify_results_11.csv", "Emotify_results_21.csv"], "Cal500": ["Cal500_results_11.csv", "Cal500_results_21.csv"],
+#           "Merge": ["Merge_results_11.csv", "Merge_results_21.csv"], "MirexLike_Categories": ["MirexLike_Categories_results_11.csv", "MirexLike_Categories_results_21.csv"], "MirexLike_Cluster": ["MirexLike_Cluster_results_11.csv", "MirexLike_Cluster_results_21.csv"]} #, "Cal500": ["Cal500_results_11.csv"]
+#fetch_best_results(results)
 
-retest("Best_results.csv", trackDict, [11, 21, 31, 41, 51, 61, 71, 81, 91, 101, 111])
+#retest("Best_results.csv", trackDict, range(10, 30, 10))
 
 #path_to_ss_clips = 'datasets/MIREX-like_mood/SS_and_clipped_audio/Separated_and_mixed_versions/'
 #categories = 'datasets/MIREX-like_mood/categories.txt'
